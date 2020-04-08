@@ -9,11 +9,7 @@ import com.triline.billionlights.utils.inflate
 import kotlinx.android.synthetic.main.item_offer_received.view.*
 
 
-class RequestSentAdapter(
-    private var requestSentList: ArrayList<RequestSent>,
-    private val onRateReportClick: (RequestSent) -> Unit,
-    private val onDeleteClick: (RequestSent) -> Unit
-) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
+class RequestSentAdapter(private var requestSentList: ArrayList<RequestSent>, private val onRateReportClick: (RequestSent) -> Unit, private val onDeleteClick: (RequestSent) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestSentViewHolder {
         val viewLayout: ItemRequestSentBinding = parent.inflate(R.layout.item_request_sent)
         return RequestSentViewHolder(viewLayout)
@@ -36,6 +32,5 @@ class RequestSentAdapter(
         return requestSentList.size
     }
 
-    inner class RequestSentViewHolder internal constructor(val item: ItemRequestSentBinding) :
-        RecyclerView.ViewHolder(item.root)
+    inner class RequestSentViewHolder internal constructor(val item: ItemRequestSentBinding) : RecyclerView.ViewHolder(item.root)
 }

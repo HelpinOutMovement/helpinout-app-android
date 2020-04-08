@@ -16,8 +16,7 @@ class BillionLightsApplication : MultiDexApplication() {
         MultiDex.install(this);
         Fabric.with(this, Crashlytics())
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        mAppComponent = DaggerApiComponent.builder()
-            .appModule(AppModule(this)).build()
+        mAppComponent = DaggerApiComponent.builder().appModule(AppModule(this)).build()
     }
 
     fun getAppComponent(): ApiComponent {

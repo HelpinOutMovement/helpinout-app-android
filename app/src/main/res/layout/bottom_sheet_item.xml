@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.triline.billionlights.model.database.entity.BottomHelp" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:text="@{item.name}"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/chk_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Shyam Narayan" />
+
+        <CheckBox
+            android:id="@+id/chk_name"
+            style="@style/StyleCheckBox"
+            android:layout_width="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_name" />
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:numStars="5"
+            android:progressTint="@color/rating_color"
+            android:rating="@{item.rating}"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            tools:rating="4" />
+
+        <TextView
+            android:id="@+id/tv_message"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@{item.description}"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintEnd_toStartOf="@+id/chk_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_bar"
+            tools:text="Can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered. " />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

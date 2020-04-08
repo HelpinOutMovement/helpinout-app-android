@@ -31,8 +31,7 @@ class LanguageChooserActivity : BaseActivity() {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
 
-        languageAdapter =
-            LanguageChooserAdapter(languageList, onItemClick = { item -> onItemClick(item) })
+        languageAdapter = LanguageChooserAdapter(languageList, onItemClick = { item -> onItemClick(item) })
         val itemDecorator = ItemOffsetDecoration(this@LanguageChooserActivity, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = languageAdapter

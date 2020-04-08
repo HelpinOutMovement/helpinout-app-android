@@ -22,8 +22,7 @@ class AppModule(private var app: Application) {
     @Singleton
     @Provides
     fun providePreferenceService(): PreferencesService {
-        if (!Hawk.isBuilt())
-            Hawk.init(app).build()
+        if (!Hawk.isBuilt()) Hawk.init(app).build()
         return PreferencesService()
     }
 
@@ -35,16 +34,11 @@ class AppModule(private var app: Application) {
 
     @Provides
     @Singleton
-    fun provideLoginService(preferencesService: PreferencesService, service: NetworkApiProvider) =
-        LoginService(preferencesService, service)
+    fun provideLoginService(preferencesService: PreferencesService, service: NetworkApiProvider) = LoginService(preferencesService, service)
 
     @Provides
     @Singleton
-    fun provideLocationService(
-        preferencesService: PreferencesService,
-        service: NetworkApiProvider,
-        db: AppDatabase
-    ) = LocationService(preferencesService, service, db)
+    fun provideLocationService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase) = LocationService(preferencesService, service, db)
 
     @Provides
     @Singleton

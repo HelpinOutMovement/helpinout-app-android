@@ -43,21 +43,12 @@ class SMSVerificationActivity : BaseActivity() {
     }
 
     private fun sendVerificationCode(number: String) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            number,
-            60,
-            TimeUnit.SECONDS,
-            TaskExecutors.MAIN_THREAD,
-            mCallBack
-        )
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
     }
 
     private val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
-        override fun onCodeSent(
-            s: String,
-            forceResendingToken: PhoneAuthProvider.ForceResendingToken
-        ) {
+        override fun onCodeSent(s: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
             super.onCodeSent(s, forceResendingToken)
             resendToken = s
         }
@@ -87,8 +78,7 @@ class SMSVerificationActivity : BaseActivity() {
     }
 
     private fun signInWithCredential(credential: PhoneAuthCredential) {
-        mAuth!!.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
+        mAuth!!.signInWithCredential(credential).addOnCompleteListener { task ->
                 btn_verify.isEnabled = true
                 if (task.isSuccessful) {
                     preferencesService.step = REGISTRATION_STEP
@@ -104,8 +94,7 @@ class SMSVerificationActivity : BaseActivity() {
         dialog.setCancelable(false)
         dialog.show()
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
-        viewModel.getLoginResult(preferencesService.countryCode, preferencesService.mobileNumber)
-            .observe(this, Observer {
+        viewModel.getLoginResult(preferencesService.countryCode, preferencesService.mobileNumber).observe(this, Observer {
                 dialog.dismiss()
                 if (it.first != null) {
                     val data = (it.first as LoginResponse).data
@@ -126,8 +115,7 @@ class SMSVerificationActivity : BaseActivity() {
                         finishWithFade()
                     }
                 } else {
-                    if (isNetworkAvailable())
-                        toastError(it.second)
+                    if (isNetworkAvailable()) toastError(it.second)
                     else {
                         toastError(R.string.toast_error_internet_issue)
                     }

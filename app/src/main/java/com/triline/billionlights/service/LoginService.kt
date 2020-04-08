@@ -12,20 +12,12 @@ import com.triline.billionlights.utils.Utils.Companion.getTimeZone
 import com.triline.billionlights.utils.Utils.Companion.getTimeZoneString
 import org.json.JSONObject
 
-class LoginService(
-    private val preferencesService: PreferencesService,
-    private val service: NetworkApiProvider
-) {
+class LoginService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider) {
 
 
     suspend fun verifyExistingUserResult(countryCode: String, mobileNumber: String): LoginResponse {
         return service.makeCall {
-            it.networkApi.verifyExistingUserAsync(
-                createLoginRequest(
-                    countryCode,
-                    mobileNumber
-                )
-            )
+            it.networkApi.verifyExistingUserAsync(createLoginRequest(countryCode, mobileNumber))
         }
     }
 
@@ -66,9 +58,7 @@ class LoginService(
 
     suspend fun getRegistrationResult(registration: Registration): LoginResponse {
         return service.makeCall {
-            it.networkApi.getRegistrationResponseAsync(
-                createRegistrationRequest(registration)
-            )
+            it.networkApi.getRegistrationResponseAsync(createRegistrationRequest(registration))
         }
     }
 

@@ -10,11 +10,7 @@ import com.triline.billionlights.utils.inflate
 import kotlinx.android.synthetic.main.item_offer_received.view.*
 
 
-class OfferReceivedAdapter(
-    private var offerList: ArrayList<OfferReceived>,
-    private val onRateReportClick: (OfferReceived) -> Unit,
-    private val onDeleteClick: (OfferReceived) -> Unit
-) : RecyclerView.Adapter<OfferReceivedAdapter.OfferReceivedViewHolder>() {
+class OfferReceivedAdapter(private var offerList: ArrayList<OfferReceived>, private val onRateReportClick: (OfferReceived) -> Unit, private val onDeleteClick: (OfferReceived) -> Unit) : RecyclerView.Adapter<OfferReceivedAdapter.OfferReceivedViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferReceivedViewHolder {
         val viewLayout: ItemOfferReceivedBinding = parent.inflate(R.layout.item_offer_received)
         return OfferReceivedViewHolder(viewLayout)
@@ -44,7 +40,6 @@ class OfferReceivedAdapter(
     }
 
 
-    inner class OfferReceivedViewHolder internal constructor(val item: ItemOfferReceivedBinding) :
-        RecyclerView.ViewHolder(item.root)
+    inner class OfferReceivedViewHolder internal constructor(val item: ItemOfferReceivedBinding) : RecyclerView.ViewHolder(item.root)
 
 }

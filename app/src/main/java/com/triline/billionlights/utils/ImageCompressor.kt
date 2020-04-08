@@ -19,8 +19,7 @@ class ImageCompressor {
 
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER")
-        var bmp: Bitmap? = BitmapFactory.decodeFile(imagePath, options)
+        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var bmp: Bitmap? = BitmapFactory.decodeFile(imagePath, options)
 
         var actualHeight = options.outHeight
         var actualWidth = options.outWidth
@@ -75,38 +74,21 @@ class ImageCompressor {
 
         val canvas = Canvas(scaledBitmap)
         canvas.setMatrix(scaleMatrix)
-        canvas.drawBitmap(
-            bmp,
-            middleX - bmp!!.width / 2,
-            middleY - bmp.height / 2,
-            Paint(FILTER_BITMAP_FLAG)
-        )
+        canvas.drawBitmap(bmp, middleX - bmp!!.width / 2, middleY - bmp.height / 2, Paint(FILTER_BITMAP_FLAG))
 
         bmp.recycle()
 
         val exif: ExifInterface
         try {
             exif = ExifInterface(imagePath)
-            val orientation = exif.getAttributeInt(
-                ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED
-            )
+            val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
             val matrix = Matrix()
             when (orientation) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
                 ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
                 ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
             }
-            scaledBitmap =
-                Bitmap.createBitmap(
-                    scaledBitmap!!,
-                    0,
-                    0,
-                    scaledBitmap.width,
-                    scaledBitmap.height,
-                    matrix,
-                    true
-                )
+            scaledBitmap = Bitmap.createBitmap(scaledBitmap!!, 0, 0, scaledBitmap.width, scaledBitmap.height, matrix, true)
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -125,11 +107,7 @@ class ImageCompressor {
         return filepath
     }
 
-    private fun calculateInSampleSize(
-        options: BitmapFactory.Options,
-        reqWidth: Int,
-        reqHeight: Int
-    ): Int {
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
         val height = options.outHeight
         val width = options.outWidth
         var inSampleSize = 1
@@ -150,8 +128,7 @@ class ImageCompressor {
     }
 
     private fun getFilename(context: Context): String {
-        val mediaStorageDir =
-            File("${Environment.getExternalStorageDirectory()}/Android/data/${context.applicationContext.packageName}/Files/Compressed")
+        val mediaStorageDir = File("${Environment.getExternalStorageDirectory()}/Android/data/${context.applicationContext.packageName}/Files/Compressed")
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             mediaStorageDir.mkdirs()

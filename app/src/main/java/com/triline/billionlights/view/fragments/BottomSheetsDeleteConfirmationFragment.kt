@@ -10,15 +10,11 @@ import com.triline.billionlights.R
 import com.triline.billionlights.model.database.entity.Offer
 import com.triline.billionlights.model.database.entity.OfferReceived
 import com.triline.billionlights.model.database.entity.RequestSent
-import kotlinx.android.synthetic.main.layout_delete_confirmation.*
+import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.*
 
-class DeleteConfirmationFragment : BottomSheetDialogFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.layout_delete_confirmation, container, false)
+class BottomSheetsDeleteConfirmationFragment : BottomSheetDialogFragment() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.bottom_sheet_delete_confirmation, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,8 +42,8 @@ class DeleteConfirmationFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(item: Offer): DeleteConfirmationFragment {
-            val delete = DeleteConfirmationFragment()
+        fun newInstance(item: Offer): BottomSheetsDeleteConfirmationFragment {
+            val delete = BottomSheetsDeleteConfirmationFragment()
             val args = Bundle()
             val data = Gson().toJson(item)
             args.putString("RequestSent", data)

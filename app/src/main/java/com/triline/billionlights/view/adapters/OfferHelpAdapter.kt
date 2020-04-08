@@ -8,14 +8,10 @@ import com.triline.billionlights.model.database.entity.OfferHelpItem
 import com.triline.billionlights.utils.inflate
 
 
-class OfferHelpAdapter(
-    var homeItemList: ArrayList<OfferHelpItem>,
-    private val onItemClick: (OfferHelpItem) -> Unit
-) : RecyclerView.Adapter<OfferHelpAdapter.OfferHelpViewHolder>() {
+class OfferHelpAdapter(var homeItemList: ArrayList<OfferHelpItem>, private val onItemClick: (OfferHelpItem) -> Unit) : RecyclerView.Adapter<OfferHelpAdapter.OfferHelpViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferHelpViewHolder {
         val viewLayout: ItemOfferHelpBinding = parent.inflate(R.layout.item_offer_help)
         return OfferHelpViewHolder(viewLayout)
-
     }
 
     override fun onBindViewHolder(holder: OfferHelpViewHolder, position: Int) {
@@ -32,7 +28,6 @@ class OfferHelpAdapter(
     }
 
 
-    inner class OfferHelpViewHolder internal constructor(val item: ItemOfferHelpBinding) :
-        RecyclerView.ViewHolder(item.root)
+    inner class OfferHelpViewHolder internal constructor(val item: ItemOfferHelpBinding) : RecyclerView.ViewHolder(item.root)
 
 }

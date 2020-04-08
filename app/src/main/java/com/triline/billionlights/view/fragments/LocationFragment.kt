@@ -25,9 +25,7 @@ import com.karumi.dexter.listener.single.PermissionListener
 import com.triline.billionlights.utils.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
 import com.triline.billionlights.utils.UPDATE_INTERVAL_IN_MILLISECONDS
 
-abstract class LocationFragment : Fragment(), LocationListener,
-    GoogleApiClient.ConnectionCallbacks,
-    ResultCallback<LocationSettingsResult> {
+abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.ConnectionCallbacks, ResultCallback<LocationSettingsResult> {
 
     var mGoogleApiClient: GoogleApiClient? = null
 
@@ -38,10 +36,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
 
     @Synchronized
     fun buildGoogleApiClient() {
-        mGoogleApiClient = GoogleApiClient.Builder(activity!!)
-            .addConnectionCallbacks(this)
-            .addApi(LocationServices.API)
-            .build()
+        mGoogleApiClient = GoogleApiClient.Builder(activity!!).addConnectionCallbacks(this).addApi(LocationServices.API).build()
         mGoogleApiClient!!.connect()
     }
 
@@ -52,11 +47,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         activity?.let {
-            if (ContextCompat.checkSelfPermission(
-                    activity!!,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+            if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 buildLocationSettingsRequest()
                 checkLocationSettings()
             }
@@ -65,9 +56,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
     }
 
     fun checkPermissionAndAccessLocation() {
-        Dexter.withActivity(activity!!)
-            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-            .withListener(object : PermissionListener {
+        Dexter.withActivity(activity!!).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse) {
                     onPermissionAllow()
                 }
@@ -75,10 +64,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
                 override fun onPermissionDenied(response: PermissionDeniedResponse) {
                 }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest,
-                    token: PermissionToken
-                ) {
+                override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {
                     token.continuePermissionRequest()
                 }
             }).check()
@@ -101,11 +87,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
     }
 
     private fun checkLocationSettings() {
-        val result = LocationServices.SettingsApi
-            .checkLocationSettings(
-                mGoogleApiClient,
-                mLocationSettingsRequest
-            )
+        val result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, mLocationSettingsRequest)
         result.setResultCallback(this)
     }
 
@@ -116,10 +98,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
                 startLocationUpdates()
             }
             LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
-                Log.i(
-                    TAG,
-                    "Location settings are not satisfied. Show the user a dialog to" + "upgrade location settings "
-                )
+                Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" + "upgrade location settings ")
                 try {
                     status.startResolutionForResult(activity!!, REQUEST_CHECK_SETTINGS)
                 } catch (e: IntentSender.SendIntentException) {
@@ -127,10 +106,7 @@ abstract class LocationFragment : Fragment(), LocationListener,
                 }
 
             }
-            LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> Log.i(
-                TAG,
-                "Location settings are inadequate, and cannot be fixed here. Dialog " + "not created."
-            )
+            LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> Log.i(TAG, "Location settings are inadequate, and cannot be fixed here. Dialog " + "not created.")
         }
     }
 
@@ -147,24 +123,11 @@ abstract class LocationFragment : Fragment(), LocationListener,
 
     private fun startLocationUpdates() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(
-                    activity!!,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-                == PackageManager.PERMISSION_GRANTED
-            ) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(
-                    mGoogleApiClient,
-                    mLocationRequest,
-                    this
-                )
+            if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
             }
         } else {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient,
-                mLocationRequest,
-                this
-            )
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
         }
     }
 

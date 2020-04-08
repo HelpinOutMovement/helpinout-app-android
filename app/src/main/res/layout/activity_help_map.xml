@@ -48,6 +48,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/layout_help_provider_reequester" />
+    <include layout="@layout/bottom_sheet_help_provider_requester" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

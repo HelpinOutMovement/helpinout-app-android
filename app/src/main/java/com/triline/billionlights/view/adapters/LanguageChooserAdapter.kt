@@ -8,10 +8,7 @@ import com.triline.billionlights.model.database.entity.LanguageItem
 import com.triline.billionlights.utils.inflate
 
 
-class LanguageChooserAdapter(
-    var languageList: ArrayList<LanguageItem>,
-    private val onItemClick: (LanguageItem) -> Unit
-) : RecyclerView.Adapter<LanguageChooserAdapter.LanguageViewHolder>() {
+class LanguageChooserAdapter(var languageList: ArrayList<LanguageItem>, private val onItemClick: (LanguageItem) -> Unit) : RecyclerView.Adapter<LanguageChooserAdapter.LanguageViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
         val viewLayout: ItemLanguageBinding = parent.inflate(R.layout.item_language)
         return LanguageViewHolder(viewLayout)
@@ -32,7 +29,6 @@ class LanguageChooserAdapter(
     }
 
 
-    inner class LanguageViewHolder internal constructor(val item: ItemLanguageBinding) :
-        RecyclerView.ViewHolder(item.root)
+    inner class LanguageViewHolder internal constructor(val item: ItemLanguageBinding) : RecyclerView.ViewHolder(item.root)
 
 }

@@ -25,8 +25,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         helpType = intent.getIntExtra(HELP_TYPE, 0)
-        if (helpType == OFFER_HELP)
-            setTheme(R.style.OfferTheme)
+        if (helpType == OFFER_HELP) setTheme(R.style.OfferTheme)
         (application as BillionLightsApplication).getAppComponent().inject(this)
         setContentView(getLayout())
         toolbar = findViewById(R.id.toolbar)
@@ -74,18 +73,12 @@ abstract class BaseActivity : AppCompatActivity() {
         val currentTime = Calendar.getInstance()
         val hour = currentTime.get(Calendar.HOUR_OF_DAY)
         val minute = currentTime.get(Calendar.MINUTE)
-        val timePicker = TimePickerDialog(
-            this,
-            TimePickerDialog.OnTimeSetListener { picker, selectedHour, selectedMinute ->
-                val cal = Calendar.getInstance()
-                cal.set(Calendar.HOUR_OF_DAY, selectedHour)
-                cal.set(Calendar.MINUTE, selectedMinute)
-                tvTime.text = cal.time.time.displayTime()
-            },
-            hour,
-            minute,
-            false
-        )
+        val timePicker = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { picker, selectedHour, selectedMinute ->
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.HOUR_OF_DAY, selectedHour)
+            cal.set(Calendar.MINUTE, selectedMinute)
+            tvTime.text = cal.time.time.displayTime()
+        }, hour, minute, false)
         timePicker.setTitle(resources!!.getString(R.string.select_time))
         timePicker.show()
     }
@@ -95,15 +88,13 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if (this !is HomeActivity)
-            finishWithSlideAnimation()
+        if (this !is HomeActivity) finishWithSlideAnimation()
         else finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-            if (this !is HomeActivity)
-                finishWithSlideAnimation()
+            if (this !is HomeActivity) finishWithSlideAnimation()
             else finish()
         }
         return super.onOptionsItemSelected(item)

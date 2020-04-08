@@ -11,11 +11,7 @@ import kotlinx.android.synthetic.main.fragment_my_offer.*
 
 class MyOfferFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_my_offer, container, false)
     }
 

@@ -28,12 +28,8 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkhttpClient(
-        cache: Cache,
-        loggingInterceptor: HttpLoggingInterceptor
-    ): OkHttpClient {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
+    fun provideOkhttpClient(cache: Cache, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor)
         client.connectTimeout(5, TimeUnit.MINUTES) // connect timeout
             .writeTimeout(5, TimeUnit.MINUTES) // write timeout
             .readTimeout(5, TimeUnit.MINUTES)
@@ -43,8 +39,7 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun httpLoggingInterceptor() = HttpLoggingInterceptor {
-    }.apply {
+    fun httpLoggingInterceptor() = HttpLoggingInterceptor {}.apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
@@ -52,13 +47,7 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
-            .baseUrl(BuildConfig.BASE_URL)
-            .client(okHttpClient)
-            .build()
+        return Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create()).addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(CoroutineCallAdapterFactory()).baseUrl(BuildConfig.BASE_URL).client(okHttpClient).build()
     }
 
 

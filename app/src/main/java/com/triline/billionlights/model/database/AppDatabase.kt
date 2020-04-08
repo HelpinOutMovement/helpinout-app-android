@@ -7,10 +7,7 @@ import androidx.room.RoomDatabase
 import com.triline.billionlights.model.database.entity.Registration
 
 
-@Database(
-    entities = [(Registration::class)],
-    version = 1, exportSchema = false
-)
+@Database(entities = [(Registration::class)], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
         private var mInstance: AppDatabase? = null
@@ -19,11 +16,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Synchronized
         fun getInstance(context: Context): AppDatabase {
             if (mInstance == null) {
-                mInstance = Room.databaseBuilder(
-                    context.applicationContext, AppDatabase::class.java,
-                    DB_NAME
-                )
-                    .fallbackToDestructiveMigration().build()
+                mInstance = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME).fallbackToDestructiveMigration().build()
             }
             return mInstance!!
         }

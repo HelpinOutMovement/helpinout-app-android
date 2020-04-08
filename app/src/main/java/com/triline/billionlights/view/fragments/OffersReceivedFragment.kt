@@ -36,11 +36,7 @@ class OffersReceivedFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_offers, container, false)
     }
 
@@ -52,10 +48,7 @@ class OffersReceivedFragment : Fragment() {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = OfferReceivedAdapter(
-            itemList,
-            onRateReportClick = { item -> onRateReportClick(item) },
-            onDeleteClick = { item -> onDeleteClick(item) })
+        adapter = OfferReceivedAdapter(itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) })
         val itemDecorator = ItemOffsetDecoration(activity!!, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -84,7 +77,7 @@ class OffersReceivedFragment : Fragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        val rateReport = RateReportFragment.newInstance(item, false)
+        val rateReport = BottomSheetRateReportFragment.newInstance(item, false)
         rateReport.show(childFragmentManager, null)
     }
 
@@ -93,7 +86,7 @@ class OffersReceivedFragment : Fragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = DeleteConfirmationFragment.newInstance(item)
+        val deleteDialog = BottomSheetsDeleteConfirmationFragment.newInstance(item)
         deleteDialog.show(childFragmentManager, "Delete Dialog")
     }
 }

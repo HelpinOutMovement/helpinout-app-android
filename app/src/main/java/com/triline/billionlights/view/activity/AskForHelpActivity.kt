@@ -68,52 +68,31 @@ class AskForHelpActivity : LocationActivity() {
     private fun onItemClick(item: AskForHelpItem) {
         when (item.type) {
             FOOD -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to FOOD
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to FOOD)
             }
             PEOPLE -> {
                 startActivity<PeopleHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
             }
             SHELTER -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to SHELTER
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to SHELTER)
             }
             MED_PPE -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to MED_PPE
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to MED_PPE)
             }
             TESTING -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to TESTING
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to TESTING)
             }
             MEDICINES -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to MEDICINES
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to MEDICINES)
             }
             AMBULANCE -> {
                 startActivity<AmbulanceHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
             }
             MEDICAL_EQUIPMENT -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to MEDICAL_EQUIPMENT
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to MEDICAL_EQUIPMENT)
             }
             OTHER_THINGS -> {
-                startActivity<FoodHelpActivity>(
-                    HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0),
-                    ITEM_TYPE to OTHER_THINGS
-                )
+                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), ITEM_TYPE to OTHER_THINGS)
             }
         }
         overridePendingTransition(R.anim.enter, R.anim.exit)

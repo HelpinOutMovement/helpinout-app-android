@@ -49,14 +49,8 @@ class Utils {
 
                 exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE, lat)
                 exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, lon)
-                exifInterface.setAttribute(
-                    ExifInterface.TAG_GPS_LATITUDE_REF,
-                    if (locLatitude > 0) "N" else "S"
-                )
-                exifInterface.setAttribute(
-                    ExifInterface.TAG_GPS_LONGITUDE_REF,
-                    if (locLongitude > 0) "E" else "W"
-                )
+                exifInterface.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, if (locLatitude > 0) "N" else "S")
+                exifInterface.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, if (locLongitude > 0) "E" else "W")
                 exifInterface.saveAttributes()
 
             } catch (e: IOException) {

@@ -11,16 +11,11 @@ import com.triline.billionlights.utils.Utils.Companion.currentDateTime
 import com.triline.billionlights.utils.Utils.Companion.getTimeZoneString
 import org.json.JSONObject
 
-class LocationService(
-    private val preferencesService: PreferencesService,
-    private val service: NetworkApiProvider,
-    private val db: AppDatabase
-) {
+class LocationService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase) {
+
     suspend fun getNewAddActivityResult(body: AddData): String {
         return service.makeCall {
-            it.networkApi.getActivityNewAddResponseAsync(
-                createAddActivityRequest(body)
-            )
+            it.networkApi.getActivityNewAddResponseAsync(createAddActivityRequest(body))
         }
     }
 
@@ -39,10 +34,7 @@ class LocationService(
 
                 bodyJson.put("uuid", body.uuid)
                 bodyJson.put("activity_type", body.activityType)
-                bodyJson.put(
-                    "geo_location",
-                    preferencesService.latitude + "," + preferencesService.longitude
-                )
+                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 bodyJson.put("address", body.address)
                 bodyJson.put("activity_category", body.activityCategory)
@@ -64,9 +56,7 @@ class LocationService(
 
     suspend fun getNewSuggestionResult(body: SuggestionData): String {
         return service.makeCall {
-            it.networkApi.getActivitySuggestionResponseAsync(
-                createNewSuggestionRequest(body)
-            )
+            it.networkApi.getActivitySuggestionResponseAsync(createNewSuggestionRequest(body))
         }
     }
 
@@ -115,10 +105,7 @@ class LocationService(
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-                bodyJson.put(
-                    "geo_location",
-                    preferencesService.latitude + "," + preferencesService.longitude
-                )
+                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 bodyJson.put("time_zone", getTimeZoneString())
                 mainData.put("data", bodyJson)
@@ -133,12 +120,7 @@ class LocationService(
 
     suspend fun deleteActivity(mappingId: String, uuid: String): String {
         return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(
-                createDeleteRequest(
-                    mappingId,
-                    uuid
-                )
-            )
+            it.networkApi.getMappingDeleteResponseAsync(createDeleteRequest(mappingId, uuid))
         }
     }
 
@@ -166,30 +148,13 @@ class LocationService(
         return mainData.toString()
     }
 
-    suspend fun makeRating(
-        mappingId: String,
-        uuid: String,
-        rating: String,
-        recommendOther: Int
-    ): String {
+    suspend fun makeRating(mappingId: String, uuid: String, rating: String, recommendOther: Int): String {
         return service.makeCall {
-            it.networkApi.getMappingRatingResponseAsync(
-                createRatingRequest(
-                    mappingId,
-                    uuid,
-                    rating,
-                    recommendOther
-                )
-            )
+            it.networkApi.getMappingRatingResponseAsync(createRatingRequest(mappingId, uuid, rating, recommendOther))
         }
     }
 
-    private fun createRatingRequest(
-        mappingId: String,
-        uuid: String,
-        rating: String,
-        recommendOther: Int
-    ): String {
+    private fun createRatingRequest(mappingId: String, uuid: String, rating: String, recommendOther: Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -217,20 +182,13 @@ class LocationService(
 
     suspend fun makeCallTracking(mappingId: String, uuid: String): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(
-                createDeleteRequest(
-                    mappingId,
-                    uuid
-                )
-            )
+            it.networkApi.getCallInitiateResponseAsync(createDeleteRequest(mappingId, uuid))
         }
     }
 
     suspend fun getUserRequestsOfferList(activityType: String): String {
         return service.makeCall {
-            it.networkApi.getUserRequestOfferListResponseAsync(
-                createOfferRequest(activityType)
-            )
+            it.networkApi.getUserRequestOfferListResponseAsync(createOfferRequest(activityType))
         }
     }
 

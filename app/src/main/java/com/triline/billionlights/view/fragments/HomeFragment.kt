@@ -49,11 +49,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     @Inject
     lateinit var preferencesService: PreferencesService
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 
@@ -77,10 +73,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun startLocationPicker() {
-        val fields: List<Place.Field> =
-            listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
-        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
-            .build(activity!!)
+        val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
+        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(activity!!)
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
 
@@ -142,8 +136,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
-                    tv_current_address.text =
-                        activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
+                    tv_current_address.text = activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
                 }
                 tv_current_address.text = activity!!.getAddress(loc.latitude, loc.longitude)
                 stopLocationUpdate()
@@ -154,8 +147,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun findNearestHelpProviders(latitude: Double, longitude: Double) {
-        val url =
-            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=gas_station"
+        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=gas_station"
 
         val nearestPumpViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         nearestPumpViewModel.getNearestDestination(url)!!.observe(this, Observer {
@@ -169,8 +161,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun findNearestHelpRequester(latitude: Double, longitude: Double) {
-        val url =
-            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=atm"
+        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=atm"
 
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getNearestDestination(url)!!.observe(this, Observer {
@@ -200,21 +191,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
-    private fun createMarker(
-        latitude: Double,
-        longitude: Double,
-        title: String?,
-        snippet: String?,
-        iconResID: Int
-    ) {
-        mMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(latitude, longitude))
-                .anchor(0.5f, 0.5f)
-                .title(title)
-                .snippet(snippet)
-                .icon(BitmapDescriptorFactory.fromResource(iconResID))
-        )
+    private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
+        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
 

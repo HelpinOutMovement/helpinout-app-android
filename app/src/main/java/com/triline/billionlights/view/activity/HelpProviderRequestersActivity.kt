@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,11 +24,16 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.triline.billionlights.R
+import com.triline.billionlights.model.database.entity.BottomHelp
 import com.triline.billionlights.model.database.entity.PlaceData
 import com.triline.billionlights.utils.*
+import com.triline.billionlights.view.adapters.BottomSheetHelpAdapter
+import com.triline.billionlights.view.view.DividerItemDecoration
+import com.triline.billionlights.view.view.ItemOffsetDecoration
 import com.triline.billionlights.viewmodel.HomeViewModel
+import com.triline.billionlights.viewmodel.OfferViewModel
 import kotlinx.android.synthetic.main.activity_help_map.*
-import kotlinx.android.synthetic.main.layout_help_provider_reequester.*
+import kotlinx.android.synthetic.main.bottom_sheet_help_provider_requester.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import org.json.JSONObject
 import java.util.*
@@ -33,6 +41,9 @@ import java.util.*
 class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var location: Location? = null
+
+    private var bottomItemList = ArrayList<BottomHelp>()
+    private lateinit var bottomAdapter: BottomSheetHelpAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +67,41 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback {
                 iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
             }
         }
+        mRecyclerView
+    }
+
+    private val mRecyclerView by lazy {
+        recycler_view.itemAnimator = DefaultItemAnimator()
+        recycler_view.setHasFixedSize(true)
+        val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
+        recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 10, -10))
+        bottomAdapter = BottomSheetHelpAdapter(bottomItemList, onItemClick = { item -> onItemClick(item) })
+        val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
+        recycler_view.addItemDecoration(itemDecorator)
+        recycler_view.adapter = bottomAdapter
+        loadBottomList()
+    }
+
+    private fun onItemClick(item: BottomHelp) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+    }
+
+    private fun loadBottomList() {
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
+        viewModel.getBottomSheetItem().observe(this, Observer { list ->
+            list?.let {
+                bottomItemList.clear()
+                bottomItemList.addAll(list)
+            }
+            bottomAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun startLocationPicker() {
-        val fields: List<Place.Field> =
-            listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
-        val intent =
-            Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this)
+        val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
+        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this)
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
 
@@ -135,17 +174,13 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback {
     }
 
     private fun findRequesterOrProviders(latitude: Double, longitude: Double) {
-        val url =
-            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=gas_station"
+        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=gas_station"
 
         val nearestPumpViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         nearestPumpViewModel.getNearestDestination(url)!!.observe(this, Observer {
             try {
                 val json = JSONObject(it!!)
-                finsHelperRequester(
-                    json,
-                    if (helpType == OFFER_HELP) R.drawable.ic_help_provider else R.drawable.ic_help_requester
-                )
+                finsHelperRequester(json, if (helpType == OFFER_HELP) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
             } catch (e: Exception) {
                 Log.d("", "")
             }
@@ -169,21 +204,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun createMarker(
-        latitude: Double,
-        longitude: Double,
-        title: String?,
-        snippet: String?,
-        iconResID: Int
-    ) {
-        mMap?.addMarker(
-            MarkerOptions()
-                .position(LatLng(latitude, longitude))
-                .anchor(0.5f, 0.5f)
-                .title(title)
-                .snippet(snippet)
-                .icon(BitmapDescriptorFactory.fromResource(iconResID))
-        )
+    private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
+        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
     override fun getLayout(): Int {

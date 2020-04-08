@@ -52,69 +52,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getAskForHelpItems(context: Context): MutableLiveData<List<AskForHelpItem>> {
         val list = MutableLiveData<List<AskForHelpItem>>()
         val askForHelpItemList = ArrayList<AskForHelpItem>()
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.food),
-                FOOD,
-                R.drawable.ic_food
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.people),
-                PEOPLE,
-                R.drawable.ic_group
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.shelter),
-                SHELTER,
-                R.drawable.ic_shelter
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.med_ppe),
-                MED_PPE,
-                R.drawable.ic_mask
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.testing),
-                TESTING,
-                R.drawable.ic_testing
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.medicines),
-                MEDICINES,
-                R.drawable.ic_medicines
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.ambulance),
-                AMBULANCE,
-                R.drawable.ic_ambulance
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.medical_equipment),
-                MEDICAL_EQUIPMENT,
-                R.drawable.ic_medical
-            )
-        )
-        askForHelpItemList.add(
-            AskForHelpItem(
-                context.getString(R.string.other_things),
-                OTHER_THINGS,
-                R.drawable.ic_other
-            )
-        )
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.food), FOOD, R.drawable.ic_food))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.people), PEOPLE, R.drawable.ic_group))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.shelter), SHELTER, R.drawable.ic_shelter))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.med_ppe), MED_PPE, R.drawable.ic_mask))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.testing), TESTING, R.drawable.ic_testing))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.medicines), MEDICINES, R.drawable.ic_medicines))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.ambulance), AMBULANCE, R.drawable.ic_ambulance))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.medical_equipment), MEDICAL_EQUIPMENT, R.drawable.ic_medical))
+        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.other_things), OTHER_THINGS, R.drawable.ic_other))
 
         list.postValue(askForHelpItemList)
         return list
@@ -123,87 +69,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getOfferHelpItems(context: Context): MutableLiveData<List<OfferHelpItem>> {
         val list = MutableLiveData<List<OfferHelpItem>>()
         val offerItemList = ArrayList<OfferHelpItem>()
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.food),
-                FOOD,
-                R.drawable.ic_food,
-                24,
-                2300
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.people),
-                PEOPLE,
-                R.drawable.ic_group,
-                43,
-                2100
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.shelter),
-                SHELTER,
-                R.drawable.ic_shelter,
-                13,
-                1100
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.med_ppe),
-                MED_PPE,
-                R.drawable.ic_mask,
-                5,
-                520
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.testing),
-                TESTING,
-                R.drawable.ic_testing,
-                12,
-                543
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.medicines),
-                MEDICINES,
-                R.drawable.ic_medicines,
-                10,
-                245
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.ambulance),
-                AMBULANCE,
-                R.drawable.ic_ambulance,
-                345,
-                4201
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.medical_equipment),
-                MEDICAL_EQUIPMENT,
-                R.drawable.ic_medical,
-                43,
-                5430
-            )
-        )
-        offerItemList.add(
-            OfferHelpItem(
-                context.getString(R.string.other_things),
-                OTHER_THINGS,
-                R.drawable.ic_other,
-                34,
-                5322
-            )
-        )
+        offerItemList.add(OfferHelpItem(context.getString(R.string.food), FOOD, R.drawable.ic_food, 24, 2300))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.people), PEOPLE, R.drawable.ic_group, 43, 2100))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.shelter), SHELTER, R.drawable.ic_shelter, 13, 1100))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), MED_PPE, R.drawable.ic_mask, 5, 520))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.testing), TESTING, R.drawable.ic_testing, 12, 543))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.medicines), MEDICINES, R.drawable.ic_medicines, 10, 245))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.ambulance), AMBULANCE, R.drawable.ic_ambulance, 345, 4201))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), MEDICAL_EQUIPMENT, R.drawable.ic_medical, 43, 5430))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.other_things), OTHER_THINGS, R.drawable.ic_other, 34, 5322))
 
         list.postValue(offerItemList)
         return list
@@ -213,12 +87,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val currentLocationResponse = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                currentLocationResponse.postValue(
-                    Pair(
-                        locationService.getUserCurrentLocationResult(),
-                        ""
-                    )
-                )
+                currentLocationResponse.postValue(Pair(locationService.getUserCurrentLocationResult(), ""))
             } catch (e: Exception) {
                 currentLocationResponse.postValue(Pair(null, e.getStringException()))
             }
@@ -242,12 +111,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val addActivityResponse = MutableLiveData<Pair<String?, String?>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                addActivityResponse.postValue(
-                    Pair(
-                        locationService.getNewAddActivityResult(body),
-                        ""
-                    )
-                )
+                addActivityResponse.postValue(Pair(locationService.getNewAddActivityResult(body), ""))
             } catch (e: Exception) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
             }
@@ -281,15 +145,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             for (i in 0 until results.length()) {
                 val jObj = results.getJSONObject(i)
                 val data = PlaceData()
-                if (jObj.has("name"))
-                    data.name = jObj.getString("name")
-                if (jObj.has("vicinity"))
-                    data.location = jObj.getString("vicinity")
+                if (jObj.has("name")) data.name = jObj.getString("name")
+                if (jObj.has("vicinity")) data.location = jObj.getString("vicinity")
                 if (jObj.has("geometry")) {
-                    data.latitude =
-                        jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lat")
-                    data.longnitude =
-                        jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lng")
+                    data.latitude = jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lat")
+                    data.longnitude = jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lng")
                 }
                 arrayList.add(data)
             }

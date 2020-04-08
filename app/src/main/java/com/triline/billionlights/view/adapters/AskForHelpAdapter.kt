@@ -8,10 +8,7 @@ import com.triline.billionlights.model.database.entity.AskForHelpItem
 import com.triline.billionlights.utils.inflate
 
 
-class AskForHelpAdapter(
-    var homeItemList: ArrayList<AskForHelpItem>,
-    private val onItemClick: (AskForHelpItem) -> Unit
-) : RecyclerView.Adapter<AskForHelpAdapter.AskForHelpViewHolder>() {
+class AskForHelpAdapter(var homeItemList: ArrayList<AskForHelpItem>, private val onItemClick: (AskForHelpItem) -> Unit) : RecyclerView.Adapter<AskForHelpAdapter.AskForHelpViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AskForHelpViewHolder {
         val viewLayout: ItemAskForHelpBinding = parent.inflate(R.layout.item_ask_for_help)
         return AskForHelpViewHolder(viewLayout)
@@ -32,7 +29,6 @@ class AskForHelpAdapter(
     }
 
 
-    inner class AskForHelpViewHolder internal constructor(val item: ItemAskForHelpBinding) :
-        RecyclerView.ViewHolder(item.root)
+    inner class AskForHelpViewHolder internal constructor(val item: ItemAskForHelpBinding) : RecyclerView.ViewHolder(item.root)
 
 }

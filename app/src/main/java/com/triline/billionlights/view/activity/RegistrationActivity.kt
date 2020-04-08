@@ -37,12 +37,7 @@ class RegistrationActivity : LocationActivity(), View.OnClickListener {
         }
 
         spinner_org_type.onItemSelectedListener = object : SpinnerSelector() {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 registration.orgType = spinner_org_type.selectedItem as String
             }
         }

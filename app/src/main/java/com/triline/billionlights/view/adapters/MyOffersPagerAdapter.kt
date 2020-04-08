@@ -11,8 +11,7 @@ import com.triline.billionlights.utils.REQUEST_RECEIVED
 import com.triline.billionlights.view.fragments.OffersReceivedFragment
 import com.triline.billionlights.view.fragments.RequestSentFragment
 
-class MyOffersPagerAdapter(fm: FragmentManager, private val context: Context) :
-    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class MyOffersPagerAdapter(fm: FragmentManager, private val context: Context) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     private val numItems = 2
     private var offerReceivedFragment: OffersReceivedFragment? = null
     private var requestSentFragment: RequestSentFragment? = null

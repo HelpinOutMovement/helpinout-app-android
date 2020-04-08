@@ -25,10 +25,7 @@ class LoginRegistrationViewModel(application: Application) : AndroidViewModel(ap
         (application as BillionLightsApplication).getAppComponent().inject(this)
     }
 
-    fun getLoginResult(
-        countryCode: String,
-        mobileNumber: String
-    ): MutableLiveData<Pair<LoginResponse?, String>> {
+    fun getLoginResult(countryCode: String, mobileNumber: String): MutableLiveData<Pair<LoginResponse?, String>> {
         val loginResponse = MutableLiveData<Pair<LoginResponse?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
@@ -46,12 +43,7 @@ class LoginRegistrationViewModel(application: Application) : AndroidViewModel(ap
         val registrationResponse = MutableLiveData<Pair<LoginResponse?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                registrationResponse.postValue(
-                    Pair(
-                        loginService.getRegistrationResult(registration),
-                        ""
-                    )
-                )
+                registrationResponse.postValue(Pair(loginService.getRegistrationResult(registration), ""))
             } catch (e: Exception) {
                 registrationResponse.postValue(Pair(null, e.getStringException()))
             }

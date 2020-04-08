@@ -2,17 +2,21 @@ package com.triline.billionlights.view.activity
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.triline.billionlights.R
 import com.triline.billionlights.model.database.entity.ActivityDetail
 import com.triline.billionlights.model.database.entity.AddData
 import com.triline.billionlights.model.database.entity.SuggestionData
 import com.triline.billionlights.utils.*
 import com.triline.billionlights.view.view.HelpInTextWatcher
+import com.triline.billionlights.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.activity_food_help.*
 import kotlinx.android.synthetic.main.item_food.view.*
-import org.jetbrains.anko.startActivityForResult
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -26,6 +30,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addData.uuid = getUuid()
+        addData.activityType= helpType
         when (intent.getIntExtra(ITEM_TYPE, 0)) {
             FOOD -> {
                 addData.activityCategory = 1
@@ -70,17 +75,13 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         we_can_pay.setOnClickListener(this)
         we_can_not_pay.setOnClickListener(this)
         layout_items.addView(getFoodLayout(layout_items))
-        addData.address = getAddress(
-            preferencesService.latitude.toDouble(),
-            preferencesService.longitude.toDouble()
-        )
+        addData.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
     }
 
     private fun getFoodLayout(layoutMain: LinearLayout): View {
         val layout = layoutInflater.inflate(R.layout.item_food, null)
         val activityDetail = ActivityDetail()
-        if (layoutMain.childCount > 0)
-            layout.iv_expend_collapse.show()
+        if (layoutMain.childCount > 0) layout.iv_expend_collapse.show()
         layout.iv_expend_collapse.setOnClickListener {
             addData.activity_detail.remove(activityDetail)
             suggestionData.activity_detail.remove(activityDetail)
@@ -158,25 +159,21 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
 
     private fun sendDataOnMap() {
 
-        startActivityForResult<HelpProviderRequestersActivity>(
-            showMapCode,
-            HELP_TYPE to helpType,
-            ITEM_TYPE to intent.getIntExtra(ITEM_TYPE, 0)
-        )
+        //startActivityForResult<HelpProviderRequestersActivity>(showMapCode, HELP_TYPE to helpType, ITEM_TYPE to intent.getIntExtra(ITEM_TYPE, 0))
 
-//        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
-//        dialog.setCancelable(false)
-//        dialog.show()
-//        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-//
-//        viewModel.getSuggestion(suggestionData).observe(this, Observer {
-//            dialog.dismiss()
-//            Log.d("", "")
-//        })
-//        viewModel.addActivity(addData).observe(this, Observer {
-//            dialog.dismiss()
-//            Log.d("", "")
-//        })
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.setCancelable(false)
+        dialog.show()
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+////
+////        viewModel.getSuggestion(suggestionData).observe(this, Observer {
+////            dialog.dismiss()
+////            Log.d("", "")
+////        })
+        viewModel.addActivity(addData).observe(this, Observer {
+            dialog.dismiss()
+            Log.d("", "")
+        })
     }
 
     override fun getLayout(): Int {

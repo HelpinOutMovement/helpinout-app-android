@@ -25,30 +25,22 @@ import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.startActivity
 
 
-class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener,
-    NavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val drawerToggle: ActionBarDrawerToggle =
-            object : ActionBarDrawerToggle(
-                this,
-                drawer_layout,
-                toolbar,
-                R.string.app_name,
-                R.string.app_name
-            ) {
-                override fun onDrawerClosed(view: View) {
-                    invalidateOptionsMenu()
-                }
-
-                override fun onDrawerOpened(drawerView: View) {
-                    invalidateOptionsMenu()
-                }
+        val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.app_name, R.string.app_name) {
+            override fun onDrawerClosed(view: View) {
+                invalidateOptionsMenu()
             }
+
+            override fun onDrawerOpened(drawerView: View) {
+                invalidateOptionsMenu()
+            }
+        }
         drawer_layout.setDrawerListener(drawerToggle)
         drawerToggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
@@ -302,8 +294,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
     private fun loadFragment(fragment: Fragment): Boolean {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
-            .commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
         return true
     }
 

@@ -10,15 +10,11 @@ import com.triline.billionlights.R
 import com.triline.billionlights.model.database.entity.Offer
 import com.triline.billionlights.model.database.entity.OfferReceived
 import com.triline.billionlights.model.database.entity.RequestSent
-import kotlinx.android.synthetic.main.layout_rate_report.*
+import kotlinx.android.synthetic.main.bottom_sheet_rate_report.*
 
-class RateReportFragment : BottomSheetDialogFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.layout_rate_report, container, false)
+class BottomSheetRateReportFragment : BottomSheetDialogFragment() {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.bottom_sheet_rate_report, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,8 +37,8 @@ class RateReportFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(item: Offer, isRequestSend: Boolean): RateReportFragment {
-            val report = RateReportFragment()
+        fun newInstance(item: Offer, isRequestSend: Boolean): BottomSheetRateReportFragment {
+            val report = BottomSheetRateReportFragment()
             val args = Bundle()
             val data = Gson().toJson(item)
             args.putString("RequestSent", data)

@@ -68,8 +68,7 @@ fun Long.displayTime(): String {
 }
 
 fun Context.isSimInserted(): Boolean {
-    val tm: TelephonyManager =
-        getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager //gets the current TelephonyManager
+    val tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager //gets the current TelephonyManager
     return !(tm.simState === TelephonyManager.SIM_STATE_ABSENT)
 }
 
@@ -84,11 +83,7 @@ fun Activity.getAddress(latitude: Double, longitude: Double): String {
     return try {
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses: List<Address>
-        addresses = geocoder.getFromLocation(
-            latitude,
-            longitude,
-            1
-        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        addresses = geocoder.getFromLocation(latitude, longitude, 1) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         addresses[0].getAddressLine(0)
     } catch (e: Exception) {
         "$latitude,$longitude"
@@ -188,11 +183,7 @@ fun Activity.getUriFromFile(file: File): Uri {
     if (Build.VERSION.SDK_INT < 24) {
         return Uri.fromFile(file)
     } else {
-        return FileProvider.getUriForFile(
-            this,
-            "$packageName.provider",
-            file
-        )
+        return FileProvider.getUriForFile(this, "$packageName.provider", file)
     }
 }
 
@@ -232,10 +223,7 @@ fun Context.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.success(this, getString(messageId, true), duration).show()
 }
 
-fun androidx.fragment.app.Fragment.toastSuccess(
-    messageId: Int,
-    duration: Int = Toast.LENGTH_SHORT
-) {
+fun androidx.fragment.app.Fragment.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.success(activity!!, getString(messageId, true), duration).show()
 }
 
@@ -243,10 +231,7 @@ fun Context.toastSuccess(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.success(this, message, duration, true).show()
 }
 
-fun androidx.fragment.app.Fragment.toastSuccess(
-    message: String,
-    duration: Int = Toast.LENGTH_SHORT
-) {
+fun androidx.fragment.app.Fragment.toastSuccess(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toasty.success(activity!!, message, duration, true).show()
 }
 
@@ -282,14 +267,11 @@ fun String.fromHtml(): Spanned {
 }
 
 fun String.isNumberValid(): Boolean {
-    if (isEmpty() || length < 10)
-        return false
+    if (isEmpty() || length < 10) return false
     if (startsWith("+91")) {
         return substring(3, length).length == 10
     }
-    return (length == 10 && (startsWith("0") || startsWith("5") || startsWith("6") || startsWith("7") || startsWith(
-        "8"
-    ) || startsWith("9")))
+    return (length == 10 && (startsWith("0") || startsWith("5") || startsWith("6") || startsWith("7") || startsWith("8") || startsWith("9")))
 }
 
 fun String.onlyPhoneNumber(): String {
@@ -345,8 +327,7 @@ fun View.invisible() {
 }
 
 fun View.hideKeyboard() {
-    val inputMethodManager =
-        context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
@@ -398,8 +379,7 @@ fun <T : ViewDataBinding> ViewGroup.inflate(layoutId: Int): T {
 
 fun EditText.showKeyboard() {
     if (requestFocus()) {
-        val inputMethodManager =
-            context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, 0)
     }
 }
@@ -456,12 +436,7 @@ fun Context.goToMarket(packageName: String) {
     try {
         startActivity(goToMarket.newTask())
     } catch (e: ActivityNotFoundException) {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
-            ).newTask()
-        )
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$packageName")).newTask())
     }
 }
 
@@ -473,12 +448,7 @@ fun Fragment.goToMarket(packageName: String) {
     try {
         startActivity(goToMarket.newTask())
     } catch (e: ActivityNotFoundException) {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
-            ).newTask()
-        )
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$packageName")).newTask())
     }
 }
 

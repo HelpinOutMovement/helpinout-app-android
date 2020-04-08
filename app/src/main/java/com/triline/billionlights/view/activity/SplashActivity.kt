@@ -19,8 +19,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferencesService.imeiNumber =
-            Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        preferencesService.imeiNumber = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         try {
             val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
             preferencesService.appVersion = pInfo.versionName
