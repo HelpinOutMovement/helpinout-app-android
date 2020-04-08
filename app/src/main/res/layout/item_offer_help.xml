@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.triline.billionlights.model.database.entity.OfferHelpItem" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:selectableItemBackground"
+            android:padding="@dimen/_20sdp">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:load_image="@{item.icon}"
+                tools:srcCompat="@drawable/ic_ambulance" />
+
+            <TextView
+                android:id="@+id/action_title"
+                style="@style/HomeButton"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:gravity="start"
+                android:paddingStart="@dimen/_12sdp"
+                android:paddingEnd="@dimen/_12sdp"
+                android:text="@{item.title}"
+                android:textAlignment="textStart"
+                app:layout_constraintStart_toEndOf="@+id/icon"
+                app:layout_constraintTop_toTopOf="@+id/icon"
+                tools:text="@string/ambulance" />
+
+            <TextView
+                android:id="@+id/tv_near_me"
+                style="@style/StyleTextViewNormal"
+                android:layout_width="0dp"
+                android:paddingStart="@dimen/_12sdp"
+                android:text="@{@string/request_near_me(item.nearRequest)}"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="@+id/action_title"
+                app:layout_constraintTop_toBottomOf="@+id/action_title"
+                tools:text="24 Requests near me" />
+
+            <TextView
+                android:id="@+id/tv_total_request"
+                style="@style/StyleTextViewNormal"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:paddingStart="@dimen/_12sdp"
+                android:text="@{@string/request_total(item.totalRequest)}"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_near_me"
+                tools:text="4200 Total" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+</layout>

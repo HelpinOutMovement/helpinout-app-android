@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/ic_food" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_20sdp">
+
+
+            <LinearLayout
+                android:id="@+id/layout_items"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/add_more"
+                style="@style/StyleTextView"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:background="@drawable/dotted"
+                android:gravity="center"
+                android:text="@string/add_more_items"
+                app:layout_constraintTop_toBottomOf="@+id/layout_items" />
+
+
+            <TextView
+                android:id="@+id/tv_availability"
+                style="@style/StyleTextView"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/availability_condition"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_more"
+                tools:visibility="visible" />
+
+
+            <EditText
+                android:id="@+id/edt_conditions"
+                style="@style/StyleEditTextFull"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="200"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_availability"
+                tools:hint="@string/hint_conditions"
+                tools:visibility="gone" />
+
+
+            <Button
+                android:id="@+id/we_can_pay"
+                style="@style/StyleLoginButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:text="@string/we_can_pay"
+                app:layout_constraintEnd_toStartOf="@+id/we_can_not_pay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_conditions" />
+
+            <Button
+                android:id="@+id/we_can_not_pay"
+                style="@style/StyleLoginButtonPrimaryRevert"
+                android:layout_width="0dp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:text="@string/we_can_not_pay"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/we_can_pay"
+                app:layout_constraintTop_toBottomOf="@+id/edt_conditions" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

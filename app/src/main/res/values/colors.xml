@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#EE6B6B</color>
+    <color name="colorPrimaryDark">#e06464</color>
+    <color name="colorAccent">#4F5065</color>
+    <color name="colorAccentDark">#404154</color>
+
+    <!--normal colors-->
+    <color name="screen_bg">#EEEEEE</color>
+    <color name="rating_color">#FFA448</color>
+    <!--colors for light mode-->
+    <color name="semi_transparent_color">#8c000000</color>
+
+</resources>

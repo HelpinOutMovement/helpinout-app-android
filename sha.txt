@@ -1,0 +1,6 @@
+keytool -list -v -keystore debug.keystore -alias androiddebugkey -storepass android -keypass android
+9A:47:8A:95:3A:AD:00:B3:F6:A1:70:F3:18:C0:53:8F:92:02:86:B4
+
+keytool -list -v -keystore release_key.jks -alias release_key -storepass release_key -keypass release_key
+
+C3:97:BB:9B:AE:0B:83:A6:64:F2:41:E6:5B:D2:EE:41:D6:5C:F1:F0

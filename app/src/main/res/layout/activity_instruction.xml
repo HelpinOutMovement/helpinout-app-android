@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <include
+        android:id="@+id/layout_logo"
+        layout="@layout/layout_logo" />
+
+
+    <TextView
+        android:id="@+id/tvWebsite"
+        style="@style/StyleTextView"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center_horizontal"
+        android:text="@string/website_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
+
+
+    <com.triline.billionlights.view.view.HelpInOutTextView
+        android:id="@+id/instruction_text"
+        style="@style/StyleTextView"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:gravity="center_horizontal"
+        android:text="@string/instruction_text"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnContinue"
+        style="@style/StyleLoginButton"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:text="@string/btn_continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

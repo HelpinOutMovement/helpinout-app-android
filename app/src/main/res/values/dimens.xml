@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="item_offset">6dp</dimen>
+
+    <!--&lt;!&ndash; Standard Padding &ndash;&gt;-->
+    <!--<dimen name="padding_tiny">2dp</dimen>-->
+    <!--<dimen name="padding_small">4dp</dimen>-->
+    <!--<dimen name="padding_smedium">6dp</dimen>-->
+    <!--<dimen name="padding_medium">8dp</dimen>-->
+    <!--<dimen name="padding_mlarge">12dp</dimen>-->
+    <!--<dimen name="padding_large">16dp</dimen>-->
+    <!--<dimen name="padding_xxlarge">32dp</dimen>-->
+
+    <!--&lt;!&ndash;&lt;!&ndash; Standard Margin &ndash;&gt;&ndash;&gt;-->
+    <!--<dimen name="margin_tiny">2dp</dimen>-->
+    <!--<dimen name="margin_small">4dp</dimen>-->
+    <!--<dimen name="margin_smedium">6dp</dimen>-->
+    <!--<dimen name="margin_medium">8dp</dimen>-->
+    <!--<dimen name="margin_mlarge">12dp</dimen>-->
+    <!--<dimen name="margin_large">16dp</dimen>-->
+    <!--<dimen name="margin_xlarge">24dp</dimen>-->
+    <!--<dimen name="margin_xxlarge">32dp</dimen>-->
+
+
+    <!--&lt;!&ndash;&lt;!&ndash; Standard Thumbnail size &ndash;&gt;&ndash;&gt;-->
+    <!--<dimen name="thumb_tiny">16dp</dimen>-->
+    <!--<dimen name="thumb_small">24dp</dimen>-->
+    <!--<dimen name="thumb_smedium">32dp</dimen>-->
+    <!--<dimen name="thumb_medium">40dp</dimen>-->
+    <!--<dimen name="thumb_mlarge">48dp</dimen>-->
+    <!--<dimen name="thumb_large">56dp</dimen>-->
+    <!--<dimen name="thumb_xlarge">64dp</dimen>-->
+    <!--<dimen name="thumb_xlarge1">60dp</dimen>-->
+    <!--<dimen name="thumb_xxlarge">72dp</dimen>-->
+    <!--<dimen name="thumb_xxxlarge">80dp</dimen>-->
+    <!--<dimen name="thumb_extra_large">120dp</dimen>-->
+
+    <!--<dimen name="font_heading1">96dp</dimen>-->
+    <!--<dimen name="font_heading2">60dp</dimen>-->
+    <!--<dimen name="font_heading3">48dp</dimen>-->
+    <!--<dimen name="font_heading4">34dp</dimen>-->
+    <!--<dimen name="font_heading5">24dp</dimen>-->
+    <!--<dimen name="font_heading6">20dp</dimen>-->
+    <!--<dimen name="font_sub_title1">16sp</dimen>-->
+    <!--<dimen name="font_sub_title2">14sp</dimen>-->
+    <!--<dimen name="font_body1">16sp</dimen>-->
+    <!--<dimen name="font_body2">14dp</dimen>-->
+    <!--<dimen name="font_button">14sp</dimen>-->
+    <!--<dimen name="font_caption">12sp</dimen>-->
+    <!--<dimen name="font_overline">10sp</dimen>-->
+
+</resources>

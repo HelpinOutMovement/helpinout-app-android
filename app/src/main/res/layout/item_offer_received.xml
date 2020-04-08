@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.triline.billionlights.model.database.entity.OfferReceived" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:padding="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/StyleTextView"
+                android:layout_width="0dp"
+                android:text="@{item.name}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Tina Jamna" />
+
+            <ImageView
+                android:id="@+id/iv_offer"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_name"
+                app:load_image="@{item.icon}"
+                tools:src="@drawable/ic_food" />
+
+
+            <TextView
+                android:id="@+id/tv_detail"
+                style="@style/StyleTextViewNormal"
+                android:layout_width="0dp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:text="@{item.detail}"
+                app:layout_constraintEnd_toStartOf="@+id/iv_call"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                tools:text="has offered to help you. 14 April 2020, 10:45 am Call them on +91 543053490 Time: 6pm to 9pm." />
+
+
+            <ImageView
+                android:id="@+id/iv_call"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_detail"
+                app:srcCompat="@drawable/ic_phone" />
+
+
+            <TextView
+                android:id="@+id/tv_rate_report"
+                style="@style/StyleTextView"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/_8sdp"
+                android:text="@string/rate_report"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
+
+            <TextView
+                android:id="@+id/tv_delete"
+                style="@style/StyleTextView"
+                android:layout_width="wrap_content"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:padding="@dimen/_8sdp"
+                android:text="@string/delete"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

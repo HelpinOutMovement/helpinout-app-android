@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.triline.billionlights">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <protected-broadcast android:name="com.motorola.motocare.INTENT_TRIGGER" />
+
+    <application
+        android:name=".model.BillionLightsApplication"
+        android:allowBackup="false"
+        android:fullBackupOnly="false"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:resizeableActivity="false"
+        android:supportsRtl="true"
+        android:theme="@style/AskForHelpTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="UnusedAttribute">
+        <activity android:name=".view.activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.RegistrationActivity" />
+        <activity
+            android:name=".view.activity.HomeActivity"
+            android:theme="@style/HomeTheme" />
+        <activity android:name=".view.activity.LoginActivity" />
+
+        <service
+            android:name=".view.firebase.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".view.activity.SMSVerificationActivity" />
+        <activity
+            android:name=".view.activity.AskForHelpActivity"
+            android:label="@string/title_need_help_with" />
+        <activity
+            android:name=".view.activity.OfferHelpActivity"
+            android:label="@string/title_offer_help_with" />
+
+        <activity
+            android:name=".view.activity.LanguageChooserActivity"
+            android:label="@string/label_choose_language" />
+        <activity android:name=".view.activity.InstructionActivity" />
+        <activity android:name=".view.activity.FoodHelpActivity" />
+        <activity android:name=".view.activity.PeopleHelpActivity" />
+        <activity android:name=".view.activity.AmbulanceHelpActivity" />
+        <activity android:name=".view.activity.HelpProviderRequestersActivity" />
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="@bool/Crash_Enable" />
+    </application>
+
+</manifest>

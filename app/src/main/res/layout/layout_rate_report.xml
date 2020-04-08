@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingTop="@dimen/_20sdp"
+    android:paddingEnd="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_20sdp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/StyleTextView"
+        android:layout_width="0dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:text="@string/rate_report"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginTop="@dimen/_22sdp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="Shyam Narayan" />
+
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:numStars="5"
+        android:progressTint="@color/rating_color"
+        android:rating="4"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/help_from_them"
+        app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
+
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_message">
+
+        <RadioButton
+            android:id="@+id/rb_yes"
+            style="@style/StyleRadio"
+            android:layout_width="wrap_content"
+            android:checked="true"
+            android:paddingEnd="@dimen/_40sdp"
+            android:text="@string/label_yes" />
+
+        <RadioButton
+            android:id="@+id/rb_no"
+            style="@style/StyleRadio"
+            android:layout_width="wrap_content"
+            android:paddingEnd="@dimen/_40sdp"
+            android:text="@string/label_no" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_comment"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginStart="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:text="@string/comment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group" />
+
+    <EditText
+        android:id="@+id/edt_comment"
+        style="@style/StyleEditTextFull"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:gravity="top"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="200"
+        android:padding="@dimen/_5sdp"
+        android:singleLine="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_comment"
+        tools:hint="@string/hint_conditions" />
+
+    <Button
+        android:id="@+id/button_submit"
+        style="@style/StyleLoginButtonPrimaryAccent"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:text="@string/submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_comment" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/options"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:checkable="false"
+            android:title="@string/title_home" />
+        <item
+            android:id="@+id/nav_ask_help"
+            android:checkable="false"
+            android:title="@string/ask_for_help" />
+        <item
+            android:id="@+id/nav_offer_help"
+            android:checkable="false"
+            android:title="@string/offer_help" />
+        <item
+            android:id="@+id/nav_my_request"
+            android:checkable="false"
+            android:title="@string/title_my_request" />
+
+        <item
+            android:id="@+id/nav_my_offers"
+            android:checkable="false"
+            android:title="@string/title_my_offers" />
+
+        <item
+            android:id="@+id/nav_profiles"
+            android:checkable="false"
+            android:title="@string/title_profiles" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:checkable="false"
+            android:title="@string/title_about" />
+    </group>
+
+    <group
+        android:id="@+id/langauge"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_english"
+            android:checkable="false"
+            android:title="@string/english" />
+
+        <item
+            android:id="@+id/nav_hindi"
+            android:checkable="false"
+            android:title="@string/hindi" />
+
+        <item
+            android:id="@+id/nav_kannad"
+            android:checkable="false"
+            android:title="@string/kannad" />
+
+        <item
+            android:id="@+id/nav_marathi"
+            android:checkable="false"
+            android:title="@string/marathi" />
+
+        <item
+            android:id="@+id/nav_gujrati"
+            android:checkable="false"
+            android:title="@string/gujrati" />
+
+    </group>
+</menu>

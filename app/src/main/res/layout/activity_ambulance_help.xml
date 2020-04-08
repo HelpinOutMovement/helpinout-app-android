@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_70sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/ic_ambulance" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_20sdp"
+            android:paddingBottom="@dimen/_20sdp">
+
+            <EditText
+                android:id="@+id/edt_people"
+                style="@style/StyleEditTextFull"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:digits="0123456789"
+                android:hint="@string/hint_how_many_people"
+                android:inputType="number"
+                android:maxLength="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/we_can_pay"
+                style="@style/StyleLoginButtonPrimary"
+                android:layout_width="0dp"
+                android:text="@string/we_can_pay"
+                app:layout_constraintEnd_toStartOf="@+id/we_can_not_pay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_people" />
+
+            <Button
+                android:id="@+id/we_can_not_pay"
+                style="@style/StyleLoginButtonPrimaryRevert"
+                android:layout_width="0dp"
+                android:text="@string/we_can_not_pay"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/we_can_pay"
+                app:layout_constraintTop_toBottomOf="@+id/edt_people" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,23 @@
+# Generated files
+bin/
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+/release
+# IntelliJ
+*.iml
+.idea
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+.DS_Store
+
+# Android Studio captures folder
+captures/
+
+# External native build folder generated in Android Studio 2.2 and late
+.externalNativeBuild
