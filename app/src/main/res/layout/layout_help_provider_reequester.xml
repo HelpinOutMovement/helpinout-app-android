@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:paddingStart="@dimen/_10sdp"
-    android:paddingTop="@dimen/_20sdp"
+    android:paddingTop="@dimen/_10sdp"
     android:paddingEnd="@dimen/_10sdp"
-    android:paddingBottom="@dimen/_20sdp">
+    android:paddingBottom="@dimen/_20sdp"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="@dimen/_50sdp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <ImageView
         android:id="@+id/iv_item"
@@ -26,16 +30,17 @@
         android:text="@string/select_help_provider"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_cancel"
+        app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toEndOf="@+id/iv_item"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_cancel"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
+        android:id="@+id/iv_expend_collapse"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:src="@drawable/ic_cancel"
+        android:src="@drawable/ic_expand_more"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
@@ -43,7 +48,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,11 +59,11 @@
         style="@style/StyleTextViewNormal"
         android:layout_width="0dp"
         android:layout_marginTop="@dimen/_15sdp"
+        android:text="Shyam Narayan"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/chk_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
-        tools:text="Shyam Narayan" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <CheckBox
         android:id="@+id/chk_name"
@@ -107,7 +112,7 @@
         android:id="@+id/tv_comment"
         style="@style/StyleTextViewNormal"
         android:layout_marginStart="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center"
         android:text="@string/phone_number_will_be_send"
         android:textSize="@dimen/_12sdp"
@@ -119,7 +124,7 @@
     <Button
         android:id="@+id/button_continue"
         style="@style/StyleLoginButtonPrimaryRevert"
-        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:text="@string/send_request"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_comment" />

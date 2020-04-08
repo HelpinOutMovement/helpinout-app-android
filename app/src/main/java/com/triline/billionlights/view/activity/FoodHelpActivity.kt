@@ -80,8 +80,8 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         val layout = layoutInflater.inflate(R.layout.item_food, null)
         val activityDetail = ActivityDetail()
         if (layoutMain.childCount > 0)
-            layout.iv_cancel.show()
-        layout.iv_cancel.setOnClickListener {
+            layout.iv_expend_collapse.show()
+        layout.iv_expend_collapse.setOnClickListener {
             addData.activity_detail.remove(activityDetail)
             suggestionData.activity_detail.remove(activityDetail)
             layoutMain.removeView(layout)

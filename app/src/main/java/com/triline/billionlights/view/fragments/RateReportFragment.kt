@@ -23,7 +23,7 @@ class RateReportFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        iv_cancel.setOnClickListener {
+        iv_expend_collapse.setOnClickListener {
             dismiss()
         }
 

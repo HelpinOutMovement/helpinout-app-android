@@ -19,11 +19,13 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.triline.billionlights.R
 import com.triline.billionlights.model.database.entity.PlaceData
 import com.triline.billionlights.utils.*
 import com.triline.billionlights.viewmodel.HomeViewModel
 import kotlinx.android.synthetic.main.activity_help_map.*
+import kotlinx.android.synthetic.main.layout_help_provider_reequester.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import org.json.JSONObject
 import java.util.*
@@ -43,6 +45,16 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback {
         }
         tv_change.setOnClickListener {
             startLocationPicker()
+        }
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
+        iv_expend_collapse.setOnClickListener {
+            if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                iv_expend_collapse.setImageResource(R.drawable.ic_expand_less)
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
+            }
         }
     }
 
