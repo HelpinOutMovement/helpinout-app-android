@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.triline.billionlights.model.database.entity.RequestSent" />
+            type="org.helpinout.billonlights.model.database.entity.AddItem" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -40,6 +40,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_name"
+                app:load_image="@{item.icon}"
                 tools:src="@drawable/ic_food" />
 
 
@@ -48,7 +49,6 @@
                 style="@style/StyleTextViewNormal"
                 android:layout_width="0dp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:text="@{item.detail}"
                 app:layout_constraintEnd_toStartOf="@+id/iv_offer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"

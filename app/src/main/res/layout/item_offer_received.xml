@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.triline.billionlights.model.database.entity.OfferReceived" />
+            type="org.helpinout.billonlights.model.database.entity.OfferReceived" />
     </data>
 
     <androidx.cardview.widget.CardView

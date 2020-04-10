@@ -12,7 +12,7 @@
     <string name="label_logs">Crash logs</string>
     <string name="menu_logout">Logout</string>
     <string name="toast_error_phone_number">Please enter phone number</string>
-    <string name="google_maps_key" translatable="false">AIzaSyBUKrrFdtMJBG5yB_lLUfs5hdFJ6KAnfB4</string>
+    <string name="google_maps_key" translatable="false">AIzaSyB6IPxvjM8ivhpBwf1eP4g4m4HKhWTd17w</string>
     <string name="toast_success_registrtion_success">Registration success</string>
     <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
     <string name="button_verify">Verify</string>
@@ -21,11 +21,11 @@
     <string name="organization">Organization</string>
 
 
-    <string name="english">English</string>
-    <string name="hindi">हिन्दी</string>
-    <string name="kannad">ಕನ್ನಡ</string>
-    <string name="marathi">मराठी</string>
-    <string name="gujrati">ગુજરાતી</string>
+    <string name="english" translatable="false">English</string>
+    <string name="hindi" translatable="false">हिन्दी</string>
+    <string name="kannad" translatable="false">ಕನ್ನಡ</string>
+    <string name="marathi" translatable="false">मराठी</string>
+    <string name="gujrati" translatable="false">ગુજરાતી</string>
 
     <string name="food">Food</string>
     <string name="people">People</string>
@@ -41,7 +41,7 @@
     <string name="label_choose_language">Choose language</string>
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_enter_otp">Enter OTP</string>
-    <string name="label_app_name"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
+    <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
     <string name="label_first_name">First Name</string>
     <string name="label_last_name">Last Name</string>
     <string name="label_org_name">Organization Name</string>
@@ -50,8 +50,8 @@
     <string name="toast_error_please_enter_last_name">Please enter your last name</string>
     <string name="toast_error_please_enter_organization_name">Please enter organization name</string>
     <string name="btn_continue">Continue</string>
-    <string name="website_name">www.helpinout.org</string>
-    <string name="instruction_text"><![CDATA[<font color=#EE6B6B>Ask for help</font> = Offer help<br/> wherever you are.<br/><br/><br/> Search for help-providers and<br/> help-requesters around you.]]></string>
+    <string name="website_name" translatable="false">www.helpinout.org</string>
+    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for help</font> = Offer help<br/> wherever you are.<br/><br/><br/> Search for help-providers and<br/> help-requesters around you.]]></string>
     <string name="offer_help_with">Offer help with</string>
     <string name="title_home">Home</string>
     <string name="title_my_request">My Requests</string>
@@ -69,8 +69,8 @@
     <string name="we_can_pay">We Can Pay</string>
     <string name="we_can_not_pay">We Cannot Pay</string>
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
-    <string name="terms_Of_service"><![CDATA[Terms of Service]]></string>
-    <string name="privacy_policy"><![CDATA[Privacy Policy]]></string>
+    <string name="terms_Of_service" translatable="false"><![CDATA[Terms of Service]]></string>
+    <string name="privacy_policy" translatable="false"><![CDATA[Privacy Policy]]></string>
     <string name="label_representing_as_org">Representing an Organization</string>
     <string name="label_unit_division">Unit / Division / Function / Location</string>
     <string name="toast_error_please_enter_unit_division">Please enter Unit / Division / Function / Location</string>
@@ -91,10 +91,10 @@
     <string name="delete_confirmation">Are you sure you want to delete ?</string>
     <string name="help_from_them">Should others take help from them?</string>
     <string name="submit">Submit</string>
-    <string name="toast_error_some_error">Some error occured</string>
+    <string name="toast_error_some_error">Some error occurred</string>
     <string name="title_profiles">Profile</string>
     <string name="title_about">About</string>
-    <string name="all_right_reserved">© Atmosys. All rights reserved.</string>
+    <string name="all_right_reserved" translatable="false">© Atmosys. All rights reserved.</string>
     <string name="current_location">Current location</string>
     <string name="label_no_data_available">No data available</string>
     <string name="you_are_here">You are here</string>
@@ -105,18 +105,66 @@
     <string name="select_time">Select time</string>
     <string name="request_near_me">%1$s Requests near me</string>
     <string name="request_total">%1$s Total</string>
-    <string name="hint_conditions"><![CDATA[We can supply once a day after 12 noon with a minimum 1 day notice.<br/><br/> Food will need to be picked up, it cannot be delivered.]]></string>
+    <string name="hint_conditions" translatable="false"><![CDATA[We can supply once a day after 12 noon with a minimum 1 day notice.<br/><br/> Food will need to be picked up, it cannot be delivered.]]></string>
     <string name="comment">Comments</string>
     <string name="select_help_provider">Select help providers</string>
     <string name="phone_number_will_be_send">Your phone number will be sent to these help-providers</string>
     <string name="send_request">Send Request</string>
     <string name="loading">Loading...</string>
+    <string name="update_profile">Update profile</string>
+    <string name="toast_success_update_success">Profile update success</string>
+    <string name="request_confirmation" translatable="false"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
+    <string name="offer_confirmation" translatable="false"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
+    <string name="toast_success_data_save_success">Data save success</string>
+
+    <string name="food_template_request">%1$s;  %2$s</string>
+    <string name="food_template_offer">%1$s;  %2$s</string>
+
+    <string name="people_template_request">%1$s; %2$s</string>
+    <string name="people_template_offer">%1$s; %2$s</string>
+
+    <string name="shelter_template_request">Prepared shelter (%1$s);  %2$s %3$s</string>
+    <string name="shelter_template_offer">Prepared shelter (%1$s);  %2$s %3$s</string>
+
+    <string name="med_ppe_template_request">Prepared Med PPE (%1$s);  %2$s %3$s</string>
+    <string name="med_ppe_template_offer">Prepared Med PPE (%1$s);  %2$s %3$s</string>
+
+    <string name="testing_template_request">Prepared testing kit (%1$s);  %2$s %3$s</string>
+    <string name="testing_template_offer">Prepared testing kit (%1$s);  %2$s %3$s</string>
+
+
+    <string name="medicines_template_request">Prepared medicines (%1$s);  %2$s %3$s</string>
+    <string name="medicines_template_offer">Prepared medicines (%1$s);  %2$s %3$s</string>
+
+    <string name="ambulance_template_request">Ambulance (%1$s);  %2$s</string>
+    <string name="ambulance_template_offer">Ambulance (%1$s);  %2$s</string>
+
+    <string name="medical_equipment_template_request">Medical Equipment (%1$s);  %2$s %3$s</string>
+    <string name="medical_equipment_template_offer">medical_equipment (%1$s);  %2$s %3$s</string>
+
+    <string name="other_thing_template_request">Other thing (%1$s);  %2$s %3$s</string>
+    <string name="other_thing_template_offer">Other thing (%1$s);  %2$s %3$s</string>
+    <string name="toast_delete_success">Delete success</string>
+
 
     <string-array name="org_types">
         <item>Organization type</item>
-        <item>Org1</item>
-        <item>Org2</item>
-        <item>Org3</item>
+        <item>Commercial Organization</item>
+        <item>Community Organization</item>
+        <item>Government</item>
+        <item>Health Organization</item>
+        <item>Non-profit Organization</item>
+        <item>Other</item>
     </string-array>
+
+    <integer-array name="org_types_index">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>0</item>
+    </integer-array>
 
 </resources>

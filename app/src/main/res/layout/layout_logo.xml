@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_logo" />
 
-    <com.triline.billionlights.view.view.HelpInOutTextView
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
         android:id="@+id/tv_logo"
         style="@style/BaseTextView"
         android:layout_marginTop="@dimen/_15sdp"

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.triline.billionlights.model.database.entity.OfferHelpItem" />
+            type="org.helpinout.billonlights.model.database.entity.OfferHelpItem" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -27,10 +27,13 @@
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:minHeight="@dimen/_50sdp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:load_image="@{item.icon}"
-                tools:srcCompat="@drawable/ic_ambulance" />
+                tools:srcCompat="@drawable/ic_ambulance"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/action_title"

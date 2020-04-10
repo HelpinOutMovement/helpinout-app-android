@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
 
-    <com.triline.billionlights.view.view.OtpEditText
+    <org.helpinout.billonlights.view.view.OtpEditText
         android:id="@+id/edt_otp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

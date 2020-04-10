@@ -75,6 +75,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:gravity="top"
+                android:imeOptions="actionDone"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="200"
                 android:padding="@dimen/_5sdp"

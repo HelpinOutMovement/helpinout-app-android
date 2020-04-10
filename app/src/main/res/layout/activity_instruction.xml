@@ -21,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
 
 
-    <com.triline.billionlights.view.view.HelpInOutTextView
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
         android:id="@+id/instruction_text"
         style="@style/StyleTextView"
         android:layout_marginStart="@dimen/_10sdp"

@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
-            type="com.triline.billionlights.model.database.entity.BottomHelp" />
+            type="org.helpinout.billonlights.model.database.entity.BottomHelp" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

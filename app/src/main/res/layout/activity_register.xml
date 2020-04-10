@@ -7,6 +7,11 @@
     android:orientation="vertical">
 
     <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar"
+        android:visibility="gone" />
+
+    <include
         android:id="@+id/layout_logo"
         layout="@layout/layout_logo"
         android:layout_gravity="center" />
@@ -25,6 +30,7 @@
             android:paddingBottom="@dimen/_20sdp">
 
             <TextView
+                android:id="@+id/tv_register"
                 style="@style/StyleTextView.Bold"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:text="@string/label_register"
@@ -102,7 +108,7 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/StyleLoginButton"
-                android:text="@string/label_login"
+                android:text="@string/label_register"
                 app:layout_constraintTop_toBottomOf="@+id/layout_number" />
 
         </LinearLayout>

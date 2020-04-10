@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".view.activity.HomeActivity" />
+        tools:context="org.helpinout.billonlights.view.activity.HomeActivity" />
 
     <ImageView
         android:id="@+id/current_map_pin"

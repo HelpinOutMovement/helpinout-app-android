@@ -8,8 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/_50sdp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/_50sdp">
 
         <fragment
             android:id="@+id/map"
@@ -20,7 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".view.activity.HelpProviderRequestersActivity" />
+            tools:context="org.helpinout.billonlights.view.activity.HelpProviderRequestersActivity" />
 
         <ImageView
             android:id="@+id/current_map_pin"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.triline.billionlights">
+    package="org.helpinout.billonlights">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -49,12 +49,8 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".view.activity.SMSVerificationActivity" />
-        <activity
-            android:name=".view.activity.AskForHelpActivity"
-            android:label="@string/title_need_help_with" />
-        <activity
-            android:name=".view.activity.OfferHelpActivity"
-            android:label="@string/title_offer_help_with" />
+        <activity android:name=".view.activity.AskForHelpActivity" />
+        <activity android:name=".view.activity.OfferHelpActivity" />
 
         <activity
             android:name=".view.activity.LanguageChooserActivity"
