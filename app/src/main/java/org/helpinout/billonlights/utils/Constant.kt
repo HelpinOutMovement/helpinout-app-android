@@ -10,7 +10,7 @@ const val DOUBLE_CLICK_TIME = 2000
 const val AUTOCOMPLETE_REQUEST_CODE = 42
 const val PLACE_SEARCH_KEY = "AIzaSyCw2cMowXHdpMUTI8lKZfO34DLGNHzn2Lw"
 const val HELP_TYPE = "HelpType"
-
+const val SUGGESTION_DATA = "SuggestionData"
 const val UPDATE_PROFILE = "UpdateProfile"
 const val OFFER_TYPE = "OfferType"
 const val OFFER_RECEIVED = 1
@@ -29,6 +29,7 @@ const val HINDI = 2
 const val KANNAD = 3
 const val MARATHI = 4
 const val GUJRATI = 5
+const val ALLOW_NUMBER="+917303767448"
 
 const val ENGLISH_CODE = "en"
 const val HINDI_CODE = "hi"

@@ -94,7 +94,7 @@
     <string name="toast_error_some_error">Some error occurred</string>
     <string name="title_profiles">Profile</string>
     <string name="title_about">About</string>
-    <string name="all_right_reserved" translatable="false">© Atmosys. All rights reserved.</string>
+    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
     <string name="current_location">Current location</string>
     <string name="label_no_data_available">No data available</string>
     <string name="you_are_here">You are here</string>
@@ -117,33 +117,36 @@
     <string name="offer_confirmation" translatable="false"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
     <string name="toast_success_data_save_success">Data save success</string>
 
+
+    <string name="mapping_template"><![CDATA[was sent a help request on %1$s They will call you if they can help you.]]></string>
+
     <string name="food_template_request">%1$s;  %2$s</string>
     <string name="food_template_offer">%1$s;  %2$s</string>
 
     <string name="people_template_request">%1$s; %2$s</string>
     <string name="people_template_offer">%1$s; %2$s</string>
 
-    <string name="shelter_template_request">Prepared shelter (%1$s);  %2$s %3$s</string>
-    <string name="shelter_template_offer">Prepared shelter (%1$s);  %2$s %3$s</string>
+    <string name="shelter_template_request">%1$s;  %2$s</string>
+    <string name="shelter_template_offer">%1$s;  %2$s</string>
 
-    <string name="med_ppe_template_request">Prepared Med PPE (%1$s);  %2$s %3$s</string>
-    <string name="med_ppe_template_offer">Prepared Med PPE (%1$s);  %2$s %3$s</string>
+    <string name="med_ppe_template_request">%1$s;  %2$s</string>
+    <string name="med_ppe_template_offer">%1$s;  %2$s</string>
 
-    <string name="testing_template_request">Prepared testing kit (%1$s);  %2$s %3$s</string>
-    <string name="testing_template_offer">Prepared testing kit (%1$s);  %2$s %3$s</string>
+    <string name="testing_template_request">%1$s;  %2$s</string>
+    <string name="testing_template_offer">%1$s;  %2$s</string>
 
 
-    <string name="medicines_template_request">Prepared medicines (%1$s);  %2$s %3$s</string>
-    <string name="medicines_template_offer">Prepared medicines (%1$s);  %2$s %3$s</string>
+    <string name="medicines_template_request">%1$s;  %2$s </string>
+    <string name="medicines_template_offer">%1$s;  %2$s</string>
 
     <string name="ambulance_template_request">Ambulance (%1$s);  %2$s</string>
     <string name="ambulance_template_offer">Ambulance (%1$s);  %2$s</string>
 
-    <string name="medical_equipment_template_request">Medical Equipment (%1$s);  %2$s %3$s</string>
-    <string name="medical_equipment_template_offer">medical_equipment (%1$s);  %2$s %3$s</string>
+    <string name="medical_equipment_template_request">%1$s;  %2$s</string>
+    <string name="medical_equipment_template_offer">%1$s;  %2$s</string>
 
-    <string name="other_thing_template_request">Other thing (%1$s);  %2$s %3$s</string>
-    <string name="other_thing_template_offer">Other thing (%1$s);  %2$s %3$s</string>
+    <string name="other_thing_template_request">%1$s;  %2$s</string>
+    <string name="other_thing_template_offer">%1$s;  %2$s</string>
     <string name="toast_delete_success">Delete success</string>
 
 

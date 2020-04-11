@@ -25,9 +25,13 @@ class AddData {
     var activity_detail_string = JSONArray()
 }
 
-data class SuggestionData(var activityType: Int = 0, var activityCategory: Int = 0, var activityCount: Int = 0, var latitude: String = "", var longitude: String = "", var accuracy: String = "") {
-    var activity_detail = ArrayList<ActivityDetail>()
-    var activity_detail_string = JSONArray()
+class SuggestionRequest {
+    var activity_type: Int = 0
+    var activity_category: Int = 0
+    var activity_uuid: String = ""
+    var latitude: String = ""
+    var longitude: String = ""
+    var accuracy: String = ""
 }
 
 class ActivityDetail {
@@ -46,7 +50,6 @@ class ActivityDetail {
 
 data class PlaceData(var latitude: Double? = null, var longnitude: Double? = null, var location: String? = "", var name: String? = null)
 
-class BottomHelp(val category: Int, var name: String, val rating: Float, var description: String)
 
 
 

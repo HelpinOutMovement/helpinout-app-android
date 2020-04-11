@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_rate_report.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 
-class BottomSheetRateReportFragment(val item: AddItem, val isRequestSend: Boolean) : BottomSheetDialogFragment() {
+class BottomSheetRateReportFragment(val item: AddCategoryDbItem, val isRequestSend: Boolean) : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_rate_report, container, false)
     }

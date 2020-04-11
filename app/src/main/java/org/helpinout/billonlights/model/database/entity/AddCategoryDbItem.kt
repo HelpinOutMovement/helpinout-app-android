@@ -4,12 +4,13 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "add_item", indices = [Index(value = ["id", "date_time"], unique = true)])
-class AddItem : Offer() {
+@Entity(tableName = "add_item", indices = [Index(value = ["activity_uuid"], unique = true)])
+class AddCategoryDbItem : Offer() {
     var name: String = ""
     var detail: String? = ""
     var icon: Int = 0
     var activity_type: Int = 0
+    var parent_uuid: String? = ""
     var activity_uuid: String = ""
     var date_time: String = ""
     var activity_category: Int = 0
@@ -22,7 +23,7 @@ class AddItem : Offer() {
     var technical_personal_detail: String? = ""
     var technical_personal_quantity: String? = ""
     var status: Int = 0
-
+    var mobile_no:String?=""
 
     var address: String = ""
     var qty: String? = ""

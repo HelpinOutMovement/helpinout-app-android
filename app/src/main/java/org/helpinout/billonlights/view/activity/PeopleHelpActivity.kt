@@ -6,22 +6,24 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.avneesh.crashreporter.CrashReporter
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_people_help.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.ActivityDetail
-import org.helpinout.billonlights.model.database.entity.AddData
-import org.helpinout.billonlights.model.database.entity.AddDataResponses
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.BottomSheetsRequestConfirmationFragment
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.startActivityForResult
 import timber.log.Timber
 
 class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
     private var peopleHelp = AddData()
     private var activityDetail = ActivityDetail()
+    private val suggestionData = SuggestionRequest()
+    private val showMapCode: Int = 43
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         peopleHelp.activity_type = helpType
         peopleHelp.activity_uuid = getUuid()
         peopleHelp.activity_category = 2
+        suggestionData.activity_category = 2
         peopleHelp.date_time = currentDateTime()
         peopleHelp.geo_location = preferencesService.latitude + "," + preferencesService.longitude
 
@@ -77,22 +80,28 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         activityDetail.technical_personal_quantity = edt_qty2.text.toString()
         peopleHelp.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
 
+
+        suggestionData.activity_type = helpType
+        suggestionData.latitude = preferencesService.latitude
+        suggestionData.longitude = preferencesService.longitude
+        suggestionData.accuracy = preferencesService.gpsAccuracy
+
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.sendPeopleHelp(peopleHelp).observe(this, Observer {
             if (it.first != null) {
                 saveRequestToDatabase(it.first)
             } else {
                 dialog?.dismiss()
-                // askForConfirmation()
+                CrashReporter.logCustomLogs(it.second)
             }
         })
     }
 
-    private fun saveRequestToDatabase(first: AddDataResponses?) {
+    private fun saveRequestToDatabase(first: ActivityResponses?) {
         first?.data?.let { item ->
-            val addItemList = ArrayList<AddItem>()
+            val addItemList = ArrayList<AddCategoryDbItem>()
 
-            val singleItem = AddItem()
+            val singleItem = AddCategoryDbItem()
             singleItem.activity_type = peopleHelp.activity_type
             singleItem.activity_uuid = peopleHelp.activity_uuid
             singleItem.date_time = peopleHelp.date_time
@@ -100,7 +109,6 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
             singleItem.activity_count = peopleHelp.activity_count
             singleItem.geo_location = peopleHelp.geo_location
             singleItem.address = peopleHelp.address
-            singleItem.qty = peopleHelp.qty
             var detail = ""
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
                 detail += activityDetail.volunters_detail + "(" + activityDetail.volunters_quantity + "),"
@@ -138,7 +146,10 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onYesClick() {
-        Timber.d("")
+        suggestionData.activity_uuid = peopleHelp.activity_uuid
+        val suggestionDataAsString = Gson().toJson(suggestionData)
+        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString,HELP_TYPE to helpType)
+        finishWithFade()
     }
 
     private fun onNoClick() {

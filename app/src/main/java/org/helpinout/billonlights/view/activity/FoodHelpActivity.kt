@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.avneesh.crashreporter.CrashReporter
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_food_help.*
 import kotlinx.android.synthetic.main.item_food.view.*
 import org.helpinout.billonlights.R
@@ -27,7 +29,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
     private val maxLimit = 4
     private val addData = AddData()
-    private val suggestionData = SuggestionData()
+    private val suggestionData = SuggestionRequest()
     private val showMapCode: Int = 43
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,37 +41,37 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         when (intent.getIntExtra(CATEGORY_TYPE, 0)) {
             CATEGORY_FOOD -> {
                 addData.activity_category = 1
-                suggestionData.activityCategory = 1
+                suggestionData.activity_category = 1
                 logo.setImageResource(R.drawable.ic_food)
             }
             CATEGORY_SHELTER -> {
                 addData.activity_category = 3
-                suggestionData.activityCategory = 3
+                suggestionData.activity_category = 3
                 logo.setImageResource(R.drawable.ic_shelter)
             }
             CATEGORY_MED_PPE -> {
                 addData.activity_category = 4
-                suggestionData.activityCategory = 4
+                suggestionData.activity_category = 4
                 logo.setImageResource(R.drawable.ic_mask)
             }
             CATEGORY_TESTING -> {
                 addData.activity_category = 5
-                suggestionData.activityCategory = 5
+                suggestionData.activity_category = 5
                 logo.setImageResource(R.drawable.ic_testing)
             }
             CATEGORY_MEDICINES -> {
                 addData.activity_category = 6
-                suggestionData.activityCategory = 6
+                suggestionData.activity_category = 6
                 logo.setImageResource(R.drawable.ic_medicines)
             }
             CATEGORY_MEDICAL_EQUIPMENT -> {
                 addData.activity_category = 8
-                suggestionData.activityCategory = 8
+                suggestionData.activity_category = 8
                 logo.setImageResource(R.drawable.ic_medical)
             }
             CATEGORY_OTHERS -> {
                 addData.activity_category = 0
-                suggestionData.activityCategory = 0
+                suggestionData.activity_category = 0
                 logo.setImageResource(R.drawable.ic_other)
             }
         }
@@ -89,7 +91,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         if (layoutMain.childCount > 0) layout.iv_expend_collapse.show()
         layout.iv_expend_collapse.setOnClickListener {
             addData.activity_detail.remove(activityDetail)
-            suggestionData.activity_detail.remove(activityDetail)
             layoutMain.removeView(layout)
             add_more.show()
         }
@@ -103,7 +104,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
                 activityDetail.qty = s.toString()
             }
         })
-        suggestionData.activity_detail.add(activityDetail)
         addData.activity_detail.add(activityDetail)
         return layout
     }
@@ -119,30 +119,34 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
             we_can_pay -> {
                 hideKeyboard()
                 addData.pay = 1
-                addData.activity_detail_string = getDetail()
-                addData.conditions = edt_conditions.text.toString()
-                suggestionData.activityCount = suggestionData.activity_detail.size
-
-                suggestionData.latitude = preferencesService.latitude
-                suggestionData.longitude = preferencesService.longitude
-                suggestionData.accuracy = preferencesService.gpsAccuracy
-                suggestionData.activity_detail_string = getDetail()
-                sendDataOnMap()
+                sendData()
             }
             we_can_not_pay -> {
                 hideKeyboard()
                 addData.pay = 0
-                addData.activity_detail_string = getDetail()
-                addData.conditions = edt_conditions.text.toString()
-
-                suggestionData.activityCount = suggestionData.activity_detail.size
-                suggestionData.latitude = preferencesService.latitude
-                suggestionData.longitude = preferencesService.longitude
-                suggestionData.accuracy = preferencesService.gpsAccuracy
-                suggestionData.activity_detail_string = getDetail()
-                sendDataOnMap()
+                sendData()
             }
         }
+    }
+
+    private fun sendData() {
+        addData.activity_detail_string = getDetail()
+        addData.conditions = edt_conditions.text.toString()
+        suggestionData.activity_type = helpType
+        suggestionData.latitude = preferencesService.latitude
+        suggestionData.longitude = preferencesService.longitude
+        suggestionData.accuracy = preferencesService.gpsAccuracy
+        dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog?.show()
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.addActivity(addData).observe(this, Observer {
+            if (it.first != null) {
+                saveRequestToDatabase(it.first)
+            } else {
+                CrashReporter.logCustomLogs(it.second)
+                dialog?.dismiss()
+            }
+        })
     }
 
     private fun getDetail(): JSONArray {
@@ -157,41 +161,30 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         return jsonArray
     }
 
-    private fun sendDataOnMap() {
 
-        dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
-        dialog?.show()
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.addActivity(addData).observe(this, Observer {
-            if (it.first != null) {
-                saveRequestToDatabase(it.first)
-            } else {
-                dialog?.dismiss()
-            }
-        })
-    }
-
-    private fun saveRequestToDatabase(first: AddDataResponses?) {
+    private fun saveRequestToDatabase(first: ActivityResponses?) {
         first?.data?.let { item ->
-            val addItemList = ArrayList<AddItem>()
+            val addItemList = ArrayList<AddCategoryDbItem>()
             var itemDetail = ""
-
-            item.activity_detail?.forEach { detail ->
-                itemDetail += detail.detail + "(" + detail.activity_count + "),"
+            item.activity_detail?.forEachIndexed { index, detail ->
+                itemDetail += detail.detail + "(" + detail.quantity + ")"
+                if (item.activity_detail!!.size - 1 != index) {
+                    itemDetail += ","
+                }
             }
-            val singleItem = AddItem()
-            singleItem.activity_type = addData.activity_type
-            singleItem.detail = itemDetail
-            singleItem.activity_uuid = addData.activity_uuid
-            singleItem.date_time = addData.date_time
-            singleItem.activity_category = addData.activity_category
-            singleItem.activity_count = addData.activity_count
-            singleItem.geo_location = addData.geo_location
-            singleItem.qty = addData.qty
-            singleItem.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
-            singleItem.status = 1
+            val categoryItem = AddCategoryDbItem()
+            categoryItem.activity_type = addData.activity_type
+            categoryItem.detail = itemDetail
+            categoryItem.activity_uuid = addData.activity_uuid
+            categoryItem.date_time = addData.date_time
+            categoryItem.activity_category = addData.activity_category
+            categoryItem.activity_count = addData.activity_count
+            categoryItem.geo_location = addData.geo_location
+            categoryItem.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+            categoryItem.status = 1
 
-            addItemList.add(singleItem)
+            addItemList.add(categoryItem)
+
             val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
             viewModel.saveFoodItemToDatabase(addItemList).observe(this, Observer {
                 dialog?.dismiss()
@@ -212,7 +205,9 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onYesClick() {
-        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, HELP_TYPE to helpType, CATEGORY_TYPE to intent.getIntExtra(CATEGORY_TYPE, 0))
+        suggestionData.activity_uuid = addData.activity_uuid
+        val suggestionDataAsString = Gson().toJson(suggestionData)
+        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         finishWithFade()
     }
 
@@ -220,11 +215,13 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         if (helpType == HELP_TYPE_REQUEST) {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 1)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         } else {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 2)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         }

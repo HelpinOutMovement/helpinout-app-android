@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.service.LocationService
@@ -53,25 +52,24 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-    fun getMyRequestsOrOffers(offerType: Int, context: Context): MutableLiveData<List<AddItem>> {
-        val list = MutableLiveData<List<AddItem>>()
+    fun getMyRequestsOrOffers(offerType: Int, context: Context): MutableLiveData<List<AddCategoryDbItem>> {
+        val list = MutableLiveData<List<AddCategoryDbItem>>()
         GlobalScope.launch(Dispatchers.IO) {
-
             val listItems = locationService.getMyRequestsOrOffers(offerType)
             listItems.forEach { item ->
-                item.activity_category.let {
-                    item.name = context.getString(it.getName())
-                    item.icon = it.getIcon()
+                if (item.parent_uuid.isNullOrEmpty()) {
+                    item.name = context.getString(item.activity_category.getName())
                 }
+                item.icon = item.activity_category.getIcon()
             }
             list.postValue(listItems)
         }
         return list
     }
 
-    fun getRequestSent(offerType: Int): MutableLiveData<List<AddItem>> {
-        val list = MutableLiveData<List<AddItem>>()
-        val offerItemList = ArrayList<AddItem>()
+    fun getRequestSent(offerType: Int): MutableLiveData<List<AddCategoryDbItem>> {
+        val list = MutableLiveData<List<AddCategoryDbItem>>()
+        val offerItemList = ArrayList<AddCategoryDbItem>()
 
 //        if (offerType == REQUEST_SENT) {
 //            offerItemList.add(RequestSent("Tina Jamna", "was sent a help request on 14 April 2020, 10:45 am They will call you if they can help you.", R.drawable.ic_food))
@@ -90,16 +88,16 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-    fun getBottomSheetItem(): MutableLiveData<List<BottomHelp>> {
-        val list = MutableLiveData<List<BottomHelp>>()
-        val bottomList = ArrayList<BottomHelp>()
-
-        bottomList.add(BottomHelp(R.drawable.ic_food, "Shyam Narayan", 4.0f, "Can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered."))
-        bottomList.add(BottomHelp(R.drawable.ic_food, "Vinod Kumar", 3.5f, "Can supply once a day after 2 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered."))
-        bottomList.add(BottomHelp(R.drawable.ic_food, "Sandeep Kumar", 4.5f, "Can supply once a day after 2 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered."))
-
-        list.postValue(bottomList)
-        return list
+    fun sendOfferRequesterToServer(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val response = MutableLiveData<Pair<ActivityResponses?, String>>()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                response.postValue(Pair(locationService.sendOfferRequests(activity_type, activity_uuid, list), ""))
+            } catch (e: Exception) {
+                response.postValue(Pair(null, e.getStringException()))
+            }
+        }
+        return response
     }
 
     fun deleteActivity(uuid: String, activity_type: Int): MutableLiveData<Pair<DeleteDataResponses?, String>> {
@@ -138,8 +136,8 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun getUserRequestOfferList(activityType: String): MutableLiveData<Pair<AddDataResponses?, String>> {
-        val response = MutableLiveData<Pair<AddDataResponses?, String>>()
+    fun getUserRequestOfferList(activityType: String): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 response.postValue(Pair(locationService.getUserRequestsOfferList(activityType), ""))
@@ -150,8 +148,8 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun sendPeopleHelp(peopleHelp: AddData): MutableLiveData<Pair<AddDataResponses?, String>> {
-        val response = MutableLiveData<Pair<AddDataResponses?, String>>()
+    fun sendPeopleHelp(peopleHelp: AddData): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 response.postValue(Pair(locationService.getPeopleResponse(peopleHelp), ""))
@@ -174,7 +172,7 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun saveFoodItemToDatabase(addItemList: ArrayList<AddItem>): MutableLiveData<Boolean> {
+    fun saveFoodItemToDatabase(addItemList: ArrayList<AddCategoryDbItem>): MutableLiveData<Boolean> {
         val response = MutableLiveData<Boolean>()
         doAsync {
             response.postValue(locationService.saveFoodItemsToDb(addItemList))

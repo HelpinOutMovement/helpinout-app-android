@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="org.helpinout.billonlights.model.database.entity.AddItem" />
+            type="org.helpinout.billonlights.model.database.entity.AddCategoryDbItem" />
     </data>
 
     <androidx.cardview.widget.CardView

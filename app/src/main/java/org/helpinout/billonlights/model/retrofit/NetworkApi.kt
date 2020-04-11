@@ -27,13 +27,13 @@ interface NetworkApi {
     fun getUserLocationResponseAsync(@Body body: String): Deferred<String>
 
     @POST("activity/suggestions")
-    fun getActivitySuggestionResponseAsync(@Body body: String): Deferred<String>
+    fun getActivitySuggestionResponseAsync(@Body body: String): Deferred<ActivityResponses>
 
     @POST("activity/add")
-    fun getActivityNewAddResponseAsync(@Body body: String): Deferred<AddDataResponses>
+    fun getActivityNewAddResponseAsync(@Body body: String): Deferred<ActivityResponses>
 
     @POST("activity/add")
-    fun getActivityAmbulancesponseAsync(@Body body: String): Deferred<ServerResponse>
+    fun getActivityAmbulancesResponseAsync(@Body body: String): Deferred<ServerResponse>
 
 
     @POST("activity/delete")
@@ -42,11 +42,17 @@ interface NetworkApi {
     @POST("mapping/rating")
     fun getMappingRatingResponseAsync(@Body body: String): Deferred<String>
 
+    @POST("activity/mapping")
+    fun sendOfferRequestsAsync(@Body body: String): Deferred<ActivityResponses>
+
     @POST("mapping/call")
     fun getCallInitiateResponseAsync(@Body body: String): Deferred<String>
 
     @POST("user/pastactivity")
-    fun getUserRequestOfferListResponseAsync(@Body body: String): Deferred<AddDataResponses>
+    fun getUserRequestOfferListResponseAsync(@Body body: String): Deferred<ActivityResponses>
+
+    @POST("user/currentlocation/requestersummary")
+    fun getRequestSummaryResponseAsync(@Body body: String): Deferred<String>
 
     @GET
     fun getSearchResult(@Url url: String): Call<String>

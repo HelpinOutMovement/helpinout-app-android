@@ -56,7 +56,7 @@ fun ImageView.setImage(id: Int) {
 fun Exception.getStringException(): String {
     val writer = StringWriter()
     this.printStackTrace(PrintWriter(writer))
-    return writer.toString()
+    return writer.toString().take(100)
 }
 
 fun String.displayTime(): String {

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="org.helpinout.billonlights.model.database.entity.BottomHelp" />
+            type="org.helpinout.billonlights.model.database.entity.MappingDetail" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_15sdp"
-            android:text="@{item.name}"
+            android:text="@{item.first_name}"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/chk_name"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,6 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:numStars="5"
             android:progressTint="@color/rating_color"
-            android:rating="@{item.rating}"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
             tools:rating="4" />
 
@@ -51,7 +50,6 @@
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="@{item.description}"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toStartOf="@+id/chk_name"
             app:layout_constraintStart_toStartOf="parent"

@@ -5,15 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import org.helpinout.billonlights.model.database.dao.AddItemDao
+import org.helpinout.billonlights.model.database.dao.MappingDao
 import org.helpinout.billonlights.model.database.dao.RegistrationDao
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
+import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.model.database.entity.Registration
 
 
-@Database(entities = [(Registration::class), (AddItem::class)], version = 2, exportSchema = false)
+@Database(entities = [(Registration::class), (AddCategoryDbItem::class), (MappingDetail::class)], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRegistrationDao(): RegistrationDao
     abstract fun getAddItemDao(): AddItemDao
+    abstract fun getMappingDao(): MappingDao
 
     companion object {
         private var mInstance: AppDatabase? = null

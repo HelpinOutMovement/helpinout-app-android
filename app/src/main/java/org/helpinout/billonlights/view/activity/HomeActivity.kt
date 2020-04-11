@@ -18,7 +18,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.HomeFragment
 import org.helpinout.billonlights.view.fragments.MyOfferFragment
@@ -109,8 +109,6 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 startActivity<CrashReporterActivity>()
                 overridePendingTransition(R.anim.enter, R.anim.exit)
                 return true
-            }
-            R.id.menu_logout -> {
             }
         }
         return super.onOptionsItemSelected(item)
@@ -370,6 +368,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getUserRequestOfferList("0").observe(this, Observer {
             it.first?.let { response ->
+
+                Timber.d("")
                 val offers = response.data?.offers
                 val requests = response.data?.requests
                 if (!offers.isNullOrEmpty()) {
@@ -383,29 +383,61 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
     private fun insertItemToDatabase(offers: List<ActivityAddDetail>) {
-        val addDataList = ArrayList<AddItem>()
+        val addDataList = ArrayList<AddCategoryDbItem>()
         offers.forEach { offer ->
             try {
-                val singleItem = AddItem()
-                singleItem.activity_type = offer.activity_type
-                singleItem.activity_uuid = offer.activity_uuid
+                val item = AddCategoryDbItem()
+                item.activity_type = offer.activity_type
+                item.activity_uuid = offer.activity_uuid
 
-                val itemDetail = offer.detail + "(" + offer.activity_count + "),"
+                var itemDetail = ""
+                offer.activity_detail?.forEachIndexed { index, it ->
 
-                singleItem.detail = itemDetail
-                singleItem.activity_uuid = offer.activity_uuid
-                singleItem.date_time = offer.date_time
-                singleItem.activity_category = offer.activity_category
-                singleItem.activity_count = offer.activity_count
-                singleItem.geo_location = offer.geo_location
-                singleItem.qty = "1"
-                singleItem.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
-                singleItem.status = 1
-                addDataList.add(singleItem)
+                    if (offer.activity_category == CATEGORY_PEOPLE) {
+                        //for people
+                        item.volunters_required = it.volunters_required
+                        item.volunters_detail = it.volunters_detail
+                        item.volunters_quantity = it.volunters_quantity
+                        item.technical_personal_required = it.technical_personal_required
+                        item.technical_personal_detail = it.technical_personal_detail
+                        item.technical_personal_quantity = it.technical_personal_quantity
+
+                        if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
+                            itemDetail += it.volunters_detail + "(" + it.volunters_quantity + ")"
+
+                        }
+                        if (!it.technical_personal_detail.isNullOrEmpty()) {
+                            if (itemDetail.isNotEmpty()) {
+                                itemDetail += ","
+                            }
+                            itemDetail += it.technical_personal_detail + "(" + it.technical_personal_quantity + ")"
+                        }
+
+                    }else  if (offer.activity_category == CATEGORY_AMBULANCE) {
+                        item.qty = it.quantity
+                        itemDetail = ""
+                    }
+                    else {
+                        itemDetail += it.detail + "(" + it.quantity + ")"
+                        if (offer.activity_detail!!.size - 1 != index) {
+                            itemDetail += ","
+                        }
+                    }
+                }
+                item.detail = itemDetail
+                item.activity_uuid = offer.activity_uuid
+                item.date_time = offer.date_time
+                item.activity_category = offer.activity_category
+                item.activity_count = offer.activity_count
+                item.geo_location = offer.geo_location
+                item.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+                item.status = 1
+                addDataList.add(item)
             } catch (e: Exception) {
                 Timber.d("")
             }
         }
+        addDataList.reverse()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.saveFoodItemToDatabase(addDataList).observe(this, Observer {
             Timber.d("")

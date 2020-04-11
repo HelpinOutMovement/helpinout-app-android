@@ -33,6 +33,7 @@
         <activity android:name=".view.activity.RegistrationActivity" />
         <activity
             android:name=".view.activity.HomeActivity"
+            android:launchMode="singleTask"
             android:theme="@style/HomeTheme" />
         <activity android:name=".view.activity.LoginActivity" />
 

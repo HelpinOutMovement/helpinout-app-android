@@ -14,10 +14,7 @@ import kotlinx.android.synthetic.main.activity_sms_verification.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.LoginResponse
 import org.helpinout.billonlights.model.database.entity.Registration
-import org.helpinout.billonlights.utils.HOME_STEP
-import org.helpinout.billonlights.utils.REGISTRATION_STEP
-import org.helpinout.billonlights.utils.isNetworkAvailable
-import org.helpinout.billonlights.utils.toastError
+import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.viewmodel.LoginRegistrationViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
@@ -44,7 +41,9 @@ class SMSVerificationActivity : BaseActivity() {
     }
 
     private fun sendVerificationCode(number: String) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
+        if (number == ALLOW_NUMBER) {
+            checkIfNotRegistered()
+        } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
     }
 
     private val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

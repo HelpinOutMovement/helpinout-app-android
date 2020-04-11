@@ -11,14 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import kotlinx.android.synthetic.main.fragment_offers.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.adapters.RequestSentAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 
 class RequestSentFragment : Fragment() {
-    private var itemList = ArrayList<AddItem>()
+    private var itemList = ArrayList<AddCategoryDbItem>()
 
     lateinit var adapter: RequestSentAdapter
     private var mLastClickTime: Long = 0
@@ -68,7 +68,7 @@ class RequestSentFragment : Fragment() {
         })
     }
 
-    private fun onRateReportClick(item: AddItem) {
+    private fun onRateReportClick(item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
@@ -77,7 +77,7 @@ class RequestSentFragment : Fragment() {
         rateReport.show(childFragmentManager, null)
     }
 
-    private fun onDeleteClick(item: AddItem) {
+    private fun onDeleteClick(item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }

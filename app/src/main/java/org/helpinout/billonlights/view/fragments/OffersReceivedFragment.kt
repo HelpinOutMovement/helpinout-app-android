@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import kotlinx.android.synthetic.main.fragment_offers.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddItem
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.model.database.entity.OfferReceived
 import org.helpinout.billonlights.utils.DOUBLE_CLICK_TIME
 import org.helpinout.billonlights.utils.OFFER_TYPE
@@ -92,7 +92,7 @@ class OffersReceivedFragment : Fragment() {
 //        deleteDialog.show(childFragmentManager, null)
     }
 
-    private fun onDeleteYesClick(item: AddItem) {
+    private fun onDeleteYesClick(item: AddCategoryDbItem) {
         val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.deleteActivity(item.activity_uuid ?: "", offerType).observe(this, Observer {

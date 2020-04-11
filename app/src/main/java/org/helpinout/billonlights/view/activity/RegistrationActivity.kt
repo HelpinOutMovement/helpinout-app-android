@@ -186,7 +186,7 @@ class RegistrationActivity : LocationActivity(), View.OnClickListener {
             registration.first_name = first_name.text.toString()
             registration.last_name = last_name.text.toString()
             registration.org_name = ""
-            registration.org_type = -1
+            registration.org_type = null
             registration.org_division = ""
             registration.user_type = 1
             registration.mobile_no = preferencesService.mobileNumber

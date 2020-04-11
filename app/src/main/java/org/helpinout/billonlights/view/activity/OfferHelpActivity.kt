@@ -2,6 +2,7 @@ package org.helpinout.billonlights.view.activity
 
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -24,7 +25,15 @@ class OfferHelpActivity : LocationActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = getString(R.string.title_offer_help_with)
         checkLocationPermission()
+        getRequesterSummary()
         mRecyclerView
+    }
+
+    private fun getRequesterSummary() {
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.addRequesterSummary().observe(this, Observer {
+            Log.d("","")
+        })
     }
 
     private val mRecyclerView by lazy {

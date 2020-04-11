@@ -14,6 +14,7 @@ import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApi
 import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.utils.*
+import org.jetbrains.anko.doAsync
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -95,8 +96,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return currentLocationResponse
     }
 
-    fun getSuggestion(body: SuggestionData): MutableLiveData<Pair<String?, String>> {
-        val suggestionResponse = MutableLiveData<Pair<String?, String>>()
+    fun getSuggestion(body: SuggestionRequest): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val suggestionResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 suggestionResponse.postValue(Pair(locationService.getNewSuggestionResult(body), ""))
@@ -107,11 +108,24 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return suggestionResponse
     }
 
-    fun addActivity(body: AddData): MutableLiveData<Pair<AddDataResponses?, String?>> {
-        val addActivityResponse = MutableLiveData<Pair<AddDataResponses?, String?>>()
+    fun addActivity(body: AddData): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val addActivityResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 addActivityResponse.postValue(Pair(locationService.getNewAddActivityResult(body), ""))
+            } catch (e: Exception) {
+                addActivityResponse.postValue(Pair(null, e.getStringException()))
+            }
+        }
+
+        return addActivityResponse
+    }
+
+    fun addRequesterSummary(): MutableLiveData<Pair<String?, String?>> {
+        val addActivityResponse = MutableLiveData<Pair<String?, String?>>()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                addActivityResponse.postValue(Pair(locationService.getRequesterSummary(), ""))
             } catch (e: Exception) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
             }
@@ -157,6 +171,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         } catch (e: JSONException) {
         }
         return mNearestResponse
+    }
+
+    fun saveMapping(mappingList: java.util.ArrayList<MappingDetail>): MutableLiveData<Boolean> {
+        val response = MutableLiveData<Boolean>()
+        doAsync {
+            response.postValue(locationService.saveMappingToDb(mappingList))
+        }
+        return response
     }
 
 }
