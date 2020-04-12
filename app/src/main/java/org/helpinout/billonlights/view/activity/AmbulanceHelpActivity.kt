@@ -10,15 +10,14 @@ import com.avneesh.crashreporter.CrashReporter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_ambulance_help.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddData
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
+import org.helpinout.billonlights.model.database.entity.AddData
 import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.BottomSheetsRequestConfirmationFragment
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivityForResult
-import timber.log.Timber
 
 
 class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
@@ -114,7 +113,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
     private fun onYesClick() {
         suggestionData.activity_uuid = ambulanceHelp.activity_uuid
         val suggestionDataAsString = Gson().toJson(suggestionData)
-        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString,HELP_TYPE to helpType)
+        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         finishWithFade()
     }
 

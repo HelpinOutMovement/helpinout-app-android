@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.*
 import org.helpinout.billonlights.R
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 
-class BottomSheetsDeleteConfirmationFragment(private val item: String, private val onDeleteYesClick: (String) -> Unit) : BottomSheetDialogFragment() {
+class BottomSheetsDeleteConfirmationFragment(private val item: AddCategoryDbItem, private val onDeleteYesClick: (AddCategoryDbItem) -> Unit) : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_delete_confirmation, container, false)
     }

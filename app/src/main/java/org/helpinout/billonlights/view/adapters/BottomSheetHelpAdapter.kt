@@ -19,7 +19,7 @@ class BottomSheetHelpAdapter(var homeItemList: ArrayList<ActivityAddDetail>, pri
         val homeItem = homeItemList[position]
         holder.item.item = homeItem.app_user_detail
         holder.itemView.tv_message.text = homeItem.offer_condition
-        holder.itemView.chk_name.setOnClickListener {
+        holder.itemView.tv_name.setOnClickListener {
             homeItem.isSelected = !homeItem.isSelected
         }
     }
@@ -28,7 +28,7 @@ class BottomSheetHelpAdapter(var homeItemList: ArrayList<ActivityAddDetail>, pri
         return homeItemList.size
     }
 
-    fun getCheckedItemsList(): List<ActivityAddDetail>{
+    fun getCheckedItemsList(): List<ActivityAddDetail> {
         return homeItemList.filter { it.isSelected }
     }
 

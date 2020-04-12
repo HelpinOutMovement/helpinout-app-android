@@ -108,7 +108,8 @@
     <string name="hint_conditions" translatable="false"><![CDATA[We can supply once a day after 12 noon with a minimum 1 day notice.<br/><br/> Food will need to be picked up, it cannot be delivered.]]></string>
     <string name="comment">Comments</string>
     <string name="select_help_provider">Select help providers</string>
-    <string name="phone_number_will_be_send">Your phone number will be sent to these help-providers</string>
+    <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
+    <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
     <string name="send_request">Send Request</string>
     <string name="loading">Loading...</string>
     <string name="update_profile">Update profile</string>
@@ -148,6 +149,10 @@
     <string name="other_thing_template_request">%1$s;  %2$s</string>
     <string name="other_thing_template_offer">%1$s;  %2$s</string>
     <string name="toast_delete_success">Delete success</string>
+    <string name="select_help_requester">Select help requesters</string>
+    <string name="search_for_help_provider">Search for help provider</string>
+    <string name="search_for_help_requester">Search for help requesters</string>
+    <string name="rating_success">Rating success</string>
 
 
     <string-array name="org_types">

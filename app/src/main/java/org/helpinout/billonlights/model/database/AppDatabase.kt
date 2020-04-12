@@ -12,7 +12,7 @@ import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.model.database.entity.Registration
 
 
-@Database(entities = [(Registration::class), (AddCategoryDbItem::class), (MappingDetail::class)], version = 2, exportSchema = false)
+@Database(entities = [(Registration::class), (AddCategoryDbItem::class), (MappingDetail::class)], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRegistrationDao(): RegistrationDao
     abstract fun getAddItemDao(): AddItemDao

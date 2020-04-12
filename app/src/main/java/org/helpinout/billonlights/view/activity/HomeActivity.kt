@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_home.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
+import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.HomeFragment
 import org.helpinout.billonlights.view.fragments.MyOfferFragment
@@ -413,17 +414,50 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                             itemDetail += it.technical_personal_detail + "(" + it.technical_personal_quantity + ")"
                         }
 
-                    }else  if (offer.activity_category == CATEGORY_AMBULANCE) {
+                    } else if (offer.activity_category == CATEGORY_AMBULANCE) {
                         item.qty = it.quantity
                         itemDetail = ""
-                    }
-                    else {
+                    } else {
                         itemDetail += it.detail + "(" + it.quantity + ")"
                         if (offer.activity_detail!!.size - 1 != index) {
                             itemDetail += ","
                         }
                     }
                 }
+
+                offer.mapping?.forEach { mapping ->
+                    if (mapping.offer_detail != null) {
+                        mapping.offer_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
+                        mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                        mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
+                        mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
+                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
+                        mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
+                        mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                        mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                    } else if (mapping.request_detail != null) {
+                        mapping.request_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
+                        mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                        mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
+                        mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
+                        mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
+                        mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
+                        mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                        mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                    }
+                }
+                val mappingList = ArrayList<MappingDetail>()
+                offer.mapping?.forEach {
+                    if (it.offer_detail != null) {
+                        mappingList.add(it.offer_detail!!.app_user_detail!!)
+                    } else {
+                        mappingList.add(it.request_detail!!.app_user_detail!!)
+                    }
+                }
+                if (mappingList.isNotEmpty()) saveMapping(mappingList)
+
                 item.detail = itemDetail
                 item.activity_uuid = offer.activity_uuid
                 item.date_time = offer.date_time
@@ -440,6 +474,13 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         addDataList.reverse()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.saveFoodItemToDatabase(addDataList).observe(this, Observer {
+            Timber.d("")
+        })
+    }
+
+    private fun saveMapping(mappingList: ArrayList<MappingDetail>) {
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.saveMapping(mappingList).observe(this, Observer {
             Timber.d("")
         })
     }

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="org.helpinout.billonlights.model.database.entity.OfferReceived" />
+            type="org.helpinout.billonlights.model.database.entity.AddCategoryDbItem" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -49,7 +49,6 @@
                 style="@style/StyleTextViewNormal"
                 android:layout_width="0dp"
                 android:layout_marginEnd="@dimen/_15sdp"
-                android:text="@{item.detail}"
                 app:layout_constraintEnd_toStartOf="@+id/iv_call"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"

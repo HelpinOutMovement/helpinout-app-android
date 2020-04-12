@@ -65,6 +65,12 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             startLocationPicker()
         }
         layout_peek.setOnClickListener(this)
+        if (helpType == HELP_TYPE_OFFER) {
+            tv_title.setText(R.string.select_help_requester)
+            tv_comment.setText(R.string.phone_number_will_be_send_to_requester)
+            button_continue.setBackgroundColor(R.color.colorAccent)
+
+        }
         button_continue.setOnClickListener(this)
         bottom_sheet.hide()
         mRecyclerView
@@ -176,6 +182,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun updateLocation() {
         location?.let { loc ->
             mMap?.let {
+                 mMap?.isMyLocationEnabled = true
                 mMap!!.clear()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
 //                it.addMarker(MarkerOptions().position(currentLocation).title(getString(R.string.current_location)))
@@ -227,7 +234,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     iv_expend_collapse.setImageResource(R.drawable.ic_expand_less)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
                 } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
                 }
             }
@@ -243,20 +250,37 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             if (it.first != null) {
                 if (it.first!!.data != null) {
                     it.first!!.data!!.mapping?.forEach { mapping ->
-                        mapping.offer_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
-                        mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
-                        mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
-                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
-                        mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
-                        mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+
+                        if (mapping.offer_detail != null) {
+                            mapping.offer_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
+                            mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
+                            mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                            mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
+                            mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
+                            mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
+                            mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
+                            mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                            mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        } else if (mapping.request_detail != null) {
+                            mapping.request_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
+                            mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
+                            mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                            mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
+                            mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
+                            mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
+                            mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
+                            mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                            mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        }
                     }
                     saveMappingToDataBase(it.first!!.data!!.mapping)
-                }else{
+                } else {
                     dialog?.dismiss()
                 }
             } else {
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }
                 dialog?.dismiss()
                 CrashReporter.logCustomLogs(it.second)
             }
@@ -267,25 +291,27 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun saveMappingToDataBase(mapping: List<Mapping>?) {
         val mappingList = ArrayList<MappingDetail>()
         mapping?.forEach {
-            if (it.offer_detail!!.app_user_detail != null) {
+            if (it.offer_detail != null) {
                 mappingList.add(it.offer_detail!!.app_user_detail!!)
+            } else {
+                mappingList.add(it.request_detail!!.app_user_detail!!)
             }
         }
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.saveMapping(mappingList).observe(this, Observer {
             dialog?.dismiss()
-            if (it){
+            if (it) {
                 if (helpType == HELP_TYPE_REQUEST) {
                     val intent = Intent(baseContext!!, HomeActivity::class.java)
                     intent.putExtra(SELECTED_INDEX, 1)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra(PAGER_INDEX, 0)
+                    intent.putExtra(PAGER_INDEX, 1)
                     startActivity(intent)
                 } else {
                     val intent = Intent(baseContext!!, HomeActivity::class.java)
                     intent.putExtra(SELECTED_INDEX, 2)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra(PAGER_INDEX, 0)
+                    intent.putExtra(PAGER_INDEX, 1)
                     startActivity(intent)
                 }
                 finishWithFade()

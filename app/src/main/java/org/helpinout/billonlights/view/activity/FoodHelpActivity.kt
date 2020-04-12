@@ -144,6 +144,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
                 saveRequestToDatabase(it.first)
             } else {
                 CrashReporter.logCustomLogs(it.second)
+                toastError(it.second)
                 dialog?.dismiss()
             }
         })

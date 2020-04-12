@@ -70,17 +70,37 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getOfferHelpItems(context: Context): MutableLiveData<List<OfferHelpItem>> {
         val list = MutableLiveData<List<OfferHelpItem>>()
         val offerItemList = ArrayList<OfferHelpItem>()
-        offerItemList.add(OfferHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food, 24, 2300))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group, 43, 2100))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter, 13, 1100))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask, 5, 520))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing, 12, 543))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines, 10, 245))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance, 345, 4201))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical, 43, 5430))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other, 34, 5322))
 
-        list.postValue(offerItemList)
+        offerItemList.add(OfferHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other))
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val response = locationService.getRequesterSummary()
+                if (response.status == 1) {
+                    offerItemList.forEach { off ->
+                        val item = response.data.find { off.type == it.activity_category }
+                        item?.let {
+                            off.nearRequest = it.near
+                            off.totalRequest = it.total
+                        }
+                    }
+                }
+                list.postValue(offerItemList)
+            } catch (e: Exception) {
+                list.postValue(offerItemList)
+            }
+        }
+
+
+
         return list
     }
 
@@ -113,19 +133,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 addActivityResponse.postValue(Pair(locationService.getNewAddActivityResult(body), ""))
-            } catch (e: Exception) {
-                addActivityResponse.postValue(Pair(null, e.getStringException()))
-            }
-        }
-
-        return addActivityResponse
-    }
-
-    fun addRequesterSummary(): MutableLiveData<Pair<String?, String?>> {
-        val addActivityResponse = MutableLiveData<Pair<String?, String?>>()
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                addActivityResponse.postValue(Pair(locationService.getRequesterSummary(), ""))
             } catch (e: Exception) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
             }
@@ -173,7 +180,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return mNearestResponse
     }
 
-    fun saveMapping(mappingList: java.util.ArrayList<MappingDetail>): MutableLiveData<Boolean> {
+    fun saveMapping(mappingList: ArrayList<MappingDetail>): MutableLiveData<Boolean> {
         val response = MutableLiveData<Boolean>()
         doAsync {
             response.postValue(locationService.saveMappingToDb(mappingList))

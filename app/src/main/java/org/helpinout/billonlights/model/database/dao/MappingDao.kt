@@ -16,4 +16,8 @@ interface MappingDao {
 
     @Query("Select * from mapping where activity_type =:offerType")
     fun getMyRequestsOrOffers(offerType: Int): List<MappingDetail>
+
+
+    @Query("delete from mapping WHERE activity_uuid=:activity_uuid and parent_uuid=:parentUUid")
+    fun deleteMapping(activity_uuid: String, parentUUid: String)
 }

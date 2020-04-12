@@ -6,8 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
-import org.helpinout.billonlights.utils.OFFER_RECEIVED
-import org.helpinout.billonlights.utils.REQUEST_RECEIVED
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.view.fragments.OffersReceivedFragment
 import org.helpinout.billonlights.view.fragments.RequestSentFragment
 
@@ -20,18 +19,18 @@ class MyOffersPagerAdapter(fm: FragmentManager, private val context: Context) : 
         when (position) {
             0 -> {
                 if (offerReceivedFragment == null) {
-                    offerReceivedFragment = OffersReceivedFragment.newInstance(REQUEST_RECEIVED)
+                    offerReceivedFragment = OffersReceivedFragment.newInstance(HELP_TYPE_OFFER, HELP_TYPE_REQUEST)
                 }
                 return offerReceivedFragment!!
             }
             1 -> {
                 if (requestSentFragment == null) {
-                    requestSentFragment = RequestSentFragment.newInstance(HELP_TYPE_OFFER)
+                    requestSentFragment = RequestSentFragment.newInstance(HELP_TYPE_OFFER, HELP_TYPE_OFFER)
                 }
                 return requestSentFragment!!
             }
         }
-        return OffersReceivedFragment.newInstance(OFFER_RECEIVED)
+        return OffersReceivedFragment.newInstance(HELP_TYPE_OFFER, HELP_TYPE_REQUEST)
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

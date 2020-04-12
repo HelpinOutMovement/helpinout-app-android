@@ -23,7 +23,7 @@ interface NetworkApi {
     @POST("user/update")
     fun getProfileUpdateResponseAsync(@Body body: String): Deferred<RegistrationResponse>
 
-    @POST("user/currentlocation")
+    @POST("user/locationsuggestion")
     fun getUserLocationResponseAsync(@Body body: String): Deferred<String>
 
     @POST("activity/suggestions")
@@ -37,7 +37,11 @@ interface NetworkApi {
 
 
     @POST("activity/delete")
-    fun getMappingDeleteResponseAsync(@Body body: String): Deferred<DeleteDataResponses>
+    fun getActivityDeleteResponseAsync(@Body body: String): Deferred<DeleteDataResponses>
+
+    @POST("mapping/delete")
+    fun getMappingDeleteResponseAsync(@Body body: String): Deferred<String>
+
 
     @POST("mapping/rating")
     fun getMappingRatingResponseAsync(@Body body: String): Deferred<String>
@@ -51,8 +55,8 @@ interface NetworkApi {
     @POST("user/pastactivity")
     fun getUserRequestOfferListResponseAsync(@Body body: String): Deferred<ActivityResponses>
 
-    @POST("user/currentlocation/requestersummary")
-    fun getRequestSummaryResponseAsync(@Body body: String): Deferred<String>
+    @POST("user/locationrequestersummary")
+    fun getRequestSummaryResponseAsync(@Body body: String): Deferred<OfferHelpResponses>
 
     @GET
     fun getSearchResult(@Url url: String): Call<String>

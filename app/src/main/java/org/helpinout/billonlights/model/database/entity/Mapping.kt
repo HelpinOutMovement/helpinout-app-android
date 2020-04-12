@@ -5,11 +5,13 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 class Mapping {
+    var request_detail: ActivityAddDetail? = null
     var offer_detail: ActivityAddDetail? = null
     var status: Int? = null
+    var request_mapping_initiator: Int? = 0
 }
 
-@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid","activity_uuid"], unique = true)])
+@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid"], unique = true)])
 class MappingDetail {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -24,9 +26,11 @@ class MappingDetail {
     var org_division: String? = ""
     var date_time: String? = ""
     var activity_type: Int? = 0
+    var rating: Int? = 0
     var activity_category: Int? = 0
-    var geo_location:String?=""
+    var geo_location: String? = ""
     var parent_uuid: String? = ""
     var activity_uuid: String? = ""
     var offer_condition: String? = ""
+    var request_mapping_initiator: Int? = 0
 }

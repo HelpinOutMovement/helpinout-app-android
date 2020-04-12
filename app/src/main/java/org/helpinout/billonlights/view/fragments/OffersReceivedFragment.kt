@@ -1,20 +1,16 @@
 package org.helpinout.billonlights.view.fragments
 
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import kotlinx.android.synthetic.main.fragment_offers.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
-import org.helpinout.billonlights.model.database.entity.OfferReceived
-import org.helpinout.billonlights.utils.DOUBLE_CLICK_TIME
+import org.helpinout.billonlights.utils.INITIATOR
 import org.helpinout.billonlights.utils.OFFER_TYPE
 import org.helpinout.billonlights.utils.goneIf
 import org.helpinout.billonlights.utils.visibleIf
@@ -22,17 +18,17 @@ import org.helpinout.billonlights.view.adapters.OfferReceivedAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 
-class OffersReceivedFragment : Fragment() {
-    private var itemList = ArrayList<OfferReceived>()
-    private var mLastClickTime: Long = 0
+class OffersReceivedFragment : BaseFragment() {
+    private var itemList = ArrayList<AddCategoryDbItem>()
 
     lateinit var adapter: OfferReceivedAdapter
 
     companion object {
-        fun newInstance(type: Int): OffersReceivedFragment {
+        fun newInstance(type: Int, initiator: Int): OffersReceivedFragment {
             val myFragment = OffersReceivedFragment()
             val args = Bundle()
             args.putInt(OFFER_TYPE, type)
+            args.putInt(INITIATOR, initiator)
             myFragment.arguments = args
             return myFragment
         }
@@ -55,13 +51,14 @@ class OffersReceivedFragment : Fragment() {
         val itemDecorator = ItemOffsetDecoration(activity!!, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
-        loadOfferItemList(offerType)
+        loadRequestList()
     }
 
-    @Synchronized
-    private fun loadOfferItemList(offerType: Int) {
+    override fun loadRequestList() {
+        val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
+        val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getReceivedOffers(offerType).observe(this, Observer { list ->
+        viewModel.getMyRequestsOrOffers(offerType, initiator, activity!!).observe(this, Observer { list ->
             progress_bar.hide()
             list?.let {
                 itemList.clear()
@@ -70,33 +67,6 @@ class OffersReceivedFragment : Fragment() {
             recycler_view.goneIf(itemList.isEmpty())
             tv_no_data_available.visibleIf(itemList.isEmpty())
             adapter.notifyDataSetChanged()
-        })
-    }
-
-    private fun onRateReportClick(item: OfferReceived) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-
-//        val rateReport = BottomSheetRateReportFragment(item, false)
-//        rateReport.show(childFragmentManager, null)
-    }
-
-    private fun onDeleteClick(item: OfferReceived) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-//        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item., onDeleteYesClick = { onDeleteYesClick(item) })
-//        deleteDialog.show(childFragmentManager, null)
-    }
-
-    private fun onDeleteYesClick(item: AddCategoryDbItem) {
-        val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.deleteActivity(item.activity_uuid ?: "", offerType).observe(this, Observer {
-            Log.d("", "")
         })
     }
 }

@@ -5,7 +5,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "add_item", indices = [Index(value = ["activity_uuid"], unique = true)])
-class AddCategoryDbItem : Offer() {
+class AddCategoryDbItem {
     var name: String = ""
     var detail: String? = ""
     var icon: Int = 0
@@ -22,8 +22,9 @@ class AddCategoryDbItem : Offer() {
     var technical_personal_required: Int = 0
     var technical_personal_detail: String? = ""
     var technical_personal_quantity: String? = ""
+    var isMappingExist: Boolean? = false
     var status: Int = 0
-    var mobile_no:String?=""
+    var mobile_no: String? = ""
 
     var address: String = ""
     var qty: String? = ""

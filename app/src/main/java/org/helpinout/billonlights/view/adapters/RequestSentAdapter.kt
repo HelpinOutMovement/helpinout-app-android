@@ -23,22 +23,23 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
 
             CATEGORY_FOOD -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.food_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
                         val text = holder.itemView.context.getString(R.string.food_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
@@ -46,23 +47,27 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
             }
             CATEGORY_PEOPLE -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.people_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
                         val text = holder.itemView.context.getString(R.string.people_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
@@ -71,48 +76,56 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
             }
             CATEGORY_SHELTER -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.shelter_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.shelter_template_offer,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
+                        val text = holder.itemView.context.getString(R.string.shelter_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 }
             }
             CATEGORY_MED_PPE -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.med_ppe_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.med_ppe_template_offer,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
+                        val text = holder.itemView.context.getString(R.string.med_ppe_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
@@ -120,23 +133,27 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
             }
             CATEGORY_TESTING -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.testing_template_request,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
+                        val text = holder.itemView.context.getString(R.string.testing_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
                         val text = holder.itemView.context.getString(R.string.testing_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
@@ -145,46 +162,54 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
             }
             CATEGORY_MEDICINES -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.medicines_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.medicines_template_offer,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
+                        val text = holder.itemView.context.getString(R.string.medicines_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 }
             }
             CATEGORY_AMBULANCE -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
                         val text = holder.itemView.context.getString(R.string.ambulance_template_request, item.qty.toString(), item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
                         val text = holder.itemView.context.getString(R.string.ambulance_template_offer, item.qty.toString(), item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
@@ -192,47 +217,55 @@ class RequestSentAdapter(private var requestSentList: ArrayList<AddCategoryDbIte
             }
             CATEGORY_MEDICAL_EQUIPMENT -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.medical_equipment_template_request,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
+                        val text = holder.itemView.context.getString(R.string.medical_equipment_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.medical_equipment_template_offer,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
+                        val text = holder.itemView.context.getString(R.string.medical_equipment_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 }
             }
             CATEGORY_OTHERS -> {
                 if (item.activity_type == HELP_TYPE_REQUEST) {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.other_thing_template_request,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
+                        val text = holder.itemView.context.getString(R.string.other_thing_template_request, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
 
                 } else {
-                    if (!item.parent_uuid.isNullOrEmpty()){
-                        holder.itemView.tv_rate_report.hide()
+                    if (!item.parent_uuid.isNullOrEmpty()) {
                         val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
-                    }else{
-                        holder.itemView.tv_rate_report.hide()
-                        val text = holder.itemView.context.getString(R.string.other_thing_template_offer,  item.detail, item.date_time.displayTime())
+                    } else {
+                        item.isMappingExist?.let {
+                            if (it) holder.itemView.tv_rate_report.hide()
+                        }
+                        holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
+                        val text = holder.itemView.context.getString(R.string.other_thing_template_offer, item.detail, item.date_time.displayTime())
                         holder.itemView.tv_detail.text = text
                     }
                 }

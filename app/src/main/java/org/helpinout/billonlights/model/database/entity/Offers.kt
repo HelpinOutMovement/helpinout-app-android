@@ -3,9 +3,9 @@ package org.helpinout.billonlights.model.database.entity
 import org.json.JSONArray
 
 
-open class Offer
+//open class Offer
 
-data class OfferReceived(var name: String = "", var detail: String, var mobile: String, var icon: Int) : Offer()
+//data class OfferReceived(var name: String = "", var detail: String, var mobile: String, var icon: Int) : Offer()
 
 
 class AddData {

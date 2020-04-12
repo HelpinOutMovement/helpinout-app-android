@@ -5,12 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_offer_received.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.ItemOfferReceivedBinding
-import org.helpinout.billonlights.model.database.entity.OfferReceived
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.utils.callPhoneNumber
+import org.helpinout.billonlights.utils.displayTime
+import org.helpinout.billonlights.utils.hide
 import org.helpinout.billonlights.utils.inflate
 
 
-class OfferReceivedAdapter(private var helpType: Int, private var offerList: ArrayList<OfferReceived>, private val onRateReportClick: (OfferReceived) -> Unit, private val onDeleteClick: (OfferReceived) -> Unit) : RecyclerView.Adapter<OfferReceivedAdapter.OfferReceivedViewHolder>() {
+class OfferReceivedAdapter(private var helpType: Int, private var offerList: ArrayList<AddCategoryDbItem>, private val onRateReportClick: (AddCategoryDbItem) -> Unit, private val onDeleteClick: (AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<OfferReceivedAdapter.OfferReceivedViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferReceivedViewHolder {
         val viewLayout: ItemOfferReceivedBinding = parent.inflate(R.layout.item_offer_received)
         return OfferReceivedViewHolder(viewLayout)
@@ -21,14 +23,17 @@ class OfferReceivedAdapter(private var helpType: Int, private var offerList: Arr
         val item = offerList[position]
         holder.item.item = item
 
-//        if (helpType == HELP_TYPE_REQUEST) {
-//            holder.itemView.tv_rate_report.hide()
-//            //val text = holder.itemView.context.getString(R.string.food_template, item.quantity.toString(), item.quantity.toString(), item.date_time.displayTime())
-//            holder.itemView.tv_detail.text = text
-//        }else{
-        holder.itemView.tv_detail.text = item.detail
-//        }
-
+        if (!item.parent_uuid.isNullOrEmpty()) {
+            val text = holder.itemView.context.getString(R.string.mapping_template, item.date_time.displayTime())
+            holder.itemView.tv_detail.text = text
+        } else {
+            item.isMappingExist?.let {
+                if (it) holder.itemView.tv_rate_report.hide()
+            }
+            holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
+            val text = holder.itemView.context.getString(R.string.food_template_request, item.detail, item.date_time.displayTime())
+            holder.itemView.tv_detail.text = text
+        }
         holder.itemView.tv_rate_report.setOnClickListener {
             onRateReportClick(item)
         }
@@ -36,8 +41,8 @@ class OfferReceivedAdapter(private var helpType: Int, private var offerList: Arr
             onDeleteClick(item)
         }
         holder.itemView.iv_call.setOnClickListener {
-            if (item.mobile.isNotEmpty()) {
-                holder.itemView.context.callPhoneNumber(item.mobile)
+            if (!item.mobile_no.isNullOrEmpty()) {
+                holder.itemView.context.callPhoneNumber(item.mobile_no!!)
             }
         }
 

@@ -3,6 +3,7 @@ package org.helpinout.billonlights.model
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import com.avneesh.crashreporter.CrashReporter
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import org.helpinout.billonlights.model.dagger.ApiComponent
@@ -15,6 +16,10 @@ class BillionLightsApplication : MultiDexApplication() {
         super.onCreate()
         MultiDex.install(this);
         Fabric.with(this, Crashlytics())
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
+        externalCacheDir?.path?.let {
+            CrashReporter.initialize(this, it)
+        }
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         mAppComponent = DaggerApiComponent.builder().appModule(AppModule(this)).build()
     }

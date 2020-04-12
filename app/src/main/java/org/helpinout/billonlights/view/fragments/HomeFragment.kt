@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.Status
@@ -38,12 +39,14 @@ import org.helpinout.billonlights.view.activity.OfferHelpActivity
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.startActivity
 import org.json.JSONObject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 
 class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListener {
 
+    private lateinit var mapFragment: SupportMapFragment
     private var mMap: GoogleMap? = null
     private var location: Location? = null
 
@@ -61,7 +64,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
             Places.initialize(activity!!, getString(R.string.google_api_key))
         }
         checkPermissionAndAccessLocation()
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         ask_for_help.setOnClickListener(this)
         offer_help.setOnClickListener(this)
@@ -123,6 +126,18 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
+//    private fun showMyLocation(){
+//        try{
+//            val locationButton = (mapFragment.findViewById(1).getParent() as View).findViewById<View>(2)
+//            val rlp: RelativeLayout.LayoutParams = locationButton.layoutParams as RelativeLayout.LayoutParams
+//            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
+//            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+//            rlp.setMargins(0, 0, 30, 30)
+//        }catch (e:Exception){
+//         Timber.d("")
+//        }
+//    }
+
     override fun onLocationChanged(location: Location?) {
         this.location = location
         if (location != null && mMap != null) {
@@ -133,6 +148,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private fun updateLocation() {
         location?.let { loc ->
             mMap?.let {
+                mMap!!.isMyLocationEnabled = true
                 mMap!!.clear()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
 //                it.addMarker(MarkerOptions().position(currentLocation).title(getString(R.string.current_location)))

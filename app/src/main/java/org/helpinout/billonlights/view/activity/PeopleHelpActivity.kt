@@ -16,7 +16,6 @@ import org.helpinout.billonlights.view.fragments.BottomSheetsRequestConfirmation
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivityForResult
-import timber.log.Timber
 
 class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
@@ -148,7 +147,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     private fun onYesClick() {
         suggestionData.activity_uuid = peopleHelp.activity_uuid
         val suggestionDataAsString = Gson().toJson(suggestionData)
-        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString,HELP_TYPE to helpType)
+        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         finishWithFade()
     }
 

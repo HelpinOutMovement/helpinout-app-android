@@ -95,7 +95,7 @@
         android:layout_marginStart="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:gravity="center"
-        android:text="@string/phone_number_will_be_send"
+        android:text="@string/phone_number_will_be_send_to_provider"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

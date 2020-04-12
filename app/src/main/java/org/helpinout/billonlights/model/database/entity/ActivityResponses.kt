@@ -10,9 +10,9 @@ class AddDataData {
     var offers: List<ActivityAddDetail>? = null
     var requests: List<ActivityAddDetail>? = null
     var activity_detail: List<ActivityAddDetail>? = null// this item for single food items
-    var mapping: List<Mapping>? = null
-    var activity_uuid:String=""
-    var activity_count:String=""
+    var mapping: List<Mapping>? = null// for help provider activity do not delete
+    var activity_uuid: String = ""
+    var activity_count: String = ""
 }
 
 class ActivityAddDetail {
@@ -30,6 +30,7 @@ class ActivityAddDetail {
     var app_user_id: Int = 0
     var status: Int = 0
     var activity_detail: List<ActivityDetailSubItem>? = null
+    var mapping: List<Mapping>? = null
     var app_user_detail: MappingDetail? = null
 }
 

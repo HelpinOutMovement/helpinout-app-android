@@ -9,7 +9,6 @@ import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
-import org.helpinout.billonlights.utils.Utils.Companion.getTimeZoneString
 import org.helpinout.billonlights.utils.getIcon
 import org.json.JSONArray
 import org.json.JSONObject
@@ -49,7 +48,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("offerer", body.offerer)
                 bodyJson.put("requester", body.requester)
                 bodyJson.put("pay", body.pay)
-                bodyJson.put("time_zone", getTimeZoneString())
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -95,7 +93,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                     }
                     bodyJson.put("requester", jsonArray)
                 }
-                bodyJson.put("time_zone", getTimeZoneString())
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -128,7 +125,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("activity_uuid", body.activity_uuid)
                 bodyJson.put("geo_location", body.latitude + "," + body.longitude)
                 bodyJson.put("geo_accuracy", body.accuracy)
-                bodyJson.put("time_zone", getTimeZoneString())
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -139,7 +135,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getRequesterSummary(): String {
+    suspend fun getRequesterSummary(): OfferHelpResponses {
         return service.makeCall { it.networkApi.getRequestSummaryResponseAsync(createRequesterSummaryRequest()) }
     }
 
@@ -157,7 +153,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
-                bodyJson.put("time_zone", getTimeZoneString())
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -186,7 +181,48 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
-                bodyJson.put("time_zone", getTimeZoneString())
+                mainData.put("data", bodyJson)
+            } catch (e: Exception) {
+                CrashReporter.logException(e)
+            }
+        } catch (e: Exception) {
+            CrashReporter.logException(e)
+        }
+        return mainData.toString()
+    }
+
+    suspend fun deleteMappingFromServer(item: AddCategoryDbItem, activityType: Int): String {
+        return service.makeCall {
+            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(item, activityType))
+        }
+    }
+
+    private fun createMappingDeleteRequest(item: AddCategoryDbItem, activityType: Int): String {
+        val mainData = JSONObject()
+        try {
+            mainData.put("app_id", preferencesService.appId)
+            mainData.put("imei_no", preferencesService.imeiNumber)
+            mainData.put("app_version", preferencesService.appVersion)
+            mainData.put("date_time", currentDateTime())
+            val bodyJson = JSONObject()
+            try {
+                FirebaseInstanceId.getInstance().token?.let {
+                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
+                }
+                bodyJson.put("activity_uuid", item.parent_uuid)
+                bodyJson.put("activity_type", activityType)
+
+                val jsonArray = JSONArray()
+                val json = JSONObject()
+                json.put("activity_uuid", item.activity_uuid)
+                jsonArray.put(json)
+
+                if (item.activity_type == HELP_TYPE_REQUEST) {
+                    bodyJson.put("requester", jsonArray)
+                } else {
+                    bodyJson.put("offerer", jsonArray)
+
+                }
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -199,11 +235,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
     suspend fun deleteActivity(uuid: String, activityType: Int): DeleteDataResponses {
         return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(createDeleteRequest(uuid, activityType))
+            it.networkApi.getActivityDeleteResponseAsync(createActivityDeleteRequest(uuid, activityType))
         }
     }
 
-    private fun createDeleteRequest(uuid: String, activityType: Int): String {
+    private fun createActivityDeleteRequest(uuid: String, activityType: Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -227,13 +263,13 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun makeRating(mappingId: String, uuid: String, rating: String, recommendOther: Int): String {
+    suspend fun makeRating(item: AddCategoryDbItem, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
         return service.makeCall {
-            it.networkApi.getMappingRatingResponseAsync(createRatingRequest(mappingId, uuid, rating, recommendOther))
+            it.networkApi.getMappingRatingResponseAsync(createRatingRequest(item, activityType, rating, recommendOther, comments))
         }
     }
 
-    private fun createRatingRequest(mappingId: String, uuid: String, rating: String, recommendOther: Int): String {
+    private fun createRatingRequest(item: AddCategoryDbItem, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -245,8 +281,29 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-                bodyJson.put("activity_uuid", uuid)
-                bodyJson.put("mapping_id", mappingId)
+
+                bodyJson.put("activity_uuid", item.parent_uuid)
+                bodyJson.put("activity_type", activityType)
+
+                val jsonArray = JSONArray()
+                val json = JSONObject()
+                json.put("activity_uuid", item.activity_uuid)
+
+                val rateReportJson = JSONObject()
+                rateReportJson.put("rating", rating)
+                rateReportJson.put("recommend_other", recommendOther)
+                rateReportJson.put("comments", comments)
+
+                json.put("rate_report", rateReportJson)
+
+                jsonArray.put(json)
+
+                if (item.activity_type == HELP_TYPE_REQUEST) {
+                    bodyJson.put("requester", jsonArray)
+                } else {
+                    bodyJson.put("offerer", jsonArray)
+
+                }
                 bodyJson.put("rating", rating)
                 bodyJson.put("recommend_other", recommendOther)
                 mainData.put("data", bodyJson)
@@ -259,9 +316,9 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun makeCallTracking(uuid: String, activityType: Int): String {
+    suspend fun makeCallTracking(item: AddCategoryDbItem, activityType: Int): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createDeleteRequest(uuid, activityType))
+            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(item, activityType))
         }
     }
 
@@ -295,7 +352,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    fun getMyRequestsOrOffers(offerType: Int): List<AddCategoryDbItem> {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): List<AddCategoryDbItem> {
         val finalRequest = ArrayList<AddCategoryDbItem>()
         val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
         var type = offerType
@@ -305,14 +362,23 @@ class LocationService(private val preferencesService: PreferencesService, privat
             HELP_TYPE_OFFER
         }
         val mappingList = db.getMappingDao().getMyRequestsOrOffers(type)
+
         requestList.forEach { item ->
+
+            val initiatorMappingList = mappingList.filter { it.request_mapping_initiator == initiator }
+
             val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
-            if (mapping.isEmpty()) {
+
+            if (mapping.isNotEmpty()) {
+                item.isMappingExist = true
+            }
+
+            if (initiatorMappingList.isEmpty()) {
                 item.icon = item.activity_category.getIcon()
                 finalRequest.add(item)
             } else {
                 val newList = ArrayList<AddCategoryDbItem>()
-                mapping.forEach { t ->
+                initiatorMappingList.forEach { t ->
                     val m = AddCategoryDbItem()
                     m.name = t.first_name + " " + t.last_name
                     m.activity_type = t.activity_type!!
@@ -368,7 +434,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("pay", peopleHelp.pay)
                 bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
-                bodyJson.put("time_zone", getTimeZoneString())
 
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
@@ -408,7 +473,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("qty", ambulance.qty)
                 bodyJson.put("geo_location", ambulance.geo_location)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
-                bodyJson.put("time_zone", getTimeZoneString())
                 bodyJson.put("pay", ambulance.pay)
 
                 mainData.put("data", bodyJson)
@@ -445,4 +509,14 @@ class LocationService(private val preferencesService: PreferencesService, privat
         }
 
     }
+
+    fun deleteMappingFromDb(item: AddCategoryDbItem): Boolean {
+        return try {
+            db.getMappingDao().deleteMapping(item.activity_uuid, item.parent_uuid!!)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
 }

@@ -14,25 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <CheckBox
             android:id="@+id/tv_name"
-            style="@style/StyleTextViewNormal"
+            style="@style/StyleCheckBoxRight"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_15sdp"
             android:text="@{item.first_name}"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/chk_name"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Shyam Narayan" />
-
-        <CheckBox
-            android:id="@+id/chk_name"
-            style="@style/StyleCheckBox"
-            android:layout_width="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_name" />
 
         <RatingBar
             android:id="@+id/rating_bar"
