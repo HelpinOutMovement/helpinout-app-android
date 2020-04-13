@@ -3,12 +3,13 @@ package org.helpinout.billonlights.view.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Intent
-import android.content.IntentSender
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.avneesh.crashreporter.CrashReporter
@@ -21,21 +22,26 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import org.helpinout.billonlights.utils.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
-import org.helpinout.billonlights.utils.UPDATE_INTERVAL_IN_MILLISECONDS
+import org.helpinout.billonlights.utils.*
 
-abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiClient.ConnectionCallbacks, ResultCallback<LocationSettingsResult> {
+abstract class LocationActivity : BaseActivity(), LocationListener, OnPermissionListener, GoogleApiClient.ConnectionCallbacks, ResultCallback<LocationSettingsResult> {
 
     var mGoogleApiClient: GoogleApiClient? = null
     private val TAG = "MoreActivity"
     private var mLocationSettingsRequest: LocationSettingsRequest? = null
     var mLocationRequest: LocationRequest? = null
     private val REQUEST_CHECK_SETTINGS = 43
+    var showSetting: Boolean = false
 
     @Synchronized
     fun buildGoogleApiClient() {
         mGoogleApiClient = GoogleApiClient.Builder(this).addConnectionCallbacks(this).addApi(LocationServices.API).build()
         mGoogleApiClient!!.connect()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(locationServicesChangeReceiver, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION))
     }
 
     override fun onConnected(p0: Bundle?) {
@@ -56,20 +62,27 @@ abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiCli
             }
 
             override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                if (showSetting) {
+                    showSettingsDialog()
+                    showSetting = false
+                }
+                onPermissionCancel()
             }
 
             override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {
                 token.continuePermissionRequest()
+                onPermissionCancel()
+                showSetting = false
             }
         }).check()
     }
 
-    abstract fun onPermissionAllow()
 
     override fun onConnectionSuspended(p0: Int) {
 
     }
 
+    abstract fun onLocationOnOff(isEnable: Boolean)
 
     private fun buildLocationSettingsRequest() {
         val builder = LocationSettingsRequest.Builder()
@@ -91,6 +104,8 @@ abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiCli
             LocationSettingsStatusCodes.SUCCESS -> {
                 startLocationUpdates()
             }
+            REQUEST_APP_SETTINGS -> checkLocationPermission()
+
             LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
                 Log.i(TAG, "Location settings are not satisfied. Show the user a dialog to" + "upgrade location settings ")
                 try {
@@ -105,10 +120,12 @@ abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiCli
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         when (requestCode) {
+            REQUEST_APP_SETTINGS -> checkLocationPermission()
             REQUEST_CHECK_SETTINGS -> if (resultCode == Activity.RESULT_OK) {
                 startLocationUpdates()
+            } else {
+                onLocationOnOff(isLocationEnabled())
             }
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
@@ -138,6 +155,14 @@ abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiCli
         } catch (e: Exception) {
             CrashReporter.logException(e)
         }
+        try {
+            unregisterReceiver(locationServicesChangeReceiver)
+            if (mGoogleApiClient != null) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
+            }
+        } catch (e: Exception) {
+
+        }
     }
 
     fun stopLocationUpdate() {
@@ -147,6 +172,19 @@ abstract class LocationActivity : BaseActivity(), LocationListener, GoogleApiCli
             }
         } catch (e: Exception) {
             CrashReporter.logException(e)
+        }
+    }
+
+
+
+    private fun isLocationEnabled(): Boolean {
+        val provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
+        return provider != ""
+    }
+
+    private val locationServicesChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            onLocationOnOff(isLocationEnabled())
         }
     }
 

@@ -12,7 +12,6 @@ class AskForHelpAdapter(var homeItemList: ArrayList<AskForHelpItem>, private val
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AskForHelpViewHolder {
         val viewLayout: ItemAskForHelpBinding = parent.inflate(R.layout.item_ask_for_help)
         return AskForHelpViewHolder(viewLayout)
-
     }
 
     override fun onBindViewHolder(holder: AskForHelpViewHolder, position: Int) {
@@ -30,5 +29,10 @@ class AskForHelpAdapter(var homeItemList: ArrayList<AskForHelpItem>, private val
 
 
     inner class AskForHelpViewHolder internal constructor(val item: ItemAskForHelpBinding) : RecyclerView.ViewHolder(item.root)
+//    {
+//        init {
+//            itemView.card.outlineAmbientShadowColor= itemView.context.getColor(R.color.colorPrimaryDark)
+//        }
+//    }
 
 }

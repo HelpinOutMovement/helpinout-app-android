@@ -6,8 +6,10 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +31,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_help_map.*
 import kotlinx.android.synthetic.main.bottom_sheet_help_provider_requester.*
+import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
+import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
 import org.helpinout.billonlights.model.database.entity.Mapping
@@ -45,18 +49,19 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import timber.log.Timber
 
 class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, View.OnClickListener {
+    private var mapFragment: SupportMapFragment? = null
     private var dialog: ProgressDialog? = null
     private var suggestionData: SuggestionRequest? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
     private var bottomItemList = ArrayList<ActivityAddDetail>()
-    private lateinit var bottomAdapter: BottomSheetHelpAdapter
+    private var bottomAdapter: BottomSheetHelpAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkLocationPermission()
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment?.getMapAsync(this)
         iv_menu.setImageResource(R.drawable.ic_arrow_back)
         iv_menu.setOnClickListener {
             onBackPressed()
@@ -72,9 +77,12 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
         }
         button_continue.setOnClickListener(this)
+        btnPermission.setOnClickListener(this)
+        enableLocation.setOnClickListener(this)
         bottom_sheet.hide()
         mRecyclerView
     }
+
 
     private fun loadSuggestionData() {
         val data = intent.getStringExtra(SUGGESTION_DATA)!!
@@ -87,15 +95,25 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     if (!res.data?.offers.isNullOrEmpty()) {
                         bottomItemList.clear()
                         bottomItemList.addAll(res.data?.offers!!)
-                        bottomAdapter.notifyDataSetChanged()
+                        bottomAdapter?.notifyDataSetChanged()
                     }
                 } else {
                     if (!res.data?.requests.isNullOrEmpty()) {
                         bottomItemList.clear()
                         bottomItemList.addAll(res.data?.requests!!)
-                        bottomAdapter.notifyDataSetChanged()
+                        bottomAdapter?.notifyDataSetChanged()
                     }
                 }
+                if (helpType == HELP_TYPE_OFFER) {
+                    tv_no_help_provider.setText(R.string.no_help_requeter)
+                }
+                tv_comment.visibleIf(bottomItemList.isNotEmpty())
+                if (bottomItemList.isEmpty()) {
+                    button_continue.setText(R.string.btn_continue)
+                }
+                tv_no_help_provider.visibleIf(bottomItemList.isEmpty())
+                recycler_view.inVisibleIf(bottomItemList.isEmpty())
+
                 mMap?.let {
                     it.clear()
                     showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
@@ -116,7 +134,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
-        loadSuggestionData()
     }
 
     private fun onItemClick(item: ActivityAddDetail) {
@@ -144,8 +161,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         latLing?.let {
                             mMap?.clear()
                             mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
-                            //findRequesterOrProviders(it.latitude, it.longitude)
+                            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
                         }
                         tv_current_address.text = place.address
                     }
@@ -155,7 +171,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     Log.i("TAG", status.statusMessage)
                 }
                 Activity.RESULT_CANCELED -> {
-                    // The user canceled the operation.
                 }
             }
         }
@@ -163,6 +178,24 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onPermissionAllow() {
         buildGoogleApiClient()
+        layoutPermission.hide()
+        bottom_sheet.show()
+    }
+
+    override fun onPermissionCancel() {
+        layoutPermission.show()
+        bottom_sheet.hide()
+    }
+
+    override fun onLocationOnOff(isEnable: Boolean) {
+        if (isEnable) {
+            layoutLocation.hide()
+            bottom_sheet.show()
+            checkLocationPermission()
+        } else {
+            layoutLocation.show()
+            bottom_sheet.hide()
+        }
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -182,22 +215,48 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun updateLocation() {
         location?.let { loc ->
             mMap?.let {
-                 mMap?.isMyLocationEnabled = true
+                mMap?.isMyLocationEnabled = true
                 mMap!!.clear()
+                changeMyLocationButton()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
-//                it.addMarker(MarkerOptions().position(currentLocation).title(getString(R.string.current_location)))
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
+                it.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
 
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
+                    tv_address.show()
                     tv_current_address.text = getAddress(midLatLng.latitude, midLatLng.longitude)
+                    try {
+                        suggestionData?.latitude = midLatLng.latitude.toString()
+                        suggestionData?.longitude = midLatLng.longitude.toString()
+                    } catch (e: Exception) {
+
+                    }
+                    loadSuggestionData()
+                    tv_address.text = tv_current_address.text
                 }
 
                 tv_current_address.text = getAddress(loc.latitude, loc.longitude)
+                tv_address.text = tv_current_address.text
                 stopLocationUpdate()
                 showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
             }
+        }
+    }
+
+    private fun changeMyLocationButton() {
+        try {
+            val locationButton = (mapFragment?.view?.findViewById<View>("1".toInt())?.parent as View).findViewById<View>("2".toInt())
+            val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
+            val ruleList = rlp.rules
+            for (i in ruleList.indices) {
+                rlp.removeRule(i)
+            }
+            rlp.bottomMargin = 100
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE)
+        } catch (e: Exception) {
+
         }
     }
 
@@ -226,7 +285,17 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     override fun onClick(v: View?) {
         when (v) {
             button_continue -> {
-                sendRequestOffersToServer()
+                if (bottomItemList.isEmpty()) {
+                    val intent = Intent(baseContext!!, HomeActivity::class.java)
+                    intent.putExtra(SELECTED_INDEX, 1)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.putExtra(PAGER_INDEX, 1)
+                    startActivity(intent)
+                } else {
+                    if (bottomAdapter!!.getCheckedItemsList().isEmpty()) {
+                        toastError(R.string.please_select_provider_helper)
+                    } else sendRequestOffersToServer()
+                }
             }
             layout_peek -> {
                 val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
@@ -238,13 +307,22 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
                 }
             }
+            btnPermission -> {
+                showSetting = true
+                checkLocationPermission()
+            }
+            enableLocation -> {
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+
+            }
         }
     }
 
     private fun sendRequestOffersToServer() {
         dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog?.show()
-        val list = bottomAdapter.getCheckedItemsList()
+        val list = bottomAdapter?.getCheckedItemsList() ?: listOf()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.sendOfferRequesterToServer(suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
             if (it.first != null) {

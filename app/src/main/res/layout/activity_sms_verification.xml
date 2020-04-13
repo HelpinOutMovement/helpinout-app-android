@@ -9,6 +9,14 @@
         android:id="@+id/layout_logo"
         layout="@layout/layout_logo" />
 
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_margin="@dimen/_10sdp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/layout_logo"
+        style="@style/StyleTextView" />
+
     <TextView
         android:id="@+id/tv_otp"
         style="@style/StyleTextView.Bold"
@@ -16,7 +24,8 @@
         android:text="@string/label_enter_otp"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_message" />
+
 
     <org.helpinout.billonlights.view.view.OtpEditText
         android:id="@+id/edt_otp"
@@ -34,12 +43,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_otp" />
 
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_margin="@dimen/_10sdp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/edt_otp"
+        style="@style/StyleTextView" />
+
     <Button
         android:id="@+id/btn_verify"
         style="@style/StyleLoginButton"
         android:text="@string/button_verify"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_otp" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_timer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

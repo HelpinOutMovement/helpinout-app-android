@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <include
             android:id="@+id/layout_toolbar"
             layout="@layout/toolbar_map" />
@@ -38,6 +39,25 @@
             app:itemIconTint="@drawable/bottom_navigation_selector"
             app:itemTextColor="@drawable/bottom_navigation_selector"
             app:menu="@menu/bottom_nav_menu" />
+
+        <include
+            android:id="@+id/layoutLocation"
+            layout="@layout/layout_enable_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/layoutPermission"
+            layout="@layout/layout_permission"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

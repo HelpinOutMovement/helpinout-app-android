@@ -1,6 +1,5 @@
 package org.helpinout.billonlights.view.activity
 
-import android.location.Location
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
@@ -16,7 +15,7 @@ import org.helpinout.billonlights.viewmodel.LoginRegistrationViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 
-class RegistrationActivity : LocationActivity(), View.OnClickListener {
+class RegistrationActivity : BaseActivity(), View.OnClickListener {
 
     private var isUpdate: Boolean = false
     private var registration = Registration()
@@ -25,7 +24,6 @@ class RegistrationActivity : LocationActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = getString(R.string.update_profile)
-        checkLocationPermission()
         chk_as_organization.setOnCheckedChangeListener { _, b ->
             if (b) {
                 til_org_name.show()
@@ -161,15 +159,6 @@ class RegistrationActivity : LocationActivity(), View.OnClickListener {
         })
     }
 
-    override fun onLocationChanged(location: Location?) {
-        location?.let {
-            preferencesService.latitude = it.latitude.toString()
-            preferencesService.longitude = it.longitude.toString()
-            preferencesService.gpsAccuracy = it.accuracy.toString()
-            stopLocationUpdate()
-        }
-    }
-
     private fun validate(): Boolean {
         if (!chk_as_organization.isChecked) {
             if (first_name.text.isNullOrEmpty()) {
@@ -237,9 +226,5 @@ class RegistrationActivity : LocationActivity(), View.OnClickListener {
 
     override fun getLayout(): Int {
         return R.layout.activity_register
-    }
-
-    override fun onPermissionAllow() {
-        buildGoogleApiClient()
     }
 }

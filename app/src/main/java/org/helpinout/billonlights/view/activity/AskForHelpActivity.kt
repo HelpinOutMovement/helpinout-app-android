@@ -1,6 +1,5 @@
 package org.helpinout.billonlights.view.activity
 
-import android.location.Location
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +15,7 @@ import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.startActivity
 
 
-class AskForHelpActivity : LocationActivity() {
+class AskForHelpActivity : BaseActivity() {
 
     private var itemList = ArrayList<AskForHelpItem>()
     private lateinit var adapter: AskForHelpAdapter
@@ -25,7 +24,6 @@ class AskForHelpActivity : LocationActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = getString(R.string.title_need_help_with)
-        checkLocationPermission()
         mRecyclerView
     }
 
@@ -88,20 +86,7 @@ class AskForHelpActivity : LocationActivity() {
         overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 
-
-    override fun onLocationChanged(location: Location?) {
-        location?.let {
-            preferencesService.latitude = location.latitude.toString()
-            preferencesService.longitude = location.longitude.toString()
-            preferencesService.gpsAccuracy = location.accuracy.toInt().toString()
-        }
-    }
-
     override fun getLayout(): Int {
         return R.layout.activity_help
-    }
-
-    override fun onPermissionAllow() {
-        buildGoogleApiClient()
     }
 }

@@ -29,6 +29,20 @@
         app:layout_constraintTop_toTopOf="@+id/map"
         tools:visibility="visible" />
 
+    <TextView
+        android:id="@+id/tv_address"
+        style="@style/StyleTextViewNormal"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
+        android:padding="@dimen/_3sdp"
+        tools:visibility="visible"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:background="@color/transparent_color"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        app:layout_constraintTop_toBottomOf="@+id/current_map_pin" />
+
     <include
         android:id="@+id/map_toolbar"
         layout="@layout/layout_map_toolbar"

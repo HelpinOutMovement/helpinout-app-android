@@ -153,6 +153,20 @@
     <string name="search_for_help_provider">Search for help provider</string>
     <string name="search_for_help_requester">Search for help requesters</string>
     <string name="rating_success">Rating success</string>
+    <string name="otp_send_success">OTP send success</string>
+    <string name="otp_description">Please type the verification code sent to %1$s</string>
+    <string name="enable_location">Please enable your location without location app will not work</string>
+    <string name="label_app_need_location_permission">Application need location permission, please click the below button to allow permission</string>
+    <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="message_need_permission">Need Permissions</string>
+    <string name="title_go_to_setting">GOTO SETTINGS</string>
+    <string name="label_location">Enable location</string>
+    <string name="label_permission">Allow permission</string>
+    <string name="no_help_requeter">Currently there are no help-requesters in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="no_help_provider">Currently there are no help-providers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="please_select_provider_helper">Please select provider or helper first</string>
+    <string name="someone_accept_offer">You received new offers</string>
+    <string name="someone_receive_your_request">Some one send you request</string>
 
 
     <string-array name="org_types">

@@ -6,6 +6,7 @@ const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 const val DISPLAY_DATE_FORMAT = "dd MMMM yyyy, h:mm a"
 const val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
 const val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
+const val REQUEST_APP_SETTINGS = 101
 const val DOUBLE_CLICK_TIME = 1000
 const val AUTOCOMPLETE_REQUEST_CODE = 42
 const val PLACE_SEARCH_KEY = "AIzaSyCw2cMowXHdpMUTI8lKZfO34DLGNHzn2Lw"
@@ -52,3 +53,12 @@ const val PAGER_INDEX = "PagerIndex"
 
 const val HELP_TYPE_REQUEST = 1
 const val HELP_TYPE_OFFER = 2
+
+
+//notification constants
+const val TITLE = "title"
+const val ACTIVITY_TYPE = "activity_type"
+const val ACTION = "action"
+const val NOTIFICATION_CATEGORY_TYPE = "category_type"
+const val ACTIVITY_TIME = "activity_time"
+const val ACTIVITY_UUID = "activity_uuid"

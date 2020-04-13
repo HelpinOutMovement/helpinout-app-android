@@ -39,14 +39,13 @@ import org.helpinout.billonlights.view.activity.OfferHelpActivity
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.startActivity
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 
 class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListener {
 
-    private lateinit var mapFragment: SupportMapFragment
+    private  var mapFragment: SupportMapFragment?=null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
 
@@ -65,7 +64,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
         checkPermissionAndAccessLocation()
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
         ask_for_help.setOnClickListener(this)
         offer_help.setOnClickListener(this)
         iv_menu.setOnClickListener {
@@ -108,11 +107,12 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                         latLing?.let {
                             mMap?.clear()
 //                            mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
+                            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
                             findNearestHelpProviders(it.latitude, it.longitude)
                             findNearestHelpRequester(it.latitude, it.longitude)
                         }
                         tv_current_address.text = place.address
+                        tv_address.text = place.address
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
@@ -126,18 +126,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
-//    private fun showMyLocation(){
-//        try{
-//            val locationButton = (mapFragment.findViewById(1).getParent() as View).findViewById<View>(2)
-//            val rlp: RelativeLayout.LayoutParams = locationButton.layoutParams as RelativeLayout.LayoutParams
-//            rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0)
-//            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-//            rlp.setMargins(0, 0, 30, 30)
-//        }catch (e:Exception){
-//         Timber.d("")
-//        }
-//    }
-
     override fun onLocationChanged(location: Location?) {
         this.location = location
         if (location != null && mMap != null) {
@@ -149,20 +137,41 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         location?.let { loc ->
             mMap?.let {
                 mMap!!.isMyLocationEnabled = true
+
+                changeMyLocationButton()
+
                 mMap!!.clear()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
-//                it.addMarker(MarkerOptions().position(currentLocation).title(getString(R.string.current_location)))
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
+                it.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
-                    tv_current_address.text = activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
+                    tv_address?.show()
+                    tv_current_address?.text = activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
+                    tv_address?.text= tv_current_address.text
                 }
-                tv_current_address.text = activity!!.getAddress(loc.latitude, loc.longitude)
+                tv_current_address?.text = activity!!.getAddress(loc.latitude, loc.longitude)
+                tv_address?.text= tv_current_address.text
                 stopLocationUpdate()
                 findNearestHelpProviders(loc.latitude, loc.longitude)
                 findNearestHelpRequester(loc.latitude, loc.longitude)
             }
+        }
+    }
+
+    private fun changeMyLocationButton() {
+        try {
+            val locationButton = (mapFragment?.view?.findViewById<View>("1".toInt())?.parent as View).findViewById<View>("2".toInt())
+            val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
+            val ruleList = rlp.rules
+            for (i in ruleList.indices) {
+                rlp.removeRule(i)
+            }
+            rlp.bottomMargin = 100
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE)
+        } catch (e: Exception) {
+
         }
     }
 

@@ -9,9 +9,11 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.Editable
 import android.text.Html
@@ -36,10 +38,7 @@ import com.bumptech.glide.Glide
 import es.dmoral.toasty.Toasty
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.view.activity.RegistrationActivity
-import org.jetbrains.anko.clearTop
-import org.jetbrains.anko.configuration
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.newTask
+import org.jetbrains.anko.*
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -170,6 +169,26 @@ fun Fragment.currentDateTime(): String {
     return formatter.format(curDateTime)
 }
 
+fun Activity.isLocationEnabled(): Boolean {
+
+    val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    return  manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+}
+fun Activity.showSettingsDialog() {
+    alert(R.string.message_permission, R.string.message_need_permission) {
+        positiveButton(R.string.title_go_to_setting) {
+            dialog?.cancel()
+            openSettings()
+        }
+    }.show()
+}
+fun Activity.openSettings() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    val uri = Uri.fromParts("package", packageName, null)
+    intent.data = uri
+    startActivityForResult(intent, REQUEST_APP_SETTINGS)
+}
 
 fun Activity.isNetworkAvailable(): Boolean {
     val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
@@ -338,8 +357,8 @@ infix fun View.visibleIf(condition: Boolean) {
     visibility = if (condition) View.VISIBLE else View.GONE
 }
 
-fun View.visibleIf(condition: Boolean, otherwise: Int = View.GONE) {
-    visibility = if (condition) View.VISIBLE else otherwise
+infix fun View.inVisibleIf(condition: Boolean) {
+    visibility = if (condition) View.INVISIBLE else View.VISIBLE
 }
 
 infix fun View.goneIf(condition: Boolean) {

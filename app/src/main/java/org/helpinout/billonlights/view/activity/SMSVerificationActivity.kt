@@ -3,6 +3,7 @@ package org.helpinout.billonlights.view.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.TaskExecutors
@@ -18,19 +19,22 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.viewmodel.LoginRegistrationViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.util.concurrent.TimeUnit
 
 class SMSVerificationActivity : BaseActivity() {
 
+    private var timer: CountDownTimer? = null
     private var resendToken: String? = null
     private var mAuth: FirebaseAuth? = null
-
+    private val timerTime = 60//sec
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        sendVerificationCode(preferencesService.countryCode + preferencesService.mobileNumber)
 
+        sendVerificationCode(preferencesService.countryCode + preferencesService.mobileNumber)
         btn_verify.setOnClickListener {
             if (edt_otp.text.toString().isNotEmpty()) {
                 verifyCode(edt_otp.text.toString())
@@ -44,12 +48,16 @@ class SMSVerificationActivity : BaseActivity() {
         if (number == ALLOW_NUMBER) {
             checkIfNotRegistered()
         } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
+
+        tv_message.text = getString(R.string.otp_description, number)
     }
 
     private val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onCodeSent(s: String, forceResendingToken: PhoneAuthProvider.ForceResendingToken) {
             super.onCodeSent(s, forceResendingToken)
+            toastSuccess(R.string.otp_send_success)
+            startTimer()
             resendToken = s
         }
 
@@ -69,6 +77,32 @@ class SMSVerificationActivity : BaseActivity() {
         }
     }
 
+    private fun startTimer() {
+        timer = object : CountDownTimer(timerTime * 1000L, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                try {
+                    val totalSec = millisUntilFinished / 1000
+                    val seconds = (totalSec % 60).toInt()
+                    val minutes = (totalSec / 60).toInt()
+                    val f: NumberFormat = DecimalFormat("00")
+                    tv_timer.text = f.format(minutes) + ":" + f.format(seconds)
+                } catch (e: Exception) {
+                }
+            }
+            override fun onFinish() {
+                try {
+                    tv_timer.text = "00:00"
+                } catch (e: Exception) {
+                }
+            }
+        }
+        timer?.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer?.cancel()
+    }
 
     private fun verifyCode(code: String?) {
         if (resendToken != null) {

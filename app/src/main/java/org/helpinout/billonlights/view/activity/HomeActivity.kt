@@ -1,14 +1,17 @@
 package org.helpinout.billonlights.view.activity
 
+import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +19,8 @@ import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.layout_enable_location.*
+import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
@@ -30,8 +35,9 @@ import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
 
-class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private var homeFragment: HomeFragment?=null
     private var pagerIndex: Int = 0
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
@@ -67,7 +73,10 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         setLanguage()
         checkLocationPermission()
         checkOfferList()
+        btnPermission.setOnClickListener(this)
+        enableLocation.setOnClickListener(this)
     }
+
 
     private fun setLanguage() {
         when (preferencesService.defaultLanguage) {
@@ -147,8 +156,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     bottom_nav_view.menu.getItem(0).isChecked = true
                     home.actionView = getMenuDotView()
                     toolbar?.setTitle(R.string.title_home)
-                    val fragment = HomeFragment()
-                    loadFragment(fragment)
+                     homeFragment = HomeFragment()
+                    loadFragment(homeFragment!!)
                 }
             }
             R.id.navigation_my_request, R.id.nav_my_request -> {
@@ -341,7 +350,29 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
     override fun onPermissionAllow() {
+        bottom_nav_view.show()
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        layoutPermission.hide()
         buildGoogleApiClient()
+    }
+
+    override fun onPermissionCancel() {
+        bottom_nav_view.hide()
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        layoutPermission.show()
+    }
+
+    override fun onLocationOnOff(isEnable: Boolean) {
+        if (isEnable) {
+            bottom_nav_view.show()
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            layoutLocation.hide()
+            checkLocationPermission()
+        } else {
+            layoutLocation.show()
+            bottom_nav_view.hide()
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        }
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -349,6 +380,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             preferencesService.latitude = it.latitude.toString()
             preferencesService.longitude = it.longitude.toString()
             preferencesService.gpsAccuracy = it.accuracy.toString()
+            homeFragment?.onLocationChanged(location)
             sendLocationToServer()
             stopLocationUpdate()
         }
@@ -369,7 +401,6 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getUserRequestOfferList("0").observe(this, Observer {
             it.first?.let { response ->
-
                 Timber.d("")
                 val offers = response.data?.offers
                 val requests = response.data?.requests
@@ -485,12 +516,26 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         })
     }
 
-
     fun menuClick() {
         if (!drawer_layout.isDrawerOpen(Gravity.START)) {
             drawer_layout.openDrawer(Gravity.START)
         } else {
             drawer_layout.closeDrawer(Gravity.START)
+        }
+    }
+
+
+    override fun onClick(v: View?) {
+        when (v) {
+            btnPermission -> {
+                showSetting = true
+                checkLocationPermission()
+            }
+            enableLocation -> {
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+
+            }
         }
     }
 }
