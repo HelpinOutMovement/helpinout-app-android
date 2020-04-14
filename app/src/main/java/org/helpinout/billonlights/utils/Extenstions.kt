@@ -82,7 +82,7 @@ fun Spinner.spinnerHideKeyboard() {
     }
 }
 
-fun Activity.getAddress(latitude: Double, longitude: Double): String {
+fun Context.getAddress(latitude: Double, longitude: Double): String {
     return try {
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses: List<Address>

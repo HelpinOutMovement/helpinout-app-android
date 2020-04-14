@@ -217,13 +217,11 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 1)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         } else {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 2)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         }
         finishWithFade()

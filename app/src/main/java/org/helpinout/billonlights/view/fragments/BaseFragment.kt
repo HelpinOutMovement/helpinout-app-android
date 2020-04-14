@@ -10,12 +10,14 @@ import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.HelpProviderRequestersActivity
+import org.helpinout.billonlights.view.activity.RequestDetailActivity
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 
 abstract class BaseFragment : Fragment() {
     var mLastClickTime: Long = 0
-
+    val activityResult=33
     fun onRateReportClick(item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
@@ -43,10 +45,10 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    fun onSubmitClick(item: AddCategoryDbItem, rating: String, recommendToOther: Int, comments: String) {
+    private fun onSubmitClick(item: AddCategoryDbItem, rating: String, recommendToOther: Int, comments: String) {
         val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.makeRating(item, offerType, rating, recommendToOther, comments).observe(this, Observer {
+        viewModel.makeRating(item.parent_uuid,item.activity_uuid, offerType, rating, recommendToOther, comments).observe(this, Observer {
             if (it.first != null) {
                 toastSuccess(R.string.rating_success)
             }
@@ -59,16 +61,36 @@ abstract class BaseFragment : Fragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item, onDeleteYesClick = { uuid -> onDeleteYesClick(uuid) })
+        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.parent_uuid,item.activity_uuid, onDeleteYesClick = { uuid1,uuid2 -> onDeleteYesClick(uuid1,uuid2)  })
         deleteDialog.show(childFragmentManager, null)
     }
 
-    fun onDeleteYesClick(item: AddCategoryDbItem) {
+    fun onCardClick(offerType: Int, initiator: Int, helpType: Int, item: AddCategoryDbItem) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
+        activity?.startActivityForResult<RequestDetailActivity>(activityResult,OFFER_TYPE to offerType, INITIATOR to initiator, HELP_TYPE to helpType, ACTIVITY_UUID to (item.activity_uuid ?: ""))
+        activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
+    }
+
+    fun onOffersClick(offerType: Int, initiator: Int, helpType: Int, item: AddCategoryDbItem) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        val initiat = if (initiator == 1) 2 else 1
+        mLastClickTime = SystemClock.elapsedRealtime()
+        activity?.startActivityForResult<RequestDetailActivity>(activityResult,OFFER_TYPE to offerType, INITIATOR to initiat, HELP_TYPE to helpType, ACTIVITY_UUID to (item.activity_uuid ?: ""))
+        activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
+    }
+
+
+    private fun onDeleteYesClick(parent_uuid:String?,activity_uuid:String) {
         val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
 
-        if (item.parent_uuid.isNullOrEmpty()) {
-            viewModel.deleteActivity(item.activity_uuid, offerType).observe(this, Observer {
+        if (parent_uuid.isNullOrEmpty()) {
+            viewModel.deleteActivity(activity_uuid, offerType).observe(this, Observer {
                 it.first?.let { delete ->
                     deleteActivityFromDatabase(delete.data?.activity_uuid)
                 } ?: kotlin.run {
@@ -79,9 +101,9 @@ abstract class BaseFragment : Fragment() {
 
             })
         } else {
-            viewModel.deleteMapping(item, offerType).observe(this, Observer {
-                it.first?.let { delete ->
-                    deleteMappingFromDatabase(item)
+            viewModel.deleteMapping(parent_uuid,activity_uuid, offerType).observe(this, Observer {
+                it.first?.let {
+                    deleteMappingFromDatabase(parent_uuid,activity_uuid)
                 } ?: kotlin.run {
                     if (!activity!!.isNetworkAvailable()) {
                         toastError(R.string.toast_error_internet_issue)
@@ -91,7 +113,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    fun deleteActivityFromDatabase(activityUuid: String?) {
+    private fun deleteActivityFromDatabase(activityUuid: String?) {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.deleteActivityFromDatabase(activityUuid).observe(this, Observer {
             if (it) {
@@ -103,9 +125,9 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun loadRequestList()
 
-    fun deleteMappingFromDatabase(item: AddCategoryDbItem) {
+    private fun deleteMappingFromDatabase(parent_uuid: String?, activity_uuid: String) {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.deleteMappingFromDatabase(item).observe(this, Observer {
+        viewModel.deleteMappingFromDatabase(parent_uuid,activity_uuid).observe(this, Observer {
             if (it) {
                 toastSuccess(R.string.toast_delete_success)
                 loadRequestList()

@@ -1,6 +1,7 @@
 package org.helpinout.billonlights.model.dagger
 
 import android.app.Application
+import android.util.Log
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -40,7 +41,9 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun httpLoggingInterceptor() = HttpLoggingInterceptor { Timber.tag("apiLog").d(it) }.apply {
+    fun httpLoggingInterceptor() = HttpLoggingInterceptor {
+        Log.d("ApiLog=== ", it)
+    }.apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 

@@ -12,5 +12,6 @@
     <!--colors for light mode-->
     <color name="semi_transparent_color">#8c000000</color>
     <color name="transparent_color">#ac000000</color>
+    <color name="light_gray">#C9C9CE</color>
 
 </resources>

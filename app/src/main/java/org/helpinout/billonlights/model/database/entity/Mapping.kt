@@ -26,7 +26,8 @@ class MappingDetail {
     var org_division: String? = ""
     var date_time: String? = ""
     var activity_type: Int? = 0
-    var rating: Int? = 0
+    var rating_avg: Float? = 0F
+    var rating_count: Int? = 0
     var activity_category: Int? = 0
     var geo_location: String? = ""
     var parent_uuid: String? = ""

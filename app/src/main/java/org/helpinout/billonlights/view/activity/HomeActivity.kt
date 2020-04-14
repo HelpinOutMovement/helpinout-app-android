@@ -1,44 +1,36 @@
 package org.helpinout.billonlights.view.activity
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
-import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
-import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.view.fragments.FragmentMyRequests
 import org.helpinout.billonlights.view.fragments.HomeFragment
-import org.helpinout.billonlights.view.fragments.MyOfferFragment
-import org.helpinout.billonlights.view.fragments.MyRequestsFragment
-import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
-import timber.log.Timber
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    private var homeFragment: HomeFragment?=null
-    private var pagerIndex: Int = 0
+    private var homeFragment: HomeFragment? = null
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
 
@@ -57,9 +49,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         drawerToggle.syncState()
         nav_view.setNavigationItemSelectedListener(this)
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
-        val index = intent.getIntExtra(SELECTED_INDEX, 0)
-        pagerIndex = intent.getIntExtra(PAGER_INDEX, 0)
-        when (index) {
+        when (intent.getIntExtra(SELECTED_INDEX, 0)) {
             0 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_home
             }
@@ -108,21 +98,21 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.menu_logs -> {
-                startActivity<CrashReporterActivity>()
-                overridePendingTransition(R.anim.enter, R.anim.exit)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.main_menu, menu)
+//        return super.onCreateOptionsMenu(menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+//        when (item?.itemId) {
+//            R.id.menu_logs -> {
+//                startActivity<CrashReporterActivity>()
+//                overridePendingTransition(R.anim.enter, R.anim.exit)
+//                return true
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     override fun onBackPressed() {
         closeDrawer()
@@ -151,12 +141,13 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     selectedItem = 0
                     layout_toolbar.hide()
                     checkFragmentItems()
+
                     val home = nav_view.menu.findItem(R.id.nav_home)
                     home.isChecked = true
                     bottom_nav_view.menu.getItem(0).isChecked = true
                     home.actionView = getMenuDotView()
                     toolbar?.setTitle(R.string.title_home)
-                     homeFragment = HomeFragment()
+                    homeFragment = HomeFragment()
                     loadFragment(homeFragment!!)
                 }
             }
@@ -165,12 +156,13 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     selectedItem = 1
                     layout_toolbar.show()
                     checkFragmentItems()
+                    supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary)))
                     val my_request = nav_view.menu.findItem(R.id.nav_my_request)
                     my_request.isChecked = true
                     bottom_nav_view.menu.getItem(1).isChecked = true
                     my_request.actionView = getMenuDotView()
                     toolbar?.setTitle(R.string.title_my_request)
-                    val fragment = MyRequestsFragment(pagerIndex)
+                    val fragment = FragmentMyRequests.newInstance(HELP_TYPE_REQUEST, HELP_TYPE_REQUEST, HELP_TYPE_REQUEST)
                     loadFragment(fragment)
                 }
             }
@@ -179,12 +171,13 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     selectedItem = 2
                     layout_toolbar.show()
                     checkFragmentItems()
+                    supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
                     val my_offers = nav_view.menu.findItem(R.id.nav_my_offers)
                     my_offers.isChecked = true
                     bottom_nav_view.menu.getItem(2).isChecked = true
                     toolbar?.setTitle(R.string.title_my_offers)
                     my_offers.actionView = getMenuDotView()
-                    val fragment = MyOfferFragment(pagerIndex)
+                    val fragment = FragmentMyRequests.newInstance(HELP_TYPE_OFFER, HELP_TYPE_OFFER, HELP_TYPE_OFFER)
                     loadFragment(fragment)
                 }
             }
@@ -381,16 +374,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             preferencesService.longitude = it.longitude.toString()
             preferencesService.gpsAccuracy = it.accuracy.toString()
             homeFragment?.onLocationChanged(location)
-            sendLocationToServer()
             stopLocationUpdate()
         }
-    }
-
-    private fun sendLocationToServer() {
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.sendUserLocationToServer().observe(this, Observer {
-            Log.d("", "")
-        })
     }
 
     override fun getLayout(): Int {
@@ -399,122 +384,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getUserRequestOfferList("0").observe(this, Observer {
-            it.first?.let { response ->
-                Timber.d("")
-                val offers = response.data?.offers
-                val requests = response.data?.requests
-                if (!offers.isNullOrEmpty()) {
-                    insertItemToDatabase(offers)
-                }
-                if (!requests.isNullOrEmpty()) {
-                    insertItemToDatabase(requests)
-                }
-            }
+        viewModel.getUserRequestOfferList(this, "0").observe(this, Observer {
+
         })
     }
 
-    private fun insertItemToDatabase(offers: List<ActivityAddDetail>) {
-        val addDataList = ArrayList<AddCategoryDbItem>()
-        offers.forEach { offer ->
-            try {
-                val item = AddCategoryDbItem()
-                item.activity_type = offer.activity_type
-                item.activity_uuid = offer.activity_uuid
-
-                var itemDetail = ""
-                offer.activity_detail?.forEachIndexed { index, it ->
-
-                    if (offer.activity_category == CATEGORY_PEOPLE) {
-                        //for people
-                        item.volunters_required = it.volunters_required
-                        item.volunters_detail = it.volunters_detail
-                        item.volunters_quantity = it.volunters_quantity
-                        item.technical_personal_required = it.technical_personal_required
-                        item.technical_personal_detail = it.technical_personal_detail
-                        item.technical_personal_quantity = it.technical_personal_quantity
-
-                        if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                            itemDetail += it.volunters_detail + "(" + it.volunters_quantity + ")"
-
-                        }
-                        if (!it.technical_personal_detail.isNullOrEmpty()) {
-                            if (itemDetail.isNotEmpty()) {
-                                itemDetail += ","
-                            }
-                            itemDetail += it.technical_personal_detail + "(" + it.technical_personal_quantity + ")"
-                        }
-
-                    } else if (offer.activity_category == CATEGORY_AMBULANCE) {
-                        item.qty = it.quantity
-                        itemDetail = ""
-                    } else {
-                        itemDetail += it.detail + "(" + it.quantity + ")"
-                        if (offer.activity_detail!!.size - 1 != index) {
-                            itemDetail += ","
-                        }
-                    }
-                }
-
-                offer.mapping?.forEach { mapping ->
-                    if (mapping.offer_detail != null) {
-                        mapping.offer_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
-                        mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
-                        mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
-                        mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
-                        mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
-                        mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                        mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
-                    } else if (mapping.request_detail != null) {
-                        mapping.request_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
-                        mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
-                        mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
-                        mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
-                        mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
-                        mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
-                        mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                        mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
-                    }
-                }
-                val mappingList = ArrayList<MappingDetail>()
-                offer.mapping?.forEach {
-                    if (it.offer_detail != null) {
-                        mappingList.add(it.offer_detail!!.app_user_detail!!)
-                    } else {
-                        mappingList.add(it.request_detail!!.app_user_detail!!)
-                    }
-                }
-                if (mappingList.isNotEmpty()) saveMapping(mappingList)
-
-                item.detail = itemDetail
-                item.activity_uuid = offer.activity_uuid
-                item.date_time = offer.date_time
-                item.activity_category = offer.activity_category
-                item.activity_count = offer.activity_count
-                item.geo_location = offer.geo_location
-                item.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
-                item.status = 1
-                addDataList.add(item)
-            } catch (e: Exception) {
-                Timber.d("")
-            }
-        }
-        addDataList.reverse()
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.saveFoodItemToDatabase(addDataList).observe(this, Observer {
-            Timber.d("")
-        })
-    }
-
-    private fun saveMapping(mappingList: ArrayList<MappingDetail>) {
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.saveMapping(mappingList).observe(this, Observer {
-            Timber.d("")
-        })
-    }
 
     fun menuClick() {
         if (!drawer_layout.isDrawerOpen(Gravity.START)) {
@@ -524,6 +398,12 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {// do not delete this
+        super.onActivityResult(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 
     override fun onClick(v: View?) {
         when (v) {

@@ -3,11 +3,6 @@ package org.helpinout.billonlights.model.database.entity
 import org.json.JSONArray
 
 
-//open class Offer
-
-//data class OfferReceived(var name: String = "", var detail: String, var mobile: String, var icon: Int) : Offer()
-
-
 class AddData {
     var activity_type: Int = 0
     var activity_uuid: String = ""
@@ -47,8 +42,6 @@ class ActivityDetail {
     var technical_personal_quantity: String? = ""
     var status: Int = 0
 }
-
-data class PlaceData(var latitude: Double? = null, var longnitude: Double? = null, var location: String? = "", var name: String? = null)
 
 
 

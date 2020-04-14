@@ -23,6 +23,7 @@ class AddCategoryDbItem {
     var technical_personal_detail: String? = ""
     var technical_personal_quantity: String? = ""
     var isMappingExist: Boolean? = false
+    var totalOffers:Int?=0
     var status: Int = 0
     var mobile_no: String? = ""
 

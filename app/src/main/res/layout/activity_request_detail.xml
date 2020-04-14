@@ -5,6 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/layout_toolbar"
+        layout="@layout/toolbar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
@@ -14,12 +18,45 @@
         android:paddingEnd="@dimen/_4sdp"
         android:paddingBottom="@dimen/_4sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/layout_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_request_detail" />
+
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
+        android:id="@+id/tv_no_sender"
+        style="@style/StyleTextViewNormal"
+        android:layout_margin="@dimen/_10sdp"
+        android:text="@string/no_request_sent"
+        android:textAlignment="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_offer_received" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar" />
+
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="0dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:background="@drawable/bg_shedow"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btn_cancel_request"
+            style="@style/StyleLoginButtonPrimaryRevert"
+            android:layout_margin="@dimen/_20sdp"
+            android:text="@string/cancel_this_request" />
+
+    </LinearLayout>
+
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/progress_bar"
@@ -30,7 +67,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_toolbar" />
+
 
     <TextView
         android:id="@+id/tv_no_data_available"

@@ -161,7 +161,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         latLing?.let {
                             mMap?.clear()
                             mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
                         }
                         tv_current_address.text = place.address
                     }
@@ -219,7 +219,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 mMap!!.clear()
                 changeMyLocationButton()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
-                it.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
+                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
 
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
@@ -289,7 +289,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     val intent = Intent(baseContext!!, HomeActivity::class.java)
                     intent.putExtra(SELECTED_INDEX, 1)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra(PAGER_INDEX, 1)
                     startActivity(intent)
                 } else {
                     if (bottomAdapter!!.getCheckedItemsList().isEmpty()) {
@@ -352,6 +351,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         }
                     }
                     saveMappingToDataBase(it.first!!.data!!.mapping)
+                    toastSuccess(if (helpType==HELP_TYPE_REQUEST )  R.string.request_send_success else  R.string.offer_send_success )
                 } else {
                     dialog?.dismiss()
                 }
@@ -375,7 +375,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 mappingList.add(it.request_detail!!.app_user_detail!!)
             }
         }
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.saveMapping(mappingList).observe(this, Observer {
             dialog?.dismiss()
             if (it) {
@@ -383,13 +383,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     val intent = Intent(baseContext!!, HomeActivity::class.java)
                     intent.putExtra(SELECTED_INDEX, 1)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra(PAGER_INDEX, 1)
                     startActivity(intent)
                 } else {
                     val intent = Intent(baseContext!!, HomeActivity::class.java)
                     intent.putExtra(SELECTED_INDEX, 2)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra(PAGER_INDEX, 1)
                     startActivity(intent)
                 }
                 finishWithFade()

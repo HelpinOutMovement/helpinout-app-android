@@ -33,8 +33,7 @@
         <activity android:name=".view.activity.RegistrationActivity" />
         <activity
             android:name=".view.activity.HomeActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/HomeTheme" />
+            android:launchMode="singleTask"/>
         <activity android:name=".view.activity.LoginActivity" />
 
         <service
@@ -61,6 +60,7 @@
         <activity android:name=".view.activity.PeopleHelpActivity" />
         <activity android:name=".view.activity.AmbulanceHelpActivity" />
         <activity android:name=".view.activity.HelpProviderRequestersActivity" />
+        <activity android:name=".view.activity.RequestDetailActivity" />
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"

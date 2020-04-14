@@ -155,12 +155,10 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         if (helpType == HELP_TYPE_REQUEST) {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 1)
-            intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         } else {
             val intent = Intent(baseContext!!, HomeActivity::class.java)
             intent.putExtra(SELECTED_INDEX, 2)
-            intent.putExtra(PAGER_INDEX, 1)
             startActivity(intent)
         }
         finishWithFade()

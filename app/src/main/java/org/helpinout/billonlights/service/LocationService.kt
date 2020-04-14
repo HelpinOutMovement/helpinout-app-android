@@ -9,7 +9,6 @@ import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
-import org.helpinout.billonlights.utils.getIcon
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -163,7 +162,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getUserCurrentLocationResult(): String {
+    suspend fun getUserCurrentLocationResult(): ActivityResponses {
         return service.makeCall { it.networkApi.getUserLocationResponseAsync(createLocationRequest()) }
     }
 
@@ -191,13 +190,13 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun deleteMappingFromServer(item: AddCategoryDbItem, activityType: Int): String {
+    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
         return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(item, activityType))
+            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
         }
     }
 
-    private fun createMappingDeleteRequest(item: AddCategoryDbItem, activityType: Int): String {
+    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -209,19 +208,18 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-                bodyJson.put("activity_uuid", item.parent_uuid)
+                bodyJson.put("activity_uuid", parent_uuid)
                 bodyJson.put("activity_type", activityType)
 
                 val jsonArray = JSONArray()
                 val json = JSONObject()
-                json.put("activity_uuid", item.activity_uuid)
+                json.put("activity_uuid", activity_uuid)
                 jsonArray.put(json)
 
-                if (item.activity_type == HELP_TYPE_REQUEST) {
-                    bodyJson.put("requester", jsonArray)
-                } else {
+                if (activityType == HELP_TYPE_REQUEST) {
                     bodyJson.put("offerer", jsonArray)
-
+                } else {
+                    bodyJson.put("requester", jsonArray)
                 }
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
@@ -263,13 +261,13 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun makeRating(item: AddCategoryDbItem, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
+    suspend fun makeRating(parent_uuid: String?, activity_uuid: String, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
         return service.makeCall {
-            it.networkApi.getMappingRatingResponseAsync(createRatingRequest(item, activityType, rating, recommendOther, comments))
+            it.networkApi.getMappingRatingResponseAsync(createRatingRequest(parent_uuid, activity_uuid, activityType, rating, recommendOther, comments))
         }
     }
 
-    private fun createRatingRequest(item: AddCategoryDbItem, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
+    private fun createRatingRequest(parent_uuid: String?, activity_uuid: String, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -282,12 +280,12 @@ class LocationService(private val preferencesService: PreferencesService, privat
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
 
-                bodyJson.put("activity_uuid", item.parent_uuid)
+                bodyJson.put("activity_uuid", parent_uuid)
                 bodyJson.put("activity_type", activityType)
 
                 val jsonArray = JSONArray()
                 val json = JSONObject()
-                json.put("activity_uuid", item.activity_uuid)
+                json.put("activity_uuid", activity_uuid)
 
                 val rateReportJson = JSONObject()
                 rateReportJson.put("rating", rating)
@@ -298,11 +296,10 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                 jsonArray.put(json)
 
-                if (item.activity_type == HELP_TYPE_REQUEST) {
-                    bodyJson.put("requester", jsonArray)
-                } else {
+                if (activityType == HELP_TYPE_REQUEST) {
                     bodyJson.put("offerer", jsonArray)
-
+                } else {
+                    bodyJson.put("requester", jsonArray)
                 }
                 bodyJson.put("rating", rating)
                 bodyJson.put("recommend_other", recommendOther)
@@ -316,9 +313,9 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun makeCallTracking(item: AddCategoryDbItem, activityType: Int): String {
+    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(item, activityType))
+            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
         }
     }
 
@@ -355,47 +352,21 @@ class LocationService(private val preferencesService: PreferencesService, privat
     fun getMyRequestsOrOffers(offerType: Int, initiator: Int): List<AddCategoryDbItem> {
         val finalRequest = ArrayList<AddCategoryDbItem>()
         val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
-        var type = offerType
-        type = if (offerType == HELP_TYPE_OFFER) {
-            HELP_TYPE_REQUEST
-        } else {
-            HELP_TYPE_OFFER
-        }
-        val mappingList = db.getMappingDao().getMyRequestsOrOffers(type)
-
+        val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType, initiator)
         requestList.forEach { item ->
-
-            val initiatorMappingList = mappingList.filter { it.request_mapping_initiator == initiator }
-
             val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
-
             if (mapping.isNotEmpty()) {
                 item.isMappingExist = true
             }
-
-            if (initiatorMappingList.isEmpty()) {
-                item.icon = item.activity_category.getIcon()
-                finalRequest.add(item)
-            } else {
-                val newList = ArrayList<AddCategoryDbItem>()
-                initiatorMappingList.forEach { t ->
-                    val m = AddCategoryDbItem()
-                    m.name = t.first_name + " " + t.last_name
-                    m.activity_type = t.activity_type!!
-                    m.parent_uuid = t.parent_uuid
-                    m.activity_uuid = t.activity_uuid ?: ""
-                    m.date_time = t.date_time ?: ""
-                    m.activity_category = t.activity_category ?: 0
-                    m.activity_count = 0
-                    m.geo_location = t.geo_location
-                    m.mobile_no = t.mobile_no
-                    newList.add(m)
-                }
-                finalRequest.addAll(newList)
-            }
+            finalRequest.add(item)
+            item.totalOffers = mapping.size
         }
-
         return finalRequest
+    }
+
+
+    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): List<MappingDetail> {
+        return db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
     }
 
     suspend fun getPeopleResponse(peopleHelp: AddData): ActivityResponses {
@@ -510,9 +481,9 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
     }
 
-    fun deleteMappingFromDb(item: AddCategoryDbItem): Boolean {
+    fun deleteMappingFromDb(parent_uuid: String?, activity_uuid: String): Boolean {
         return try {
-            db.getMappingDao().deleteMapping(item.activity_uuid, item.parent_uuid!!)
+            db.getMappingDao().deleteMapping(activity_uuid, parent_uuid!!)
             true
         } catch (e: Exception) {
             false

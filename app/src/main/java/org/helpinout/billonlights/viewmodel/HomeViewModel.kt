@@ -15,11 +15,6 @@ import org.helpinout.billonlights.model.retrofit.NetworkApi
 import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.utils.*
 import org.jetbrains.anko.doAsync
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -98,14 +93,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 list.postValue(offerItemList)
             }
         }
-
-
-
         return list
     }
 
-    fun sendUserLocationToServer(): MutableLiveData<Pair<String?, String>> {
-        val currentLocationResponse = MutableLiveData<Pair<String?, String>>()
+    fun sendUserLocationToServer(): MutableLiveData<Pair<ActivityResponses?, String>> {
+        val currentLocationResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 currentLocationResponse.postValue(Pair(locationService.getUserCurrentLocationResult(), ""))
@@ -141,51 +133,5 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return addActivityResponse
     }
 
-
-    fun getNearestDestination(url: String): MutableLiveData<String>? {
-        val mResponse: MutableLiveData<String> = MutableLiveData()
-        service.getSearchResult(url).enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>?, response: Response<String>?) {
-                if (response?.code() == 200) {
-                    val body = response.body()
-                    mResponse.postValue(body)
-                }
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-            }
-        })
-        return mResponse
-    }
-
-    fun parseDestination(json: JSONObject): MutableLiveData<java.util.ArrayList<PlaceData>>? {
-        val mNearestResponse = MutableLiveData<java.util.ArrayList<PlaceData>>()
-        try {
-            val results = json.getJSONArray("results")
-            val arrayList = java.util.ArrayList<PlaceData>()
-            for (i in 0 until results.length()) {
-                val jObj = results.getJSONObject(i)
-                val data = PlaceData()
-                if (jObj.has("name")) data.name = jObj.getString("name")
-                if (jObj.has("vicinity")) data.location = jObj.getString("vicinity")
-                if (jObj.has("geometry")) {
-                    data.latitude = jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lat")
-                    data.longnitude = jObj.getJSONObject("geometry").getJSONObject("location").getDouble("lng")
-                }
-                arrayList.add(data)
-            }
-            mNearestResponse.postValue(arrayList)
-        } catch (e: JSONException) {
-        }
-        return mNearestResponse
-    }
-
-    fun saveMapping(mappingList: ArrayList<MappingDetail>): MutableLiveData<Boolean> {
-        val response = MutableLiveData<Boolean>()
-        doAsync {
-            response.postValue(locationService.saveMappingToDb(mappingList))
-        }
-        return response
-    }
 
 }

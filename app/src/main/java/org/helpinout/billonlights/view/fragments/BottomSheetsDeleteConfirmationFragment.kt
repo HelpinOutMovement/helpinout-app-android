@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 
-class BottomSheetsDeleteConfirmationFragment(private val item: AddCategoryDbItem, private val onDeleteYesClick: (AddCategoryDbItem) -> Unit) : BottomSheetDialogFragment() {
+class BottomSheetsDeleteConfirmationFragment(private val parent_uuid: String?,private val activity_uuid:String, private val onDeleteYesClick: (String?,String) -> Unit) : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_delete_confirmation, container, false)
     }
@@ -23,7 +23,7 @@ class BottomSheetsDeleteConfirmationFragment(private val item: AddCategoryDbItem
 
         button_yes.setOnClickListener {
             dismiss()
-            onDeleteYesClick(item)
+            onDeleteYesClick(parent_uuid,activity_uuid)
         }
         button_no.setOnClickListener {
             dismiss()

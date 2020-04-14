@@ -31,21 +31,19 @@ import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
-import org.helpinout.billonlights.model.database.entity.PlaceData
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.AskForHelpActivity
 import org.helpinout.billonlights.view.activity.HomeActivity
 import org.helpinout.billonlights.view.activity.OfferHelpActivity
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.startActivity
-import org.json.JSONObject
-import java.util.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
 class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListener {
 
-    private  var mapFragment: SupportMapFragment?=null
+    private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
 
@@ -78,6 +76,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }, 5000)
     }
 
+
     private fun startLocationPicker() {
         val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(activity!!)
@@ -106,10 +105,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                         val latLing = place.latLng
                         latLing?.let {
                             mMap?.clear()
-//                            mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
-                            findNearestHelpProviders(it.latitude, it.longitude)
-                            findNearestHelpRequester(it.latitude, it.longitude)
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
+                            getRequesterAndhelper()
                         }
                         tv_current_address.text = place.address
                         tv_address.text = place.address
@@ -130,6 +127,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         this.location = location
         if (location != null && mMap != null) {
             updateLocation()
+            stopLocationUpdate()
         }
     }
 
@@ -142,21 +140,58 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
                 mMap!!.clear()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
-                it.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
+                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
                     tv_address?.show()
                     tv_current_address?.text = activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
-                    tv_address?.text= tv_current_address.text
+                    tv_address?.text = tv_current_address.text
                 }
                 tv_current_address?.text = activity!!.getAddress(loc.latitude, loc.longitude)
-                tv_address?.text= tv_current_address.text
+                tv_address?.text = tv_current_address.text
                 stopLocationUpdate()
-                findNearestHelpProviders(loc.latitude, loc.longitude)
-                findNearestHelpRequester(loc.latitude, loc.longitude)
+                try {
+                    getRequesterAndhelper()
+                } catch (e: Exception) {
+
+                }
             }
         }
+    }
+
+    private fun getRequesterAndhelper() {
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.sendUserLocationToServer().observe(this, Observer { it ->
+            it.first?.let { res ->
+                res.data?.let {
+                    it.offers?.forEach { detail ->
+                        try {
+                            val loc = detail.geo_location!!.split(",")
+                            val lat = loc[0].toDouble()
+                            val lon = loc[1].toDouble()
+                            val name = detail.app_user_detail?.first_name + " " + detail.app_user_detail?.last_name
+                            createMarker(lat, lon, name, name, R.drawable.ic_help_provider)
+                        } catch (e: Exception) {
+
+                        }
+                    }
+                    it.requests?.forEach { detail ->
+                        try {
+                            val loc = detail.geo_location!!.split(",")
+                            val lat = loc[0].toDouble()
+                            val lon = loc[1].toDouble()
+                            val name = detail.app_user_detail?.first_name + " " + detail.app_user_detail?.last_name
+                            createMarker(lat, lon, name, name, R.drawable.ic_help_requester)
+                        } catch (e: Exception) {
+
+                        }
+                    }
+                }
+            } ?: kotlin.run {
+                Timber.d(it.second)
+            }
+        })
     }
 
     private fun changeMyLocationButton() {
@@ -172,51 +207,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
             rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE)
         } catch (e: Exception) {
 
-        }
-    }
-
-    private fun findNearestHelpProviders(latitude: Double, longitude: Double) {
-        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=gas_station"
-
-        val nearestPumpViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        nearestPumpViewModel.getNearestDestination(url)!!.observe(this, Observer {
-            try {
-                val json = JSONObject(it!!)
-                finsHelperRequester(json, R.drawable.ic_help_provider)
-            } catch (e: Exception) {
-                Log.d("", "")
-            }
-        })
-    }
-
-    private fun findNearestHelpRequester(latitude: Double, longitude: Double) {
-        val url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=$PLACE_SEARCH_KEY&location=$latitude,$longitude&sensor=true&radius=1000&types=atm"
-
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.getNearestDestination(url)!!.observe(this, Observer {
-            try {
-                val json = JSONObject(it!!)
-                finsHelperRequester(json, R.drawable.ic_help_requester)
-            } catch (e: Exception) {
-
-            }
-        })
-    }
-
-    private fun finsHelperRequester(json: JSONObject, icon: Int) {
-        val nearestPumpViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        nearestPumpViewModel.parseDestination(json)!!.observe(this, Observer {
-            try {
-                showPinsOnMap(it!!, icon)
-            } catch (e: Exception) {
-                Log.d("", "")
-            }
-        })
-    }
-
-    private fun showPinsOnMap(placeData: ArrayList<PlaceData>, icon: Int) {
-        placeData.forEach {
-            createMarker(it.latitude!!, it.longnitude!!, it.name, it.location, icon)
         }
     }
 

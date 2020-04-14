@@ -11,6 +11,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:clickable="true"
         style="@style/CardViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -28,32 +29,63 @@
                 style="@style/StyleTextView"
                 android:layout_width="0dp"
                 android:text="@{item.name}"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/count_text_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Tina Jamna" />
 
-            <ImageView
-                android:id="@+id/iv_offer"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+            <TextView
+                android:id="@+id/count_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_text_view_primary"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="4dp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingBottom="2dp"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_name"
-                app:load_image="@{item.icon}"
-                tools:src="@drawable/ic_food" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="dsds" />
 
+            <TextView
+                android:id="@+id/tv_time"
+                style="@style/StyleTextViewNormal"
+                android:layout_width="0dp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:ellipsize="end"
+                android:textColor="@color/light_gray"
+                android:textSize="@dimen/_12sdp"
+                android:maxLines="2"
+                app:layout_constraintEnd_toStartOf="@+id/iv_offer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                tools:text="14 April 2020,2:00 pm" />
 
             <TextView
                 android:id="@+id/tv_detail"
                 style="@style/StyleTextViewNormal"
                 android:layout_width="0dp"
                 android:layout_marginEnd="@dimen/_15sdp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 app:layout_constraintEnd_toStartOf="@+id/iv_offer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_time"
                 tools:text="has offered to help you. 14 April 2020, 10:45 am Call them on +91 543053490 Time: 6pm to 9pm." />
 
+            <ImageView
+                android:id="@+id/iv_offer"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_detail"
+                app:load_image="@{item.icon}"
+                tools:src="@drawable/ic_food" />
+            \
 
             <TextView
                 android:id="@+id/tv_rate_report"

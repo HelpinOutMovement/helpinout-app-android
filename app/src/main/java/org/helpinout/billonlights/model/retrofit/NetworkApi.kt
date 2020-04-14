@@ -24,7 +24,7 @@ interface NetworkApi {
     fun getProfileUpdateResponseAsync(@Body body: String): Deferred<RegistrationResponse>
 
     @POST("user/locationsuggestion")
-    fun getUserLocationResponseAsync(@Body body: String): Deferred<String>
+    fun getUserLocationResponseAsync(@Body body: String): Deferred<ActivityResponses>
 
     @POST("activity/suggestions")
     fun getActivitySuggestionResponseAsync(@Body body: String): Deferred<ActivityResponses>

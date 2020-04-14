@@ -121,37 +121,15 @@
 
     <string name="mapping_template"><![CDATA[was sent a help request on %1$s They will call you if they can help you.]]></string>
 
-    <string name="food_template_request">%1$s;  %2$s</string>
-    <string name="food_template_offer">%1$s;  %2$s</string>
+    <string name="request_template">%1$s;  %2$s</string>
 
-    <string name="people_template_request">%1$s; %2$s</string>
-    <string name="people_template_offer">%1$s; %2$s</string>
-
-    <string name="shelter_template_request">%1$s;  %2$s</string>
-    <string name="shelter_template_offer">%1$s;  %2$s</string>
-
-    <string name="med_ppe_template_request">%1$s;  %2$s</string>
-    <string name="med_ppe_template_offer">%1$s;  %2$s</string>
-
-    <string name="testing_template_request">%1$s;  %2$s</string>
-    <string name="testing_template_offer">%1$s;  %2$s</string>
-
-
-    <string name="medicines_template_request">%1$s;  %2$s </string>
-    <string name="medicines_template_offer">%1$s;  %2$s</string>
-
-    <string name="ambulance_template_request">Ambulance (%1$s);  %2$s</string>
-    <string name="ambulance_template_offer">Ambulance (%1$s);  %2$s</string>
-
-    <string name="medical_equipment_template_request">%1$s;  %2$s</string>
-    <string name="medical_equipment_template_offer">%1$s;  %2$s</string>
 
     <string name="other_thing_template_request">%1$s;  %2$s</string>
     <string name="other_thing_template_offer">%1$s;  %2$s</string>
     <string name="toast_delete_success">Delete success</string>
     <string name="select_help_requester">Select help requesters</string>
-    <string name="search_for_help_provider">Search for help provider</string>
-    <string name="search_for_help_requester">Search for help requesters</string>
+    <string name="search_for_help_provider">Search for Help Provider</string>
+    <string name="search_for_help_requester">Search for Requesters</string>
     <string name="rating_success">Rating success</string>
     <string name="otp_send_success">OTP send success</string>
     <string name="otp_description">Please type the verification code sent to %1$s</string>
@@ -167,7 +145,27 @@
     <string name="please_select_provider_helper">Please select provider or helper first</string>
     <string name="someone_accept_offer">You received new offers</string>
     <string name="someone_receive_your_request">Some one send you request</string>
+    <string name="total_offers">%1$s Offers</string>
+    <string name="total_requests">%1$s Requests</string>
+    <string name="request_send_to">Requests have been sent to</string>
+    <string name="help_offers_received_from">Help offers received from</string>
+    <string name="offer_send_to">Offers have been sent to</string>
+    <string name="help_request_received_from">Help requests received from</string>
+    <string name="request_help_text">They will call you if they can help you</string>
+    <string name="request_offer_receive_text">View availability &amp; time</string>
+    <string name="offer_help_text">They will call you if they need your help</string>
+    <string name="call_them">Call them</string>
+    <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map<br/><br/> This request will automatically cancel after 5 days]]></string>
+    <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent
+Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
 
+    <string name="no_offer_sended">No offer sended by you</string>
+    <string name="label_no_request_send">No request send by you</string>
+    <string name="cancel_this_request">Cancel this request</string>
+    <string name="cancel_this_offer">Cancel this offer</string>
+    <string name="request_send_success">Request send success</string>
+    <string name="offer_send_success">Offer send success</string>
+    <string name="availability_time"><![CDATA[Availability & time]]></string>
 
     <string-array name="org_types">
         <item>Organization type</item>
