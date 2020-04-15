@@ -94,8 +94,8 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
 
     override fun onLocationChanged(location: Location?) {
         location?.let {
-            preferencesService.latitude = location.latitude.toString()
-            preferencesService.longitude = location.longitude.toString()
+            preferencesService.latitude = location.latitude
+            preferencesService.longitude = location.longitude
             preferencesService.gpsAccuracy = location.accuracy.toInt().toString()
         }
     }

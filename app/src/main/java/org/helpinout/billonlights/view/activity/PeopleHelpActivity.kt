@@ -32,7 +32,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         peopleHelp.activity_category = 2
         suggestionData.activity_category = 2
         peopleHelp.date_time = currentDateTime()
-        peopleHelp.geo_location = preferencesService.latitude + "," + preferencesService.longitude
+        peopleHelp.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude.toString()
 
         peopleHelp.activity_detail.add(activityDetail)
         chk_volunteers.setOnClickListener(this)
@@ -73,11 +73,11 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         activityDetail.volunters_required = if (chk_volunteers.isChecked) 1 else 0
         activityDetail.volunters_detail = edt_volunteers.text.toString()
         activityDetail.volunters_quantity = edt_qty1.text.toString()
-        peopleHelp.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+        peopleHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
         activityDetail.technical_personal_required = if (chk_technical_personnel.isChecked) 1 else 0
         activityDetail.technical_personal_detail = edt_technical_personnel.text.toString()
         activityDetail.technical_personal_quantity = edt_qty2.text.toString()
-        peopleHelp.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+        peopleHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
 
 
         suggestionData.activity_type = helpType
@@ -148,7 +148,8 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         suggestionData.activity_uuid = peopleHelp.activity_uuid
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
-        finishWithFade()
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        finish()
     }
 
     private fun onNoClick() {

@@ -24,8 +24,8 @@ class SuggestionRequest {
     var activity_type: Int = 0
     var activity_category: Int = 0
     var activity_uuid: String = ""
-    var latitude: String = ""
-    var longitude: String = ""
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
     var accuracy: String = ""
 }
 

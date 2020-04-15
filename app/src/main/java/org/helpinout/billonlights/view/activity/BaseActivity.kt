@@ -33,7 +33,8 @@ abstract class BaseActivity : AppCompatActivity() {
             setSupportActionBar(toolbar)
             val actionbar = supportActionBar
             val isUpdateProfile = intent.getBooleanExtra(UPDATE_PROFILE, false)
-            if (actionbar != null && this !is LanguageChooserActivity && (this !is HomeActivity || isUpdateProfile)) {
+            val isUpdateLanguage = intent.getBooleanExtra(UPDATE_LANGAUGE, false)
+            if (actionbar != null && (this !is LanguageChooserActivity || isUpdateLanguage) && (this !is HomeActivity || isUpdateProfile)) {
                 actionbar.setDisplayHomeAsUpEnabled(true)
                 actionbar.setHomeButtonEnabled(true)
             }
@@ -48,9 +49,6 @@ abstract class BaseActivity : AppCompatActivity() {
         when (intent.getIntExtra(HELP_TYPE, 0)) {
             HELP_TYPE_REQUEST -> {
                 supportActionBar?.setTitle(R.string.toolbar_need_help_with)
-                weCanPay?.setBackgroundResource(R.drawable.primary_border_background)
-                weCanPay?.setTextColor(resources.getColor(R.color.colorPrimary))
-                weCanNotPay?.setBackgroundResource(R.drawable.primary_revert_border_background)
                 weCanPay?.setText(R.string.we_can_pay)
                 weCanNotPay?.setText(R.string.we_can_not_pay)
             }
@@ -59,12 +57,8 @@ abstract class BaseActivity : AppCompatActivity() {
                 tvAvailability?.show()
                 edtCondition?.show()
                 edtCondition?.hint = getString(R.string.hint_conditions).fromHtml()
-                weCanPay?.setBackgroundResource(R.drawable.accent_border_background)
-                weCanPay?.setTextColor(resources.getColor(R.color.colorAccent))
-                weCanNotPay?.setBackgroundResource(R.drawable.accent_revert_border_background)
                 weCanPay?.setText(R.string.we_change)
                 weCanNotPay?.setText(R.string.for_free)
-
             }
         }
     }

@@ -1,5 +1,6 @@
 package org.helpinout.billonlights.view.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -15,17 +17,20 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_permission.*
+import org.helpinout.billonlights.BuildConfig
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.FragmentMyRequests
 import org.helpinout.billonlights.view.fragments.HomeFragment
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -33,6 +38,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     private var homeFragment: HomeFragment? = null
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
+    private var updateLanguage = 349
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,15 +58,17 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         when (intent.getIntExtra(SELECTED_INDEX, 0)) {
             0 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_home
+
             }
             1 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_my_request
+                supportActionBar?.setTitle(R.string.title_my_request)
             }
             2 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_my_offers
+                supportActionBar?.setTitle(R.string.title_my_offers)
             }
         }
-        setLanguage()
         checkLocationPermission()
         checkOfferList()
         btnPermission.setOnClickListener(this)
@@ -68,51 +76,21 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
 
-    private fun setLanguage() {
-        when (preferencesService.defaultLanguage) {
-            ENGLISH_CODE -> {
-                val english = nav_view.menu.findItem(R.id.nav_english)
-                english.isChecked = true
-                nav_view.menu.findItem(R.id.nav_english).actionView = getMenuImageView()
-            }
-            HINDI_CODE -> {
-                val hindi = nav_view.menu.findItem(R.id.nav_hindi)
-                hindi.isChecked = true
-                nav_view.menu.findItem(R.id.nav_hindi).actionView = getMenuImageView()
-            }
-            KANNAD_CODE -> {
-                val kannad = nav_view.menu.findItem(R.id.nav_kannad)
-                kannad.isChecked = true
-                nav_view.menu.findItem(R.id.nav_kannad).actionView = getMenuImageView()
-            }
-            MARATHI_CODE -> {
-                val marathi = nav_view.menu.findItem(R.id.nav_marathi)
-                marathi.isChecked = true
-                nav_view.menu.findItem(R.id.nav_marathi).actionView = getMenuImageView()
-            }
-            GUJRATI_CODE -> {
-                val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
-                gujrati.isChecked = true
-                nav_view.menu.findItem(R.id.nav_gujrati).actionView = getMenuImageView()
-            }
-        }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (BuildConfig.DEBUG) menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        menuInflater.inflate(R.menu.main_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//        when (item?.itemId) {
-//            R.id.menu_logs -> {
-//                startActivity<CrashReporterActivity>()
-//                overridePendingTransition(R.anim.enter, R.anim.exit)
-//                return true
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.menu_logs -> {
+                startActivity<CrashReporterActivity>()
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onBackPressed() {
         closeDrawer()
@@ -136,7 +114,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.navigation_home, R.id.nav_home -> {
+            R.id.navigation_home, R.id.nav_home, R.id.nav_ask_help, R.id.nav_offer_help -> {
                 if (selectedItem != 0) {
                     selectedItem = 0
                     layout_toolbar.hide()
@@ -182,86 +160,22 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 }
             }
 
-            R.id.nav_ask_help -> {
-                startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST)
-                overridePendingTransition(R.anim.enter, R.anim.exit)
-            }
-
-            R.id.nav_offer_help -> {
-                startActivity<OfferHelpActivity>(HELP_TYPE to HELP_TYPE_OFFER)
-                overridePendingTransition(R.anim.enter, R.anim.exit)
-            }
-
             R.id.nav_profiles -> {
                 startActivity<RegistrationActivity>(UPDATE_PROFILE to true)
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
+
+            R.id.nav_language -> {
+                startActivityForResult<LanguageChooserActivity>(updateLanguage, UPDATE_LANGAUGE to true)
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+            }
+
             R.id.nav_about -> {
                 selectedItem = 5
                 checkFragmentItems()
                 val about = nav_view.menu.findItem(R.id.nav_about)
                 about.isChecked = true
                 about.actionView = getMenuDotView()
-            }
-
-            R.id.nav_english -> {
-                checkLanguageItem()
-                val english = nav_view.menu.findItem(R.id.nav_english)
-                english.isChecked = true
-                item.actionView = getMenuImageView()
-                if (preferencesService.defaultLanguage != ENGLISH_CODE) {
-                    preferencesService.defaultLanguage = ENGLISH_CODE
-                    changeAppLanguage(preferencesService.defaultLanguage)
-                    restartActivity()
-                }
-            }
-
-            R.id.nav_hindi -> {
-                checkLanguageItem()
-                val hindi = nav_view.menu.findItem(R.id.nav_hindi)
-                hindi.isChecked = true
-                item.actionView = getMenuImageView()
-                if (preferencesService.defaultLanguage != HINDI_CODE) {
-                    preferencesService.defaultLanguage = HINDI_CODE
-                    changeAppLanguage(preferencesService.defaultLanguage)
-                    restartActivity()
-                }
-            }
-
-            R.id.nav_kannad -> {
-                checkLanguageItem()
-                val kannad = nav_view.menu.findItem(R.id.nav_kannad)
-                kannad.isChecked = true
-                item.actionView = getMenuImageView()
-                if (preferencesService.defaultLanguage != KANNAD_CODE) {
-                    preferencesService.defaultLanguage = KANNAD_CODE
-                    changeAppLanguage(preferencesService.defaultLanguage)
-                    restartActivity()
-                }
-            }
-
-            R.id.nav_marathi -> {
-                checkLanguageItem()
-                val marathi = nav_view.menu.findItem(R.id.nav_marathi)
-                marathi.isChecked = true
-                item.actionView = getMenuImageView()
-                if (preferencesService.defaultLanguage != MARATHI_CODE) {
-                    preferencesService.defaultLanguage = MARATHI_CODE
-                    changeAppLanguage(preferencesService.defaultLanguage)
-                    restartActivity()
-                }
-            }
-
-            R.id.nav_gujrati -> {
-                checkLanguageItem()
-                val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
-                gujrati.isChecked = true
-                item.actionView = getMenuImageView()
-                if (preferencesService.defaultLanguage != GUJRATI_CODE) {
-                    preferencesService.defaultLanguage = GUJRATI_CODE
-                    changeAppLanguage(preferencesService.defaultLanguage)
-                    restartActivity()
-                }
             }
         }
         closeDrawer()
@@ -307,35 +221,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         nav_view.menu.findItem(R.id.nav_about).actionView = null
     }
 
-    private fun checkLanguageItem() {
-        val english = nav_view.menu.findItem(R.id.nav_english)
-        english.isChecked = false
-        val hindi = nav_view.menu.findItem(R.id.nav_hindi)
-        hindi.isChecked = false
-
-        val kannad = nav_view.menu.findItem(R.id.nav_kannad)
-        kannad.isChecked = false
-
-        val marathi = nav_view.menu.findItem(R.id.nav_marathi)
-        marathi.isChecked = false
-
-        val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
-        gujrati.isChecked = false
-
-        nav_view.menu.findItem(R.id.nav_english).actionView = null
-        nav_view.menu.findItem(R.id.nav_hindi).actionView = null
-        nav_view.menu.findItem(R.id.nav_kannad).actionView = null
-        nav_view.menu.findItem(R.id.nav_marathi).actionView = null
-        nav_view.menu.findItem(R.id.nav_gujrati).actionView = null
-    }
 
     private fun getMenuDotView(): View {
         return layoutInflater.inflate(R.layout.drawer_dot, null)
     }
 
-    private fun getMenuImageView(): View {
-        return layoutInflater.inflate(R.layout.menu_image, null)
-    }
 
     private fun loadFragment(fragment: Fragment): Boolean {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
@@ -370,8 +260,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     override fun onLocationChanged(location: Location?) {
         location?.let {
-            preferencesService.latitude = it.latitude.toString()
-            preferencesService.longitude = it.longitude.toString()
+            preferencesService.latitude = it.latitude
+            preferencesService.longitude = it.longitude
             preferencesService.gpsAccuracy = it.accuracy.toString()
             homeFragment?.onLocationChanged(location)
             stopLocationUpdate()
@@ -384,11 +274,10 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getUserRequestOfferList(this, "0").observe(this, Observer {
+        viewModel.getUserRequestOfferList(this, 0).observe(this, Observer {
 
         })
     }
-
 
     fun menuClick() {
         if (!drawer_layout.isDrawerOpen(Gravity.START)) {
@@ -400,7 +289,9 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {// do not delete this
         super.onActivityResult(requestCode, resultCode, data)
-        for (fragment in supportFragmentManager.fragments) {
+        if (resultCode == Activity.RESULT_OK && requestCode == updateLanguage) {
+            restartActivity()
+        } else for (fragment in supportFragmentManager.fragments) {
             fragment.onActivityResult(requestCode, resultCode, data)
         }
     }

@@ -1,5 +1,6 @@
 package org.helpinout.billonlights.view.activity
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -37,7 +38,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         addData.activity_uuid = getUuid()
         addData.activity_type = helpType
         addData.date_time = currentDateTime()
-        addData.geo_location = preferencesService.latitude + "," + preferencesService.longitude
+        addData.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude.toString()
         when (intent.getIntExtra(CATEGORY_TYPE, 0)) {
             CATEGORY_FOOD -> {
                 addData.activity_category = 1
@@ -82,7 +83,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         we_can_pay.setOnClickListener(this)
         we_can_not_pay.setOnClickListener(this)
         layout_items.addView(getFoodLayout(layout_items))
-        addData.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+        addData.address = getAddress(preferencesService.latitude, preferencesService.longitude)
     }
 
     private fun getFoodLayout(layoutMain: LinearLayout): View {
@@ -181,7 +182,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
             categoryItem.activity_category = addData.activity_category
             categoryItem.activity_count = addData.activity_count
             categoryItem.geo_location = addData.geo_location
-            categoryItem.address = getAddress(preferencesService.latitude.toDouble(), preferencesService.longitude.toDouble())
+            categoryItem.address = getAddress(preferencesService.latitude, preferencesService.longitude)
             categoryItem.status = 1
 
             addItemList.add(categoryItem)
@@ -199,6 +200,12 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == showMapCode) {
+            finish()
+        }
+    }
 
     private fun askForConfirmation() {
         val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, onYesClick = { onYesClick() }, onNoClick = { onNoClick() })
@@ -209,7 +216,8 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         suggestionData.activity_uuid = addData.activity_uuid
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
-        finishWithFade()
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        finish()
     }
 
     private fun onNoClick() {

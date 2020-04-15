@@ -1,5 +1,7 @@
 package org.helpinout.billonlights.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import androidx.lifecycle.Observer
@@ -8,8 +10,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import kotlinx.android.synthetic.main.activity_help.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.LanguageItem
-import org.helpinout.billonlights.utils.DOUBLE_CLICK_TIME
-import org.helpinout.billonlights.utils.INSTRUCTION_STEP
+import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.adapters.LanguageChooserAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
@@ -18,11 +19,16 @@ import org.jetbrains.anko.startActivity
 
 class LanguageChooserActivity : BaseActivity() {
 
+    private var isUpdate: Boolean = false
     private var languageList = ArrayList<LanguageItem>()
     private lateinit var languageAdapter: LanguageChooserAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isUpdate = intent.getBooleanExtra(UPDATE_LANGAUGE, false)
+        if (isUpdate) {
+            layout_toolbar.show()
+        }
         mRecyclerView
     }
 
@@ -54,12 +60,18 @@ class LanguageChooserActivity : BaseActivity() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-
         preferencesService.defaultLanguage = item.code
-        preferencesService.step = INSTRUCTION_STEP
-        startActivity<InstructionActivity>()
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-        finishWithFade()
+        if (isUpdate) {
+            toastSuccess(R.string.language_update_success)
+            val returnIntent = Intent()
+            setResult(Activity.RESULT_OK, returnIntent)
+            finishWithFade()
+        } else {
+            preferencesService.step = INSTRUCTION_STEP
+            startActivity<InstructionActivity>()
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            finishWithFade()
+        }
     }
 
     override fun getLayout(): Int {

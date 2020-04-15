@@ -46,6 +46,7 @@ import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
 class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, View.OnClickListener {
@@ -64,7 +65,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         mapFragment?.getMapAsync(this)
         iv_menu.setImageResource(R.drawable.ic_arrow_back)
         iv_menu.setOnClickListener {
-            onBackPressed()
+            goToRequestDetailScreen()
         }
         tv_change.setOnClickListener {
             startLocationPicker()
@@ -73,8 +74,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         if (helpType == HELP_TYPE_OFFER) {
             tv_title.setText(R.string.select_help_requester)
             tv_comment.setText(R.string.phone_number_will_be_send_to_requester)
-            button_continue.setBackgroundColor(R.color.colorAccent)
-
+            button_continue.setText(R.string.send_offer)
+            button_continue.setBackgroundResource(R.drawable.button_background)
         }
         button_continue.setOnClickListener(this)
         btnPermission.setOnClickListener(this)
@@ -82,7 +83,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         bottom_sheet.hide()
         mRecyclerView
     }
-
 
     private fun loadSuggestionData() {
         val data = intent.getStringExtra(SUGGESTION_DATA)!!
@@ -161,7 +161,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         latLing?.let {
                             mMap?.clear()
                             mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
                         }
                         tv_current_address.text = place.address
                     }
@@ -200,6 +200,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onLocationChanged(location: Location?) {
         this.location = location
+
         if (location != null && mMap != null) {
             updateLocation()
         }
@@ -207,6 +208,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        val latlong = LatLng(preferencesService.latitude, preferencesService.longitude)
+        tv_current_address?.text = getAddress(preferencesService.latitude, preferencesService.longitude)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlong, 14.0f))
         if (location != null && mMap != null) {
             updateLocation()
         }
@@ -223,21 +227,13 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
-                    current_map_pin.show()
-                    tv_address.show()
                     tv_current_address.text = getAddress(midLatLng.latitude, midLatLng.longitude)
-                    try {
-                        suggestionData?.latitude = midLatLng.latitude.toString()
-                        suggestionData?.longitude = midLatLng.longitude.toString()
-                    } catch (e: Exception) {
-
-                    }
+                    suggestionData?.latitude = midLatLng.latitude
+                    suggestionData?.longitude = midLatLng.longitude
                     loadSuggestionData()
-                    tv_address.text = tv_current_address.text
                 }
 
                 tv_current_address.text = getAddress(loc.latitude, loc.longitude)
-                tv_address.text = tv_current_address.text
                 stopLocationUpdate()
                 showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
             }
@@ -278,9 +274,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_help_map
-    }
 
     override fun onClick(v: View?) {
         when (v) {
@@ -330,28 +323,31 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
                         if (mapping.offer_detail != null) {
                             mapping.offer_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
+                            mapping.offer_detail?.app_user_detail?.activity_type = it.first!!.data!!.activity_type
                             mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
                             mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
                             mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
-                            mapping.offer_detail?.app_user_detail?.activity_type = mapping.offer_detail?.activity_type
                             mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
                             mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
                             mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                         } else if (mapping.request_detail != null) {
                             mapping.request_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
+                            mapping.request_detail?.app_user_detail?.activity_type = it.first!!.data!!.activity_type
                             mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
                             mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
                             mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
-                            mapping.request_detail?.app_user_detail?.activity_type = mapping.request_detail?.activity_type
                             mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
                             mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
                             mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                         }
                     }
-                    saveMappingToDataBase(it.first!!.data!!.mapping)
-                    toastSuccess(if (helpType==HELP_TYPE_REQUEST )  R.string.request_send_success else  R.string.offer_send_success )
+                    if (it.first!!.data!!.mapping.isNullOrEmpty()) {
+                        toastError(R.string.toast_error_some_error)
+                        finish()
+                    } else {
+                        saveMappingToDataBase(it.first!!.data!!.mapping)
+                        toastSuccess(if (helpType == HELP_TYPE_REQUEST) R.string.request_send_success else R.string.offer_send_success)
+                    }
                 } else {
                     dialog?.dismiss()
                 }
@@ -379,19 +375,32 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         viewModel.saveMapping(mappingList).observe(this, Observer {
             dialog?.dismiss()
             if (it) {
-                if (helpType == HELP_TYPE_REQUEST) {
-                    val intent = Intent(baseContext!!, HomeActivity::class.java)
-                    intent.putExtra(SELECTED_INDEX, 1)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(baseContext!!, HomeActivity::class.java)
-                    intent.putExtra(SELECTED_INDEX, 2)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                }
-                finishWithFade()
+                startActivity<RequestDetailActivity>(OFFER_TYPE to helpType, INITIATOR to helpType, HELP_TYPE to helpType, ACTIVITY_UUID to (suggestionData?.activity_uuid ?: ""))
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+                val returnIntent = Intent()
+                setResult(Activity.RESULT_OK, returnIntent)
+                finish()
             }
         })
     }
+
+    private fun goToRequestDetailScreen() {
+        if (helpType == HELP_TYPE_REQUEST) {
+            val intent = Intent(baseContext!!, HomeActivity::class.java)
+            intent.putExtra(SELECTED_INDEX, 1)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        } else {
+            val intent = Intent(baseContext!!, HomeActivity::class.java)
+            intent.putExtra(SELECTED_INDEX, 2)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
+        finishWithSlideAnimation()
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.activity_help_map
+    }
+
 }

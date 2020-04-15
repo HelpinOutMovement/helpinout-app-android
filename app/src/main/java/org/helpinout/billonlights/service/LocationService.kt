@@ -1,16 +1,17 @@
 package org.helpinout.billonlights.service
 
+import android.content.Context
 import com.avneesh.crashreporter.CrashReporter
 import com.google.firebase.iid.FirebaseInstanceId
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
-import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
 import org.json.JSONArray
 import org.json.JSONObject
+import timber.log.Timber
 
 class LocationService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase) {
 
@@ -35,7 +36,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                 bodyJson.put("activity_uuid", body.activity_uuid)
                 bodyJson.put("activity_type", body.activity_type)
-                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
+                bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 bodyJson.put("address", body.address)
                 bodyJson.put("activity_category", body.activity_category)
@@ -122,7 +123,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("activity_type", body.activity_type)
                 bodyJson.put("activity_uuid", body.activity_uuid)
-                bodyJson.put("geo_location", body.latitude + "," + body.longitude)
+                bodyJson.put("geo_location", body.latitude.toString() + "," + body.longitude)
                 bodyJson.put("geo_accuracy", body.accuracy)
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
@@ -150,7 +151,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
+                bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
@@ -178,7 +179,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
+                bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
@@ -319,14 +320,116 @@ class LocationService(private val preferencesService: PreferencesService, privat
         }
     }
 
-    suspend fun getUserRequestsOfferList(activityType: String): ActivityResponses {
-        return service.makeCall {
+    suspend fun getUserRequestsOfferList(context: Context, activityType: Int): ActivityResponses {
+        val response = service.makeCall {
             it.networkApi.getUserRequestOfferListResponseAsync(createOfferRequest(activityType))
         }
+        try {
+            val offers = response.data?.offers
+            val requests = response.data?.requests
+            if (!offers.isNullOrEmpty()) {
+                insertItemToDatabase(context, offers)
+            }
+            if (!requests.isNullOrEmpty()) {
+                insertItemToDatabase(context, requests)
+            }
+        } catch (e: Exception) {
+
+        }
+        return response
     }
 
+    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>) {
+        val addDataList = ArrayList<AddCategoryDbItem>()
+        offers.forEach { offer ->
+            try {
+                val item = AddCategoryDbItem()
+                item.activity_type = offer.activity_type
+                item.activity_uuid = offer.activity_uuid
 
-    private fun createOfferRequest(activityType: String): String {
+                var itemDetail = ""
+                offer.activity_detail?.forEachIndexed { index, it ->
+
+                    if (offer.activity_category == CATEGORY_PEOPLE) {
+                        //for people
+                        item.volunters_required = it.volunters_required
+                        item.volunters_detail = it.volunters_detail
+                        item.volunters_quantity = it.volunters_quantity
+                        item.technical_personal_required = it.technical_personal_required
+                        item.technical_personal_detail = it.technical_personal_detail
+                        item.technical_personal_quantity = it.technical_personal_quantity
+
+                        if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
+                            itemDetail += it.volunters_detail + "(" + it.volunters_quantity + ")"
+
+                        }
+                        if (!it.technical_personal_detail.isNullOrEmpty()) {
+                            if (itemDetail.isNotEmpty()) {
+                                itemDetail += ","
+                            }
+                            itemDetail += it.technical_personal_detail + "(" + it.technical_personal_quantity + ")"
+                        }
+
+                    } else if (offer.activity_category == CATEGORY_AMBULANCE) {
+                        item.qty = it.quantity
+                        itemDetail = ""
+                    } else {
+                        itemDetail += it.detail + "(" + it.quantity + ")"
+                        if (offer.activity_detail!!.size - 1 != index) {
+                            itemDetail += ","
+                        }
+                    }
+                }
+
+                offer.mapping?.forEach { mapping ->
+                    if (mapping.offer_detail != null) {
+                        mapping.offer_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.offer_detail?.app_user_detail?.activity_type = offer.activity_type
+                        mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                        mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
+                        mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
+                        mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
+                        mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                        mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                    } else if (mapping.request_detail != null) {
+                        mapping.request_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.request_detail?.app_user_detail?.activity_type = offer.activity_type
+                        mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                        mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
+                        mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
+                        mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
+                        mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                        mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                    }
+                }
+                val mappingList = ArrayList<MappingDetail>()
+                offer.mapping?.forEach {
+                    if (it.offer_detail != null) {
+                        mappingList.add(it.offer_detail!!.app_user_detail!!)
+                    } else {
+                        mappingList.add(it.request_detail!!.app_user_detail!!)
+                    }
+                }
+                if (mappingList.isNotEmpty()) saveMappingToDb(mappingList)
+
+                item.detail = itemDetail
+                item.activity_uuid = offer.activity_uuid
+                item.date_time = offer.date_time
+                item.activity_category = offer.activity_category
+                item.activity_count = offer.activity_count
+                item.geo_location = offer.geo_location
+                item.address = context.getAddress(preferencesService.latitude, preferencesService.longitude)
+                item.status = 1
+                addDataList.add(item)
+            } catch (e: Exception) {
+                Timber.d("")
+            }
+        }
+        addDataList.reverse()
+        saveFoodItemsToDb(addDataList)
+    }
+
+    private fun createOfferRequest(activityType: Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -403,7 +506,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                 bodyJson.put("address", peopleHelp.address)
                 bodyJson.put("pay", peopleHelp.pay)
-                bodyJson.put("geo_location", preferencesService.latitude + "," + preferencesService.longitude)
+                bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
 
                 mainData.put("data", bodyJson)

@@ -19,22 +19,37 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:resizeableActivity="false"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AskForHelpTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".view.activity.SplashActivity">
+        <activity
+            android:name=".view.activity.SplashActivity"
+            android:theme="@style/OfferTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.RegistrationActivity" />
+
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:theme="@style/OfferTheme" />
+
+        <activity
+            android:name=".view.activity.SMSVerificationActivity"
+            android:theme="@style/OfferTheme" />
+
+        <activity
+            android:name=".view.activity.RegistrationActivity"
+            android:theme="@style/OfferTheme" />
+
         <activity
             android:name=".view.activity.HomeActivity"
-            android:launchMode="singleTask"/>
-        <activity android:name=".view.activity.LoginActivity" />
+            android:launchMode="singleTask" />
+
 
         <service
             android:name=".view.firebase.MyFirebaseMessagingService"
@@ -48,14 +63,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.activity.SMSVerificationActivity" />
+
         <activity android:name=".view.activity.AskForHelpActivity" />
         <activity android:name=".view.activity.OfferHelpActivity" />
 
         <activity
             android:name=".view.activity.LanguageChooserActivity"
-            android:label="@string/label_choose_language" />
-        <activity android:name=".view.activity.InstructionActivity" />
+            android:label="@string/update_language"
+            android:theme="@style/OfferTheme" />
+        <activity
+            android:name=".view.activity.InstructionActivity"
+            android:theme="@style/OfferTheme" />
         <activity android:name=".view.activity.FoodHelpActivity" />
         <activity android:name=".view.activity.PeopleHelpActivity" />
         <activity android:name=".view.activity.AmbulanceHelpActivity" />

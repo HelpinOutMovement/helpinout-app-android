@@ -67,13 +67,13 @@
                 android:id="@+id/tv_cal_them"
                 style="@style/StyleTextViewNormal"
                 android:layout_width="0dp"
-                android:visibility="gone"
-                tools:visibility="visible"
                 android:gravity="center"
                 android:text="@string/call_them"
                 android:textColor="@color/colorPrimary"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/iv_call"
-                app:layout_constraintTop_toBottomOf="@+id/iv_call" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_call"
+                tools:visibility="visible" />
 
 
             <RatingBar
@@ -120,7 +120,7 @@
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:padding="@dimen/_8sdp"
-                android:text="@string/delete"
+                android:text="@string/closed"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />

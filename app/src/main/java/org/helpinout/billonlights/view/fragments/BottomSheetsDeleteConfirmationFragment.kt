@@ -7,9 +7,15 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 
-class BottomSheetsDeleteConfirmationFragment(private val parent_uuid: String?,private val activity_uuid:String, private val onDeleteYesClick: (String?,String) -> Unit) : BottomSheetDialogFragment() {
+class BottomSheetsDeleteConfirmationFragment(private val activityType: Int, private val parent_uuid: String?, private val activity_uuid: String, private val onDeleteYesClick: (String?, String) -> Unit) : BottomSheetDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, if (activityType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_delete_confirmation, container, false)
     }
@@ -23,7 +29,7 @@ class BottomSheetsDeleteConfirmationFragment(private val parent_uuid: String?,pr
 
         button_yes.setOnClickListener {
             dismiss()
-            onDeleteYesClick(parent_uuid,activity_uuid)
+            onDeleteYesClick(parent_uuid, activity_uuid)
         }
         button_no.setOnClickListener {
             dismiss()

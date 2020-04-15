@@ -108,7 +108,7 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/StyleLoginButton"
-                android:text="@string/label_register"
+                android:text="@string/label_start"
                 app:layout_constraintTop_toBottomOf="@+id/layout_number" />
 
         </LinearLayout>

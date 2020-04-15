@@ -59,7 +59,7 @@ class FragmentMyRequests : BaseFragment() {
 
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
-        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onCardClick = { offer, initiat, helpType, item -> onCardClick(offerType, initiator, helpType, item) }, onOffersClick = { offer, initiat, helpType, item -> onOffersClick(offerType, initiator, helpType, item) })
+        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onSendRequestClick = { offer, initiat, helpType, item -> onSendRequestClick(offerType, initiator, helpType, item) }, onOffersClick = { offer, initiat, helpType, item -> onOffersClick(offerType, initiator, helpType, item) })
         val itemDecorator = ItemOffsetDecoration(activity!!, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -71,14 +71,18 @@ class FragmentMyRequests : BaseFragment() {
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getMyRequestsOrOffers(offerType, initiator, activity!!).observe(this, Observer { list ->
-            progress_bar.hide()
-            list?.let {
-                itemList.clear()
-                itemList.addAll(list.reversed())
+            try {
+                progress_bar.hide()
+                list?.let {
+                    itemList.clear()
+                    itemList.addAll(list.reversed())
+                }
+                recycler_view.goneIf(itemList.isEmpty())
+                tv_no_data_available.visibleIf(itemList.isEmpty())
+                adapter.notifyDataSetChanged()
+            } catch (e: Exception) {
+
             }
-            recycler_view.goneIf(itemList.isEmpty())
-            tv_no_data_available.visibleIf(itemList.isEmpty())
-            adapter.notifyDataSetChanged()
         })
     }
 
@@ -108,17 +112,15 @@ class FragmentMyRequests : BaseFragment() {
     private val uploadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == DATA_REFRESH) {
-                //checkOfferList()
+                checkOfferList()
             }
         }
     }
+
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        activity?.let {
-            viewModel.getUserRequestOfferList(activity!!, "0").observe(this, Observer {
-                loadRequestList()
-            })
-        }
-
+        viewModel.getUserRequestOfferList(activity!!, 0).observe(this, Observer {
+            loadRequestList()
+        })
     }
 }

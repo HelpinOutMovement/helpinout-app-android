@@ -33,9 +33,9 @@ class SMSVerificationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-
         sendVerificationCode(preferencesService.countryCode + preferencesService.mobileNumber)
         btn_verify.setOnClickListener {
+            hideKeyboard()
             if (edt_otp.text.toString().isNotEmpty()) {
                 verifyCode(edt_otp.text.toString())
             } else {
@@ -45,11 +45,10 @@ class SMSVerificationActivity : BaseActivity() {
     }
 
     private fun sendVerificationCode(number: String) {
-        if (number == ALLOW_NUMBER) {
+        if (number == ALLOW_NUMBER1 || number == ALLOW_NUMBER2) {
             checkIfNotRegistered()
         } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
-
-        tv_message.text = getString(R.string.otp_description, number)
+        tv_message.show()
     }
 
     private val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -72,7 +71,7 @@ class SMSVerificationActivity : BaseActivity() {
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            toastError(e.message + "")
+            //toastError(e.message + "")
             btn_verify.isEnabled = true
         }
     }
@@ -89,6 +88,7 @@ class SMSVerificationActivity : BaseActivity() {
                 } catch (e: Exception) {
                 }
             }
+
             override fun onFinish() {
                 try {
                     tv_timer.text = "00:00"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HelpInOut</string>
+    <string name="app_name">HelpinOut</string>
     <string name="toast_press_again_to_exit">Please click BACK again to exit</string>
     <string name="label_login">Login/Signup</string>
     <string name="alert_logout_msg">Are you sure you want to logout?</string>
@@ -59,7 +59,7 @@
     <string name="ask_for_help">Ask For Help</string>
     <string name="offer_help">Offer Help</string>
     <string name="identify_location">Identify your location above, then select below</string>
-    <string name="hint_enter_item">Enter items(Optional)</string>
+    <string name="hint_enter_item">Enter items</string>
     <string name="hint_qty">Qty</string>
     <string name="title_need_help_with">Need help with</string>
     <string name="title_offer_help_with">Offer help with</string>
@@ -85,10 +85,12 @@
     <string name="offers_received">Offers Received</string>
     <string name="requests_sent">Requests</string>
     <string name="rate_report">Rate / Report</string>
-    <string name="delete">Delete</string>
+    <string name="closed">Closed</string>
+    <string name="sent_requests">Requests Sent</string>
+    <string name="sent_offers">Offers Sent</string>
     <string name="request_received">Request Received</string>
     <string name="offers_sent">Offers</string>
-    <string name="delete_confirmation">Are you sure you want to delete ?</string>
+    <string name="delete_confirmation">Are you sure you want to close ?</string>
     <string name="help_from_them">Should others take help from them?</string>
     <string name="submit">Submit</string>
     <string name="toast_error_some_error">Some error occurred</string>
@@ -132,7 +134,7 @@
     <string name="search_for_help_requester">Search for Requesters</string>
     <string name="rating_success">Rating success</string>
     <string name="otp_send_success">OTP send success</string>
-    <string name="otp_description">Please type the verification code sent to %1$s</string>
+    <string name="otp_description">Check for OPT message and verify</string>
     <string name="enable_location">Please enable your location without location app will not work</string>
     <string name="label_app_need_location_permission">Application need location permission, please click the below button to allow permission</string>
     <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
@@ -159,13 +161,18 @@
     <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent
 Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
 
-    <string name="no_offer_sended">No offer sended by you</string>
-    <string name="label_no_request_send">No request send by you</string>
+    <string name="no_offer_sended">No offer has been made</string>
+    <string name="label_no_request_send">No request has been made</string>
     <string name="cancel_this_request">Cancel this request</string>
     <string name="cancel_this_offer">Cancel this offer</string>
     <string name="request_send_success">Request send success</string>
     <string name="offer_send_success">Offer send success</string>
     <string name="availability_time"><![CDATA[Availability & time]]></string>
+    <string name="label_start">Start</string>
+    <string name="language">Language</string>
+    <string name="update_language">Update language</string>
+    <string name="language_update_success">Language update success</string>
+    <string name="send_offer">Send offer</string>
 
     <string-array name="org_types">
         <item>Organization type</item>

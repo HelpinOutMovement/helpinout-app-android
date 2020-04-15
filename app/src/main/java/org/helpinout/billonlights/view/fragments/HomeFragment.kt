@@ -50,6 +50,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     @Inject
     lateinit var preferencesService: PreferencesService
 
+    private val markerOptions = ArrayList<MarkerOptions>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
@@ -85,6 +87,9 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        val latlong = LatLng(preferencesService.latitude, preferencesService.longitude)
+        tv_current_address?.text = activity!!.getAddress(preferencesService.latitude, preferencesService.longitude)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlong, 14.0f))
         if (location != null && mMap != null) {
             updateLocation()
         }
@@ -105,8 +110,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                         val latLing = place.latLng
                         latLing?.let {
                             mMap?.clear()
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 12.0f))
-                            getRequesterAndhelper()
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
+                            getRequesterAndHelper()
                         }
                         tv_current_address.text = place.address
                         tv_address.text = place.address
@@ -141,6 +146,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 mMap!!.clear()
                 val currentLocation = LatLng(loc.latitude, loc.longitude)
                 it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
+
+
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
@@ -152,7 +159,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 tv_address?.text = tv_current_address.text
                 stopLocationUpdate()
                 try {
-                    getRequesterAndhelper()
+                    getRequesterAndHelper()
                 } catch (e: Exception) {
 
                 }
@@ -160,11 +167,13 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
-    private fun getRequesterAndhelper() {
+
+    private fun getRequesterAndHelper() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.sendUserLocationToServer().observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
+                    markerOptions.clear()
                     it.offers?.forEach { detail ->
                         try {
                             val loc = detail.geo_location!!.split(",")
@@ -187,6 +196,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
                         }
                     }
+
                 }
             } ?: kotlin.run {
                 Timber.d(it.second)
@@ -211,7 +221,10 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
-        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
+        val marker = MarkerOptions().position(LatLng(latitude, longitude))
+        markerOptions.add(marker)
+
+        mMap?.addMarker(marker.anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
 

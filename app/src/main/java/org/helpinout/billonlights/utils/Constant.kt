@@ -12,9 +12,10 @@ const val AUTOCOMPLETE_REQUEST_CODE = 42
 const val HELP_TYPE = "HelpType"
 const val SUGGESTION_DATA = "SuggestionData"
 const val UPDATE_PROFILE = "UpdateProfile"
+const val UPDATE_LANGAUGE = "UpdateLanguage"
 const val OFFER_TYPE = "OfferType"
 const val INITIATOR = "initiator"
-const val DATA_REFRESH="DataRefresh"
+const val DATA_REFRESH = "DataRefresh"
 
 const val LANGUAGE_STEP = 0
 const val INSTRUCTION_STEP = 1
@@ -27,7 +28,8 @@ const val HINDI = 2
 const val KANNAD = 3
 const val MARATHI = 4
 const val GUJRATI = 5
-const val ALLOW_NUMBER = "+917303767448"
+const val ALLOW_NUMBER1 = "+917303767448"
+const val ALLOW_NUMBER2 = "+918097090069"
 
 const val ENGLISH_CODE = "en"
 const val HINDI_CODE = "hi"

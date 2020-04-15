@@ -53,7 +53,6 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             if (initiator == HELP_TYPE_OFFER) {//send offer
                 supportActionBar?.title = getString(R.string.offer_send_to)
                 btn_cancel_request.setText(R.string.cancel_this_offer)
-                btn_cancel_request.setBackgroundResource(R.drawable.accent_revert_border_background)
                 layout_bottom.show()
             } else {//request received from
                 supportActionBar?.title = getString(R.string.help_request_received_from)
@@ -99,8 +98,8 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             suggestionData.activity_type = item.activity_type ?: 0
             try {
                 val latt = item.geo_location!!.split(",")
-                suggestionData.latitude = latt[0]
-                suggestionData.longitude = latt[1]
+                suggestionData.latitude = latt[0].toDouble()
+                suggestionData.longitude = latt[1].toDouble()
                 suggestionData.accuracy = ""
             } catch (e: Exception) {
             }
@@ -129,7 +128,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2 -> onDeleteYesClick(uuid1, uuid2) })
+        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.activity_type!!, item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2 -> onDeleteYesClick(uuid1, uuid2) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -165,7 +164,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(name, detail)
+        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail)
         deleteDialog.show(supportFragmentManager, null)
     }
 

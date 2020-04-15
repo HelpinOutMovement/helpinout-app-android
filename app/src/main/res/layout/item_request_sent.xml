@@ -11,10 +11,10 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:clickable="true"
         style="@style/CardViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainItem"
@@ -56,9 +56,9 @@
                 android:layout_width="0dp"
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/_12sdp"
-                android:maxLines="2"
                 app:layout_constraintEnd_toStartOf="@+id/iv_offer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
@@ -90,24 +90,26 @@
             <TextView
                 android:id="@+id/tv_rate_report"
                 style="@style/StyleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:padding="@dimen/_8sdp"
                 android:text="@string/rate_report"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_send_requests"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
 
             <TextView
-                android:id="@+id/tv_delete"
+                android:id="@+id/tv_send_requests"
                 style="@style/StyleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_70sdp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                android:padding="@dimen/_8sdp"
-                android:text="@string/delete"
+                android:gravity="center"
+                android:text="@string/sent_requests"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />

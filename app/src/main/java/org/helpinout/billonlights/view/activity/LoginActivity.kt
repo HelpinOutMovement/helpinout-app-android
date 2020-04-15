@@ -31,10 +31,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         tv_privacy_policy.setOnClickListener(this)
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_login
-    }
-
     override fun onClick(v: View?) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
@@ -91,5 +87,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             return false
         }
         return true
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.activity_login
     }
 }

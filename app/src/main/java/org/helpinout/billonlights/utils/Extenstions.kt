@@ -172,9 +172,10 @@ fun Fragment.currentDateTime(): String {
 fun Activity.isLocationEnabled(): Boolean {
 
     val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    return  manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    return manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
 }
+
 fun Activity.showSettingsDialog() {
     alert(R.string.message_permission, R.string.message_need_permission) {
         positiveButton(R.string.title_go_to_setting) {
@@ -183,6 +184,7 @@ fun Activity.showSettingsDialog() {
         }
     }.show()
 }
+
 fun Activity.openSettings() {
     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
     val uri = Uri.fromParts("package", packageName, null)
@@ -226,7 +228,7 @@ fun Fragment.isNetworkAvailable(): Boolean {
     return networkInfo != null && networkInfo.isConnected
 }
 
-fun Context.toast(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toast(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.normal(this, getString(messageId), duration).show()
 }
 
@@ -242,47 +244,47 @@ fun Context.toastError(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.error(this, getString(messageId), duration, true).show()
 }
 
-fun Fragment.toastError(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun Fragment.toastError(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.error(activity!!, getString(messageId), duration, true).show()
 }
 
-fun Context.toastError(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toastError(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.error(this, message, duration, true).show()
 }
 
-fun Fragment.toastError(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Fragment.toastError(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.error(activity!!, message, duration, true).show()
 }
 
-fun Context.toastInfo(message: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toastInfo(message: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.info(this, getString(message), duration, true).show()
 }
 
-fun Fragment.toastInfo(message: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun Fragment.toastInfo(message: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.info(activity!!, getString(message), duration, true).show()
 }
 
-fun Context.toastInfo(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toastInfo(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.info(this, message, duration, true).show()
 }
 
-fun androidx.fragment.app.Fragment.toastInfo(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun androidx.fragment.app.Fragment.toastInfo(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.info(activity!!, message, duration, true).show()
 }
 
-fun Context.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.success(this, getString(messageId, true), duration).show()
 }
 
-fun androidx.fragment.app.Fragment.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_SHORT) {
+fun androidx.fragment.app.Fragment.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
     Toasty.success(activity!!, getString(messageId, true), duration).show()
 }
 
-fun Context.toastSuccess(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toastSuccess(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.success(this, message, duration, true).show()
 }
 
-fun androidx.fragment.app.Fragment.toastSuccess(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun androidx.fragment.app.Fragment.toastSuccess(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.success(activity!!, message, duration, true).show()
 }
 
@@ -292,11 +294,11 @@ fun Context.callPhoneNumber(phoneNumber: String) {
     startActivity(callIntent.newTask())
 }
 
-fun Context.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.normal(this, message, duration).show()
 }
 
-fun androidx.fragment.app.Fragment.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun androidx.fragment.app.Fragment.toast(message: String, duration: Int = Toast.LENGTH_LONG) {
     Toasty.normal(activity!!, message, duration).show()
 }
 

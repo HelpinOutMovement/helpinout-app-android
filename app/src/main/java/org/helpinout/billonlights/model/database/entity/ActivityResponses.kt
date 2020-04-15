@@ -13,6 +13,7 @@ class AddDataData {
     var mapping: List<Mapping>? = null// for help provider activity do not delete
     var activity_uuid: String = ""
     var activity_count: String = ""
+    var activity_type: Int? = 0
 }
 
 class ActivityAddDetail {

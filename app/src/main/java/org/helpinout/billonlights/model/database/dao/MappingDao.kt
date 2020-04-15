@@ -15,7 +15,7 @@ interface MappingDao {
     fun insertMappingRecord(vararg record: MappingDetail): List<Long>
 
     @Query("Select * from mapping where activity_type =:offerType and request_mapping_initiator!=:initiator")
-    fun getMyRequestsOrOffers(offerType: Int,initiator:Int): List<MappingDetail>
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): List<MappingDetail>
 
 
     @Query("Select * from mapping where activity_type =:offerType and request_mapping_initiator=:initiator and parent_uuid=:activity_uuid")

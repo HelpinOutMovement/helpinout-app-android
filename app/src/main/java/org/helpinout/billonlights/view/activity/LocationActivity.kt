@@ -176,7 +176,6 @@ abstract class LocationActivity : BaseActivity(), LocationListener, OnPermission
     }
 
 
-
     private fun isLocationEnabled(): Boolean {
         val provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED)
         return provider != ""

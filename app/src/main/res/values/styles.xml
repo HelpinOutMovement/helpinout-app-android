@@ -20,11 +20,27 @@
         <item name="android:fontFamily">@font/hindi_font</item>
     </style>
 
+    <style name="BottomSheetThemeAskForHelp" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+    </style>
+
+    <style name="BottomSheetThemeOfferHelp" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+    </style>
+
 
     <style name="OfferTheme" parent="AppTheme">
         <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorAccentDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -156,7 +172,6 @@
     </style>
 
 
-
     <style name="StyleCheckBoxRight">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -179,14 +194,15 @@
         <item name="android:layout_marginStart">@dimen/_10sdp</item>
         <item name="android:layout_marginTop">@dimen/_20sdp</item>
         <item name="android:layout_marginEnd">@dimen/_10sdp</item>
-        <item name="android:background">@drawable/button_background_gray</item>
+        <item name="android:background">@drawable/button_background</item>
         <item name="textAllCaps">false</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+
     <style name="StyleLoginButtonPrimary" parent="StyleLoginButton">
         <item name="android:background">@drawable/primary_border_background</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
     <style name="StyleLoginButtonPrimaryRevert" parent="StyleLoginButton">
@@ -196,7 +212,7 @@
 
     <style name="StyleLoginButtonAccent" parent="StyleLoginButton">
         <item name="android:background">@drawable/accent_border_background</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="StyleLoginButtonPrimaryAccent" parent="StyleLoginButton">

@@ -11,19 +11,16 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
+import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.HomeActivity
-import org.helpinout.billonlights.viewmodel.OfferViewModel
-import org.jetbrains.anko.runOnUiThread
 import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -34,6 +31,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var preferencesService: PreferencesService
+
+    @Inject
+    lateinit var locationService: LocationService
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
@@ -94,7 +94,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
             notificationManager.createNotificationChannel(channel)
         }
-
         notificationManager.notify(0, notificationBuilder.build())
     }
 

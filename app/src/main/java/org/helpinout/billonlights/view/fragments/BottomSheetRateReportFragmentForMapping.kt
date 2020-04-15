@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_rate_report.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.model.database.entity.MappingDetail
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 
 class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private val onSubmitClick: (MappingDetail, String, Int, String) -> Unit) : BottomSheetDialogFragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, if (item.activity_type == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.bottom_sheet_rate_report, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        if (helpType == HELP_TYPE_OFFER) {
-//            tv_title.setText(R.string.offer_confirmation)
-//            button_yes.setBackgroundResource(R.drawable.accent_revert_border_background)
-//            button_no.setBackgroundResource(R.drawable.accent_border_background)
-//            button_no.setTextColor(resources.getColor(R.color.colorAccent))
-//        }
         iv_expend_collapse.setOnClickListener {
             dismiss()
         }
@@ -30,6 +30,6 @@ class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private v
             onSubmitClick(item, rating_bar.rating.toString(), if (rb_yes.isChecked) 1 else 0, edt_comment.text.toString())
             dismiss()
         }
-        tv_name.text = item.first_name +" "+ item.last_name
+        tv_name.text = item.first_name + " " + item.last_name
     }
 }

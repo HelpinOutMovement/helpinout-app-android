@@ -2,7 +2,6 @@ package org.helpinout.billonlights.view.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_request_detail.view.tv_delete
 import kotlinx.android.synthetic.main.item_request_detail.view.tv_detail
 import kotlinx.android.synthetic.main.item_request_detail.view.tv_rate_report
 import kotlinx.android.synthetic.main.item_request_sent.view.*
@@ -15,7 +14,7 @@ import org.helpinout.billonlights.utils.goneIf
 import org.helpinout.billonlights.utils.inflate
 
 
-class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>, private val onRateReportClick: (AddCategoryDbItem) -> Unit, private val onDeleteClick: (AddCategoryDbItem) -> Unit, private val onCardClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onOffersClick: (Int, Int, Int, AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
+class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>, private val onRateReportClick: (AddCategoryDbItem) -> Unit, private val onSendRequestClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onOffersClick: (Int, Int, Int, AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestSentViewHolder {
         val viewLayout: ItemRequestSentBinding = parent.inflate(R.layout.item_request_sent)
         return RequestSentViewHolder(viewLayout)
@@ -36,13 +35,10 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
             holder.itemView.count_text_view.setBackgroundResource(R.drawable.rounded_text_view_accent)
             holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
             holder.itemView.count_text_view.text = holder.itemView.context.getString(R.string.total_requests, item.totalOffers)
-        }
-
-        holder.itemView.mainItem.setOnClickListener {
-            onCardClick(offerType, initiator,helpType, item)
+            holder.itemView.tv_send_requests.text = holder.itemView.tv_send_requests.context.getString(R.string.sent_offers)
         }
         holder.itemView.count_text_view.setOnClickListener {
-            onOffersClick(offerType, initiator,helpType, item)
+            onOffersClick(offerType, initiator, helpType, item)
         }
 
         holder.itemView.tv_rate_report.setOnClickListener {
@@ -51,8 +47,8 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         holder.itemView.tv_rate_report.setOnClickListener {
             onRateReportClick(item)
         }
-        holder.itemView.tv_delete.setOnClickListener {
-            onDeleteClick(item)
+        holder.itemView.tv_send_requests.setOnClickListener {
+            onSendRequestClick(offerType, initiator, helpType, item)
         }
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,10 +13,13 @@
 
     <TextView
         android:id="@+id/tv_message"
+        style="@style/StyleTextView"
         android:layout_margin="@dimen/_10sdp"
         android:gravity="center"
+        android:text="@string/otp_description"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@+id/layout_logo"
-        style="@style/StyleTextView" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_otp"
@@ -45,10 +49,10 @@
 
     <TextView
         android:id="@+id/tv_timer"
+        style="@style/StyleTextView"
         android:layout_margin="@dimen/_10sdp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/edt_otp"
-        style="@style/StyleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_otp" />
 
     <Button
         android:id="@+id/btn_verify"

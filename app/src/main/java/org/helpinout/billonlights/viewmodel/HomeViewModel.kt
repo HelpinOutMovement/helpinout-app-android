@@ -14,7 +14,6 @@ import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApi
 import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.utils.*
-import org.jetbrains.anko.doAsync
 import retrofit2.Retrofit
 import javax.inject.Inject
 

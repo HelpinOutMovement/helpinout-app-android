@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/button_yes"
-        style="@style/StyleLoginButtonPrimaryAccent"
+        style="@style/StyleLoginButtonPrimaryRevert"
         android:layout_width="0dp"
         android:layout_marginTop="@dimen/_30sdp"
         android:text="@string/label_yes"
@@ -40,7 +40,7 @@
 
     <Button
         android:id="@+id/button_no"
-        style="@style/StyleLoginButtonAccent"
+        style="@style/StyleLoginButtonPrimary"
         android:layout_width="0dp"
         android:layout_marginTop="@dimen/_30sdp"
         android:text="@string/label_no"
