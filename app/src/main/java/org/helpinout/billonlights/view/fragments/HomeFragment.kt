@@ -14,12 +14,10 @@ import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -46,11 +44,12 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
+    private var builder: LatLngBounds.Builder = LatLngBounds.Builder()
+    private var mapPadding: Int = 20
 
     @Inject
     lateinit var preferencesService: PreferencesService
 
-    private val markerOptions = ArrayList<MarkerOptions>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_map, container, false)
@@ -110,7 +109,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                         val latLing = place.latLng
                         latLing?.let {
                             mMap?.clear()
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
                             getRequesterAndHelper()
                         }
                         tv_current_address.text = place.address
@@ -118,14 +116,18 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
-                    val status: Status = Autocomplete.getStatusFromIntent(data!!)
-                    Log.i("TAG", status.statusMessage)
                 }
                 RESULT_CANCELED -> {
                     // The user canceled the operation.
                 }
             }
         }
+    }
+
+    private fun fitMap() {
+        val bounds = builder.build()
+        val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
+        mMap?.moveCamera(cu)
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -140,14 +142,10 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         location?.let { loc ->
             mMap?.let {
                 mMap!!.isMyLocationEnabled = true
-
                 changeMyLocationButton()
-
                 mMap!!.clear()
-                val currentLocation = LatLng(loc.latitude, loc.longitude)
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
-
-
+//                val currentLocation = LatLng(loc.latitude, loc.longitude)
+//                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     current_map_pin.show()
@@ -167,19 +165,18 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
-
     private fun getRequesterAndHelper() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.sendUserLocationToServer().observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
-                    markerOptions.clear()
+                    builder = LatLngBounds.Builder()
                     it.offers?.forEach { detail ->
                         try {
                             val loc = detail.geo_location!!.split(",")
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
-                            val name = detail.app_user_detail?.first_name + " " + detail.app_user_detail?.last_name
+                            val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
                             createMarker(lat, lon, name, name, R.drawable.ic_help_provider)
                         } catch (e: Exception) {
 
@@ -190,16 +187,20 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             val loc = detail.geo_location!!.split(",")
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
-                            val name = detail.app_user_detail?.first_name + " " + detail.app_user_detail?.last_name
+                            val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
                             createMarker(lat, lon, name, name, R.drawable.ic_help_requester)
                         } catch (e: Exception) {
 
                         }
                     }
-
+                    mMap?.let {
+                        fitMap()
+                    }
                 }
             } ?: kotlin.run {
-                Timber.d(it.second)
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }else toastError(it.second)
             }
         })
     }
@@ -222,8 +223,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
         val marker = MarkerOptions().position(LatLng(latitude, longitude))
-        markerOptions.add(marker)
-
+        builder.include(marker.position)
         mMap?.addMarker(marker.anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 

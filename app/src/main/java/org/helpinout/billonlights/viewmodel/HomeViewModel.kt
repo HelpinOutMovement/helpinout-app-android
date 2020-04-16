@@ -39,24 +39,22 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         homeItemList.add(LanguageItem(context.getString(R.string.kannad), KANNAD, KANNAD_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.marathi), MARATHI, MARATHI_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.gujrati), GUJRATI, GUJRATI_CODE))
-
         list.postValue(homeItemList)
         return list
     }
 
-    fun getAskForHelpItems(context: Context): MutableLiveData<List<AskForHelpItem>> {
-        val list = MutableLiveData<List<AskForHelpItem>>()
-        val askForHelpItemList = ArrayList<AskForHelpItem>()
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical))
-        askForHelpItemList.add(AskForHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other))
-
+    fun getAskForHelpItems(context: Context): MutableLiveData<List<OfferHelpItem>> {
+        val list = MutableLiveData<List<OfferHelpItem>>()
+        val askForHelpItemList = ArrayList<OfferHelpItem>()
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other))
         list.postValue(askForHelpItemList)
         return list
     }
@@ -128,9 +126,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
             }
         }
-
         return addActivityResponse
     }
-
-
 }

@@ -11,9 +11,12 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/main_card"
         style="@style/CardViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="?attr/colorPrimary"
+        android:outlineSpotShadowColor="?attr/colorPrimary"
         android:clickable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -12,7 +12,6 @@ class LanguageChooserAdapter(var languageList: ArrayList<LanguageItem>, private 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LanguageViewHolder {
         val viewLayout: ItemLanguageBinding = parent.inflate(R.layout.item_language)
         return LanguageViewHolder(viewLayout)
-
     }
 
     override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
@@ -27,7 +26,6 @@ class LanguageChooserAdapter(var languageList: ArrayList<LanguageItem>, private 
     override fun getItemCount(): Int {
         return languageList.size
     }
-
 
     inner class LanguageViewHolder internal constructor(val item: ItemLanguageBinding) : RecyclerView.ViewHolder(item.root)
 

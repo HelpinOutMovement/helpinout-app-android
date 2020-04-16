@@ -75,13 +75,6 @@ fun Context.isSimInserted(): Boolean {
     return !(tm.simState === TelephonyManager.SIM_STATE_ABSENT)
 }
 
-fun Spinner.spinnerHideKeyboard() {
-    setOnTouchListener { _, _ ->
-        hideKeyboard()
-        false
-    }
-}
-
 fun Context.getAddress(latitude: Double, longitude: Double): String {
     return try {
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -95,27 +88,6 @@ fun Context.getAddress(latitude: Double, longitude: Double): String {
 
 fun Activity.getUuid(): String {
     return UUID.randomUUID().toString()
-}
-
-fun Activity.logout() {
-//    val app_id = Hawk.get(APP_ID, 0)
-//    val name = Hawk.get(LOGIN_NAME, "")
-//    Hawk.deleteAll()
-//    Hawk.put(APP_ID, app_id)
-//    Hawk.put(LOGIN_NAME, name)
-    //Hawk.delete(IS_LOGIN)
-
-    var pInfo: PackageInfo? = null
-    try {
-        pInfo = packageManager.getPackageInfo(packageName, 0)
-    } catch (e: PackageManager.NameNotFoundException) {
-        e.printStackTrace()
-    }
-    val verName = pInfo!!.versionName
-    //Hawk.put(VERSION_NAME, verName)
-    startActivity(intentFor<RegistrationActivity>("id" to 5).clearTop())
-    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-    finish()
 }
 
 fun Activity.changeAppLanguage(languageCode: String) {

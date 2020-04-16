@@ -13,9 +13,9 @@
     <androidx.cardview.widget.CardView
         style="@style/CardViewStyle"
         android:layout_width="match_parent"
-        android:outlineSpotShadowColor="@color/colorAccent"
-        android:outlineAmbientShadowColor="@color/colorAccent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="?attr/colorPrimary"
+        android:outlineSpotShadowColor="?attr/colorPrimary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainItem"

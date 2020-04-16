@@ -7,11 +7,8 @@ import org.helpinout.billonlights.model.database.AppDatabase
 
 @Module
 class DbModule {
-
     @Provides
     fun provideDb(app: Application): AppDatabase {
         return AppDatabase.getInstance(app)
     }
-
-
 }

@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "add_item", indices = [Index(value = ["activity_uuid"], unique = true)])
 class AddCategoryDbItem {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
+
     var name: String = ""
     var detail: String? = ""
     var icon: Int = 0
@@ -26,11 +29,7 @@ class AddCategoryDbItem {
     var totalOffers: Int? = 0
     var status: Int = 0
     var mobile_no: String? = ""
-
     var address: String = ""
     var qty: String? = ""
     var pay: Int = 0
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
 }

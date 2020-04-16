@@ -60,7 +60,6 @@ abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.
             override fun onPermissionGranted(response: PermissionGrantedResponse) {
                 onPermissionAllow()
             }
-
             override fun onPermissionDenied(response: PermissionDeniedResponse) {
             }
 
@@ -75,7 +74,6 @@ abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.
     override fun onConnectionSuspended(p0: Int) {
 
     }
-
 
     private fun buildLocationSettingsRequest() {
         val builder = LocationSettingsRequest.Builder()

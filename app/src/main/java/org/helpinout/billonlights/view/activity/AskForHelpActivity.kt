@@ -7,23 +7,20 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_help.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AskForHelpItem
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.model.database.entity.OfferHelpItem
 import org.helpinout.billonlights.view.adapters.AskForHelpAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
-import org.jetbrains.anko.startActivity
 
 
 class AskForHelpActivity : BaseActivity() {
 
-    private var itemList = ArrayList<AskForHelpItem>()
+    private var itemList = ArrayList<OfferHelpItem>()
     private lateinit var adapter: AskForHelpAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = getString(R.string.title_need_help_with)
         mRecyclerView
     }
 
@@ -51,39 +48,6 @@ class AskForHelpActivity : BaseActivity() {
             }
             adapter.notifyDataSetChanged()
         })
-    }
-
-    private fun onItemClick(item: AskForHelpItem) {
-        when (item.type) {
-            CATEGORY_FOOD -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_FOOD)
-            }
-            CATEGORY_PEOPLE -> {
-                startActivity<PeopleHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
-            }
-            CATEGORY_SHELTER -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_SHELTER)
-            }
-            CATEGORY_MED_PPE -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MED_PPE)
-            }
-            CATEGORY_TESTING -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_TESTING)
-            }
-            CATEGORY_MEDICINES -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MEDICINES)
-            }
-            CATEGORY_AMBULANCE -> {
-                startActivity<AmbulanceHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
-            }
-            CATEGORY_MEDICAL_EQUIPMENT -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT)
-            }
-            CATEGORY_OTHERS -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_OTHERS)
-            }
-        }
-        overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 
     override fun getLayout(): Int {

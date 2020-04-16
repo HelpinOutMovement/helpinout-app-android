@@ -57,8 +57,4 @@ interface NetworkApi {
 
     @POST("user/locationrequestersummary")
     fun getRequestSummaryResponseAsync(@Body body: String): Deferred<OfferHelpResponses>
-
-    @GET
-    fun getSearchResult(@Url url: String): Call<String>
-
 }

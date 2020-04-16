@@ -145,7 +145,9 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
                 saveRequestToDatabase(it.first)
             } else {
                 CrashReporter.logCustomLogs(it.second)
-                toastError(it.second)
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                } else toastError(it.second)
                 dialog?.dismiss()
             }
         })
@@ -221,17 +223,10 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onNoClick() {
-        if (helpType == HELP_TYPE_REQUEST) {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 1)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        } else {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 2)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        }
+        val intent = Intent(baseContext!!, HomeActivity::class.java)
+        intent.putExtra(SELECTED_INDEX, helpType)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
         finishWithFade()
     }
 

@@ -28,7 +28,6 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     @Inject
     lateinit var preferencesService: PreferencesService
 
-
     init {
         (application as BillionLightsApplication).getAppComponent().inject(this)
     }

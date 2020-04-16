@@ -31,8 +31,5 @@ class BottomSheetRateReportFragment(val item: AddCategoryDbItem, private val onS
             dismiss()
         }
         tv_name.text = item.name
-
     }
-
-
 }

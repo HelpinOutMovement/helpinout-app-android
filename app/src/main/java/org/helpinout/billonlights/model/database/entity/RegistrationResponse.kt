@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose
 
 import com.google.gson.annotations.SerializedName
 
-
 class ServerResponse {
     var status: Int = -1
     var message: String? = null
@@ -27,12 +26,10 @@ class LoginResponse {
 
 class Data {
     var app_id: String? = null
-    var user_id: String? = null
 }
 
 
 class RegistrationData {
-    var user_id: Int? = null
     var app_id: String? = null
     var user_detail: Registration? = null
 }

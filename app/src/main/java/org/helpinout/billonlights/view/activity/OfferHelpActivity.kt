@@ -13,11 +13,11 @@ import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.OfferHelpItem
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.utils.hide
+import org.helpinout.billonlights.utils.show
 import org.helpinout.billonlights.view.adapters.OfferHelpAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
-import org.jetbrains.anko.startActivity
 
 
 class OfferHelpActivity : LocationActivity(), View.OnClickListener {
@@ -27,7 +27,6 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.title = getString(R.string.title_offer_help_with)
         checkLocationPermission()
         btnPermission.setOnClickListener(this)
         btnPermission.setOnClickListener(this)
@@ -58,50 +57,12 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
         })
     }
 
-    private fun onItemClick(item: OfferHelpItem) {
-        when (item.type) {
-            CATEGORY_FOOD -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_FOOD)
-            }
-            CATEGORY_PEOPLE -> {
-                startActivity<PeopleHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
-            }
-            CATEGORY_SHELTER -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_SHELTER)
-            }
-            CATEGORY_MED_PPE -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MED_PPE)
-            }
-            CATEGORY_TESTING -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_TESTING)
-            }
-            CATEGORY_MEDICINES -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MEDICINES)
-            }
-            CATEGORY_AMBULANCE -> {
-                startActivity<AmbulanceHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0))
-            }
-            CATEGORY_MEDICAL_EQUIPMENT -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT)
-            }
-            CATEGORY_OTHERS -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to intent.getIntExtra(HELP_TYPE, 0), CATEGORY_TYPE to CATEGORY_OTHERS)
-            }
-        }
-        overridePendingTransition(R.anim.enter, R.anim.exit)
-    }
-
-
     override fun onLocationChanged(location: Location?) {
         location?.let {
             preferencesService.latitude = location.latitude
             preferencesService.longitude = location.longitude
             preferencesService.gpsAccuracy = location.accuracy.toInt().toString()
         }
-    }
-
-    override fun getLayout(): Int {
-        return R.layout.activity_help
     }
 
     override fun onPermissionAllow() {
@@ -133,5 +94,9 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
 
             }
         }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.activity_help
     }
 }

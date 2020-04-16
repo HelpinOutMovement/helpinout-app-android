@@ -26,9 +26,7 @@ class LanguageChooserActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isUpdate = intent.getBooleanExtra(UPDATE_LANGAUGE, false)
-        if (isUpdate) {
-            layout_toolbar.show()
-        }
+        layout_toolbar.visibleIf(isUpdate)
         mRecyclerView
     }
 

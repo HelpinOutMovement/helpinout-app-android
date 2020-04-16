@@ -20,14 +20,11 @@ class OfferHelpAdapter(var homeItemList: ArrayList<OfferHelpItem>, private val o
         holder.item.mainItem.setOnClickListener {
             onItemClick(homeItem)
         }
-
     }
 
     override fun getItemCount(): Int {
         return homeItemList.size
     }
 
-
     inner class OfferHelpViewHolder internal constructor(val item: ItemOfferHelpBinding) : RecyclerView.ViewHolder(item.root)
-
 }

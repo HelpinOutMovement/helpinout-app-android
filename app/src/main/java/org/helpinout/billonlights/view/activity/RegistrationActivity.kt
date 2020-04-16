@@ -35,7 +35,6 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 til_unit_division.hide()
             }
         }
-
         spinner_org_type.onItemSelectedListener = object : SpinnerSelector() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 0) {
@@ -116,7 +115,9 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                     toastError(loginResponse?.message ?: "")
                 }
             } else {
-                toastError(it.second)
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }else toastError(it.second)
             }
         })
     }
@@ -137,7 +138,9 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                     toastError(loginResponse?.message ?: "")
                 }
             } else {
-                toastError(it.second)
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }else toastError(it.second)
             }
         })
     }

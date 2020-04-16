@@ -383,31 +383,31 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                 offer.mapping?.forEach { mapping ->
                     if (mapping.offer_detail != null) {
-                        mapping.offer_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_type = offer.activity_type
-                        mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                        mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
-                        mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
-                        mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
-                        mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                        mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        mapping.offer_detail?.user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.offer_detail?.user_detail?.activity_type = offer.activity_type
+                        mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                        mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
+                        mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
+                        mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
+                        mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                        mapping.offer_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                     } else if (mapping.request_detail != null) {
-                        mapping.request_detail?.app_user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.request_detail?.app_user_detail?.activity_type = offer.activity_type
-                        mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
-                        mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
-                        mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
-                        mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
-                        mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                        mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        mapping.request_detail?.user_detail?.parent_uuid = offer.activity_uuid
+                        mapping.request_detail?.user_detail?.activity_type = offer.activity_type
+                        mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                        mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
+                        mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
+                        mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
+                        mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                        mapping.request_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                     }
                 }
                 val mappingList = ArrayList<MappingDetail>()
                 offer.mapping?.forEach {
                     if (it.offer_detail != null) {
-                        mappingList.add(it.offer_detail!!.app_user_detail!!)
+                        mappingList.add(it.offer_detail!!.user_detail!!)
                     } else {
-                        mappingList.add(it.request_detail!!.app_user_detail!!)
+                        mappingList.add(it.request_detail!!.user_detail!!)
                     }
                 }
                 if (mappingList.isNotEmpty()) saveMappingToDb(mappingList)

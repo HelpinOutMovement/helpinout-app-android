@@ -24,6 +24,7 @@ import org.helpinout.billonlights.view.fragments.BottomSheetsDetailFragment
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
+import timber.log.Timber
 
 
 class RequestDetailActivity : BaseActivity(), View.OnClickListener {
@@ -65,7 +66,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(offerType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail -> onDetailClick(name, detail) })
+        adapter = RequestDetailAdapter(offerType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail -> onDetailClick(name, detail) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -117,7 +118,9 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             if (it.first != null) {
                 toastSuccess(R.string.rating_success)
             } else {
-                toastError(it.second)
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }else toastError(it.second)
             }
         })
     }
@@ -159,6 +162,17 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun onMakeCallClick(parentUUid: String?, activity_uuid: String) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
+        viewModel.makeCallTracking(parentUUid, activity_uuid, helpType).observe(this, Observer {
+            if (it.first != null) Timber.d("Response success of make call api")
+        })
+    }
+
     private fun onDetailClick(name: String, detail: String) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
@@ -192,13 +206,13 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_request_detail
-    }
-
     override fun onClick(v: View?) {
         if (v == btn_cancel_request) {
             onDeleteYesClick(null, activity_uuid)
         }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.activity_request_detail
     }
 }

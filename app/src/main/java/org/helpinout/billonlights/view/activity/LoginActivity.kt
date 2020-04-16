@@ -16,7 +16,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     private val registrationCode = 32
     private val loginCode = 33
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isSimInserted()) {
@@ -36,6 +35,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
+        
         when (v) {
             btn_login -> {
                 if (validate()) {

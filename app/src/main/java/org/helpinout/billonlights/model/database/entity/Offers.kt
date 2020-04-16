@@ -2,7 +2,6 @@ package org.helpinout.billonlights.model.database.entity
 
 import org.json.JSONArray
 
-
 class AddData {
     var activity_type: Int = 0
     var activity_uuid: String = ""
@@ -33,7 +32,6 @@ class ActivityDetail {
     var detail: String? = ""
     var qty: String? = ""
     var id: Int = 0
-    var request_help_id: Int? = 0
     var volunters_required: Int? = 0
     var volunters_detail: String? = ""
     var volunters_quantity: String? = ""

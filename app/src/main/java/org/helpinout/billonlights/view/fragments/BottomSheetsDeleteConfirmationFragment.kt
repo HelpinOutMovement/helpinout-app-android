@@ -34,6 +34,5 @@ class BottomSheetsDeleteConfirmationFragment(private val activityType: Int, priv
         button_no.setOnClickListener {
             dismiss()
         }
-
     }
 }

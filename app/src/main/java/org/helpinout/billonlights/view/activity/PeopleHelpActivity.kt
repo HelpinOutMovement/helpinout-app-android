@@ -41,10 +41,6 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         we_can_not_pay.setOnClickListener(this)
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_people_help
-    }
-
     override fun onClick(v: View?) {
         when (v) {
             chk_volunteers -> {
@@ -90,6 +86,9 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
             if (it.first != null) {
                 saveRequestToDatabase(it.first)
             } else {
+                if (!isNetworkAvailable()) {
+                    toastError(R.string.toast_error_internet_issue)
+                }else toastError(it.second)
                 dialog?.dismiss()
                 CrashReporter.logCustomLogs(it.second)
             }
@@ -153,15 +152,12 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onNoClick() {
-        if (helpType == HELP_TYPE_REQUEST) {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 1)
-            startActivity(intent)
-        } else {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 2)
-            startActivity(intent)
-        }
+        val intent = Intent(baseContext!!, HomeActivity::class.java)
+        intent.putExtra(SELECTED_INDEX, helpType)
+        startActivity(intent)
         finishWithFade()
+    }
+    override fun getLayout(): Int {
+        return R.layout.activity_people_help
     }
 }

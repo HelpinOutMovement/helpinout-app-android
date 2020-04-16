@@ -58,7 +58,6 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         when (intent.getIntExtra(SELECTED_INDEX, 0)) {
             0 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_home
-
             }
             1 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_my_request
@@ -268,15 +267,9 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         }
     }
 
-    override fun getLayout(): Int {
-        return R.layout.activity_home
-    }
-
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getUserRequestOfferList(this, 0).observe(this, Observer {
-
-        })
+        viewModel.getUserRequestOfferList(this, 0)
     }
 
     fun menuClick() {
@@ -308,5 +301,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
             }
         }
+    }
+    override fun getLayout(): Int {
+        return R.layout.activity_home
     }
 }

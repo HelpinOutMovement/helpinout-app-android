@@ -56,7 +56,6 @@ class FragmentMyRequests : BaseFragment() {
         if (offerType == HELP_TYPE_OFFER) {
             tv_no_data_available.text = getString(R.string.no_offer_sended)
         }
-
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
         adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onSendRequestClick = { offer, initiat, helpType, item -> onSendRequestClick(offerType, initiator, helpType, item) }, onOffersClick = { offer, initiat, helpType, item -> onOffersClick(offerType, initiator, helpType, item) })

@@ -10,13 +10,13 @@ import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.utils.*
 
 
-class RequestDetailAdapter(private var helpType: Int, private var offerList: ArrayList<MappingDetail>, private val onRateReportClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.OfferReceivedViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferReceivedViewHolder {
+class RequestDetailAdapter(private var helpType: Int, private var offerList: ArrayList<MappingDetail>, private val onRateReportClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestDetailViewHolder {
         val viewLayout: ItemRequestDetailBinding = parent.inflate(R.layout.item_request_detail)
-        return OfferReceivedViewHolder(viewLayout)
+        return RequestDetailViewHolder(viewLayout)
     }
 
-    override fun onBindViewHolder(holder: OfferReceivedViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RequestDetailViewHolder, position: Int) {
         val item = offerList[position]
         holder.item.item = item
 
@@ -60,9 +60,16 @@ class RequestDetailAdapter(private var helpType: Int, private var offerList: Arr
         holder.itemView.tv_delete.setOnClickListener {
             onDeleteClick(item)
         }
+        holder.itemView.tv_cal_them.setOnClickListener {
+            if (item.mobile_no.isNotEmpty()) {
+                onMakeCallClick(item.parent_uuid, item.activity_uuid?:"")
+                holder.itemView.context.callPhoneNumber(item.mobile_no)
+            }
+        }
         holder.itemView.iv_call.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_UP) {
                 if (item.mobile_no.isNotEmpty()) {
+                    onMakeCallClick(item.parent_uuid, item.activity_uuid?:"")
                     holder.itemView.context.callPhoneNumber(item.mobile_no)
                 }
             }
@@ -74,7 +81,6 @@ class RequestDetailAdapter(private var helpType: Int, private var offerList: Arr
         return offerList.size
     }
 
-
-    inner class OfferReceivedViewHolder internal constructor(val item: ItemRequestDetailBinding) : RecyclerView.ViewHolder(item.root)
+    inner class RequestDetailViewHolder internal constructor(val item: ItemRequestDetailBinding) : RecyclerView.ViewHolder(item.root)
 
 }

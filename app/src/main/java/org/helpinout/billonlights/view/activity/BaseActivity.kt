@@ -9,7 +9,9 @@ import androidx.appcompat.widget.Toolbar
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
+import org.helpinout.billonlights.model.database.entity.OfferHelpItem
 import org.helpinout.billonlights.utils.*
+import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -63,9 +65,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-
     abstract fun getLayout(): Int
-
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -81,6 +81,39 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun onItemClick(item: OfferHelpItem) {
+        when (item.type) {
+            CATEGORY_FOOD -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_FOOD)
+            }
+            CATEGORY_PEOPLE -> {
+                startActivity<PeopleHelpActivity>(HELP_TYPE to helpType)
+            }
+            CATEGORY_SHELTER -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_SHELTER)
+            }
+            CATEGORY_MED_PPE -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MED_PPE)
+            }
+            CATEGORY_TESTING -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_TESTING)
+            }
+            CATEGORY_MEDICINES -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICINES)
+            }
+            CATEGORY_AMBULANCE -> {
+                startActivity<AmbulanceHelpActivity>(HELP_TYPE to helpType)
+            }
+            CATEGORY_MEDICAL_EQUIPMENT -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT)
+            }
+            CATEGORY_OTHERS -> {
+                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_OTHERS)
+            }
+        }
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+    }
+
     fun updateTitle(title: String) {
         toolbar?.title = title
     }
@@ -88,7 +121,6 @@ abstract class BaseActivity : AppCompatActivity() {
     fun finishWithSlideAnimation() {
         finish()
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-
     }
 
     fun finishWithFade() {

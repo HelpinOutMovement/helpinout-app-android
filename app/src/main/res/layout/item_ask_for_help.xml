@@ -7,16 +7,16 @@
 
         <variable
             name="item"
-            type="org.helpinout.billonlights.model.database.entity.AskForHelpItem" />
+            type="org.helpinout.billonlights.model.database.entity.OfferHelpItem" />
     </data>
 
 
     <androidx.cardview.widget.CardView
         style="@style/CardViewStyle"
         android:layout_width="match_parent"
-        android:outlineSpotShadowColor="@color/colorPrimary"
-        android:outlineAmbientShadowColor="@color/colorPrimary"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="?attr/colorPrimary"
+        android:outlineSpotShadowColor="?attr/colorPrimary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/mainItem"

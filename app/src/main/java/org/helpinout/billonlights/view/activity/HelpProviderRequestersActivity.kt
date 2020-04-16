@@ -5,9 +5,7 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.os.SystemClock
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
@@ -15,13 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.avneesh.crashreporter.CrashReporter
-import com.google.android.gms.common.api.Status
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -57,6 +52,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private var location: Location? = null
     private var bottomItemList = ArrayList<ActivityAddDetail>()
     private var bottomAdapter: BottomSheetHelpAdapter? = null
+    private var mapPadding: Int = 0
+    private var builder: LatLngBounds.Builder = LatLngBounds.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +114,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 mMap?.let {
                     it.clear()
                     showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
+                    builder = LatLngBounds.Builder()
+                    fitMap()
                 }
             } ?: kotlin.run {
                 toastError(it.second)
@@ -130,18 +129,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.setHasFixedSize(true)
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 10, -10))
-        bottomAdapter = BottomSheetHelpAdapter(bottomItemList, onItemClick = { item -> onItemClick(item) })
+        bottomAdapter = BottomSheetHelpAdapter(bottomItemList)
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
     }
-
-    private fun onItemClick(item: ActivityAddDetail) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-            return
-        }
-    }
-
 
     private fun startLocationPicker() {
         val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
@@ -159,21 +151,30 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         val place = Autocomplete.getPlaceFromIntent(data)
                         val latLing = place.latLng
                         latLing?.let {
+                            suggestionData?.latitude = latLing.latitude
+                            suggestionData?.longitude = latLing.longitude
+
                             mMap?.clear()
                             mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
+                            builder = LatLngBounds.Builder()
+                            fitMap()
+//                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
                         }
                         tv_current_address.text = place.address
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
-                    val status: Status = Autocomplete.getStatusFromIntent(data!!)
-                    Log.i("TAG", status.statusMessage)
                 }
                 Activity.RESULT_CANCELED -> {
                 }
             }
         }
+    }
+
+    private fun fitMap() {
+        val bounds = builder.build()
+        val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
+        mMap?.moveCamera(cu)
     }
 
     override fun onPermissionAllow() {
@@ -200,10 +201,13 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onLocationChanged(location: Location?) {
         this.location = location
-
         if (location != null && mMap != null) {
             updateLocation()
         }
+    }
+
+    override fun onBackPressed() {
+        goToRequestDetailScreen()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -222,9 +226,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 mMap?.isMyLocationEnabled = true
                 mMap!!.clear()
                 changeMyLocationButton()
-                val currentLocation = LatLng(loc.latitude, loc.longitude)
-                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
-
                 mMap?.setOnCameraIdleListener {
                     val midLatLng = mMap!!.cameraPosition.target
                     tv_current_address.text = getAddress(midLatLng.latitude, midLatLng.longitude)
@@ -232,7 +233,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     suggestionData?.longitude = midLatLng.longitude
                     loadSuggestionData()
                 }
-
                 tv_current_address.text = getAddress(loc.latitude, loc.longitude)
                 stopLocationUpdate()
                 showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
@@ -262,7 +262,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 val geoLocation = detail.geo_location!!.split(",")
                 val latitude = geoLocation[0].toDouble()
                 val longitude = geoLocation[1].toDouble()
-                val name = detail.app_user_detail!!.first_name + " " + detail.app_user_detail!!.last_name
+                val name = detail.user_detail!!.first_name + " " + detail.user_detail!!.last_name
                 createMarker(latitude, longitude, name, name, icon)
             } catch (e: Exception) {
                 Timber.d("")
@@ -271,6 +271,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
+        val marker = MarkerOptions().position(LatLng(latitude, longitude))
+        builder.include(marker.position)
         mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
@@ -322,23 +324,23 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     it.first!!.data!!.mapping?.forEach { mapping ->
 
                         if (mapping.offer_detail != null) {
-                            mapping.offer_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.offer_detail?.app_user_detail?.activity_type = it.first!!.data!!.activity_type
-                            mapping.offer_detail?.app_user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                            mapping.offer_detail?.app_user_detail?.activity_category = mapping.offer_detail?.activity_category
-                            mapping.offer_detail?.app_user_detail?.date_time = mapping.offer_detail?.date_time
-                            mapping.offer_detail?.app_user_detail?.geo_location = mapping.offer_detail?.geo_location
-                            mapping.offer_detail?.app_user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                            mapping.offer_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                            mapping.offer_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
+                            mapping.offer_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
+                            mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                            mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
+                            mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
+                            mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
+                            mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                            mapping.offer_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                         } else if (mapping.request_detail != null) {
-                            mapping.request_detail?.app_user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.request_detail?.app_user_detail?.activity_type = it.first!!.data!!.activity_type
-                            mapping.request_detail?.app_user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
-                            mapping.request_detail?.app_user_detail?.activity_category = mapping.request_detail?.activity_category
-                            mapping.request_detail?.app_user_detail?.date_time = mapping.request_detail?.date_time
-                            mapping.request_detail?.app_user_detail?.geo_location = mapping.request_detail?.geo_location
-                            mapping.request_detail?.app_user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                            mapping.request_detail?.app_user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                            mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
+                            mapping.request_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
+                            mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                            mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
+                            mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
+                            mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
+                            mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                            mapping.request_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
                         }
                     }
                     if (it.first!!.data!!.mapping.isNullOrEmpty()) {
@@ -354,7 +356,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }
+                } else toastError(it.second)
                 dialog?.dismiss()
                 CrashReporter.logCustomLogs(it.second)
             }
@@ -366,9 +368,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         val mappingList = ArrayList<MappingDetail>()
         mapping?.forEach {
             if (it.offer_detail != null) {
-                mappingList.add(it.offer_detail!!.app_user_detail!!)
+                mappingList.add(it.offer_detail!!.user_detail!!)
             } else {
-                mappingList.add(it.request_detail!!.app_user_detail!!)
+                mappingList.add(it.request_detail!!.user_detail!!)
             }
         }
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)

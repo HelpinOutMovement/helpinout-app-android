@@ -8,16 +8,13 @@ import kotlinx.android.synthetic.main.item_request_sent.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.ItemRequestSentBinding
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
-import org.helpinout.billonlights.utils.displayTime
-import org.helpinout.billonlights.utils.goneIf
-import org.helpinout.billonlights.utils.inflate
+import org.helpinout.billonlights.utils.*
 
 
 class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>, private val onRateReportClick: (AddCategoryDbItem) -> Unit, private val onSendRequestClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onOffersClick: (Int, Int, Int, AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestSentViewHolder {
         val viewLayout: ItemRequestSentBinding = parent.inflate(R.layout.item_request_sent)
-        return RequestSentViewHolder(viewLayout)
+        return RequestSentViewHolder(viewLayout, offerType)
     }
 
     override fun onBindViewHolder(holder: RequestSentViewHolder, position: Int) {
@@ -56,5 +53,12 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         return requestSentList.size
     }
 
-    inner class RequestSentViewHolder internal constructor(val item: ItemRequestSentBinding) : RecyclerView.ViewHolder(item.root)
+    inner class RequestSentViewHolder internal constructor(val item: ItemRequestSentBinding, val offerType: Int) : RecyclerView.ViewHolder(item.root) {
+        init {
+            if (offerType == HELP_TYPE_OFFER) {
+                itemView.main_card.outlineAmbientShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+                itemView.main_card.outlineSpotShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+            }
+        }
+    }
 }

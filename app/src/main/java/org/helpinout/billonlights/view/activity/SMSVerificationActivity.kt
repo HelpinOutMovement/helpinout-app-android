@@ -146,10 +146,9 @@ class SMSVerificationActivity : BaseActivity() {
                     }
                 }
             } else {
-                if (isNetworkAvailable()) toastError(it.second)
-                else {
+                if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }
+                }else toastError(it.second)
             }
         })
     }

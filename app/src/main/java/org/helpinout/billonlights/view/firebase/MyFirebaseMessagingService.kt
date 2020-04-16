@@ -24,7 +24,6 @@ import org.helpinout.billonlights.view.activity.HomeActivity
 import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    val FCM_PARAM = "picture"
     private val CHANNEL_NAME = "FCM"
     private val CHANNEL_DESC = "Firebase Cloud Messaging"
     private var numMessages = 0
@@ -36,7 +35,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var locationService: LocationService
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-
         remoteMessage.data.isNotEmpty().let {
             handleNow(remoteMessage.data)
         }
@@ -55,14 +53,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(data: Map<String, String>) {
         val bundle = Bundle()
-        bundle.putString(FCM_PARAM, data[FCM_PARAM])
         val intent1 = Intent(DATA_REFRESH)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
         val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
         val action = data[ACTION]?.toInt() ?: 0
         var message = "New offer or request"
         if (activityType == 1) {
-            //action 1
             if (action == 1) {//request accepted
                 message = getString(R.string.someone_accept_offer)
             }
@@ -79,7 +75,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
 
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -95,10 +90,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(0, notificationBuilder.build())
-    }
-
-    companion object {
-
-        private const val TAG = "MyFirebaseMsgService"
     }
 }
