@@ -20,19 +20,9 @@ class AskForHelpAdapter(var homeItemList: ArrayList<AskForHelpItem>, private val
         holder.item.mainItem.setOnClickListener {
             onItemClick(homeItem)
         }
-
     }
-
     override fun getItemCount(): Int {
         return homeItemList.size
     }
-
-
     inner class AskForHelpViewHolder internal constructor(val item: ItemAskForHelpBinding) : RecyclerView.ViewHolder(item.root)
-//    {
-//        init {
-//            itemView.card.outlineAmbientShadowColor= itemView.context.getColor(R.color.colorPrimaryDark)
-//        }
-//    }
-
 }

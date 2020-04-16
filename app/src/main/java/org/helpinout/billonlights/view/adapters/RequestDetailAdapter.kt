@@ -1,5 +1,6 @@
 package org.helpinout.billonlights.view.adapters
 
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_request_detail.view.*
@@ -59,10 +60,13 @@ class RequestDetailAdapter(private var helpType: Int, private var offerList: Arr
         holder.itemView.tv_delete.setOnClickListener {
             onDeleteClick(item)
         }
-        holder.itemView.iv_call.setOnClickListener {
-            if (item.mobile_no.isNotEmpty()) {
-                holder.itemView.context.callPhoneNumber(item.mobile_no)
+        holder.itemView.iv_call.setOnTouchListener { view, motionEvent ->
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                if (item.mobile_no.isNotEmpty()) {
+                    holder.itemView.context.callPhoneNumber(item.mobile_no)
+                }
             }
+            true
         }
     }
 

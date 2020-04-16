@@ -46,7 +46,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
         tools:visibility="visible">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/top_shadow_gradient" />
 
         <Button
             android:id="@+id/btn_cancel_request"
