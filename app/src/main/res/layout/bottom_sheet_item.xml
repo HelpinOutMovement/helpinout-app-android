@@ -26,24 +26,21 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Shyam Narayan" />
 
-        <TextView
-            android:id="@+id/distance"
-            style="@style/StyleTextViewNormal"
-            android:text="@{@string/distance(item.distance)}"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            tools:text="@string/distance" />
-
         <RatingBar
             android:id="@+id/rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
-            android:numStars="5"
             android:progressTint="@color/rating_color"
-            app:layout_constraintTop_toBottomOf="@+id/distance"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
             tools:rating="4" />
-
+        <TextView
+            android:id="@+id/distance"
+            style="@style/StyleTextViewNormal"
+            android:text="@{@string/distance(item.distance)}"
+            app:layout_constraintTop_toBottomOf="@+id/rating_bar"
+            tools:text="@string/distance" />
         <TextView
             android:id="@+id/tv_message"
             style="@style/StyleTextViewNormal"
@@ -52,7 +49,7 @@
             android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toStartOf="@+id/chk_name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rating_bar"
+            app:layout_constraintTop_toBottomOf="@+id/distance"
             tools:text="Can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered. " />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

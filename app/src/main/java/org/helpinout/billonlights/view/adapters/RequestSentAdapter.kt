@@ -1,5 +1,6 @@
 package org.helpinout.billonlights.view.adapters
 
+import android.os.Build
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_request_detail.view.tv_detail
@@ -56,8 +57,10 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
     inner class RequestSentViewHolder internal constructor(val item: ItemRequestSentBinding, val offerType: Int) : RecyclerView.ViewHolder(item.root) {
         init {
             if (offerType == HELP_TYPE_OFFER) {
-                itemView.main_card.outlineAmbientShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
-                itemView.main_card.outlineSpotShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+                if (Build.VERSION.SDK_INT >= 28) {
+                    itemView.main_card.outlineAmbientShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+                    itemView.main_card.outlineSpotShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+                }
             }
         }
     }

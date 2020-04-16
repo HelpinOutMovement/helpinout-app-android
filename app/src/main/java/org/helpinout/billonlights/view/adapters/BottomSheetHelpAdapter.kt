@@ -18,6 +18,9 @@ class BottomSheetHelpAdapter(private var homeItemList: ArrayList<ActivityAddDeta
     override fun onBindViewHolder(holder: BottomSheetViewHolder, position: Int) {
         val homeItem = homeItemList[position]
         holder.item.item = homeItem.user_detail
+        if (homeItem.user_detail?.rating_count != 0) {
+            holder.itemView.rating_bar.rating = homeItem.user_detail?.rating_avg ?: 0F
+        }
         holder.itemView.tv_message.text = homeItem.offer_condition
         holder.itemView.tv_name.setOnClickListener {
             homeItem.isSelected = !homeItem.isSelected
