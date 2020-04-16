@@ -113,8 +113,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
                 mMap?.let {
                     it.clear()
-                    showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
+                    val latLng = LatLng(location!!.latitude, location!!.longitude)
+                    val address = getAddress(latLng.latitude, latLng.longitude)
+                    showCurrentLocation(latLng, address)
                     builder = LatLngBounds.Builder()
+                    showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
                     fitMap()
                 }
             } ?: kotlin.run {
@@ -151,16 +154,15 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         val place = Autocomplete.getPlaceFromIntent(data)
                         val latLing = place.latLng
                         latLing?.let {
+                            preferencesService.latitude= it.latitude
+                            preferencesService.longitude= it.longitude
                             suggestionData?.latitude = latLing.latitude
                             suggestionData?.longitude = latLing.longitude
-
                             mMap?.clear()
-                            mMap?.addMarker(MarkerOptions().position(latLing).title(place.address))
+                            showCurrentLocation(it, place.address ?: "")
                             builder = LatLngBounds.Builder()
                             fitMap()
-//                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, 14.0f))
                         }
-                        tv_current_address.text = place.address
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
@@ -172,9 +174,15 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun fitMap() {
-        val bounds = builder.build()
-        val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
-        mMap?.moveCamera(cu)
+       try {
+           if (bottomItemList.isNotEmpty()) {
+               val bounds = builder.build()
+               val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
+               mMap?.moveCamera(cu)
+           }
+       }catch (e:Exception){
+
+       }
     }
 
     override fun onPermissionAllow() {
@@ -226,13 +234,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 mMap?.isMyLocationEnabled = true
                 mMap!!.clear()
                 changeMyLocationButton()
-                mMap?.setOnCameraIdleListener {
-                    val midLatLng = mMap!!.cameraPosition.target
-                    tv_current_address.text = getAddress(midLatLng.latitude, midLatLng.longitude)
-                    suggestionData?.latitude = midLatLng.latitude
-                    suggestionData?.longitude = midLatLng.longitude
-                    loadSuggestionData()
-                }
+                loadSuggestionData()
                 tv_current_address.text = getAddress(loc.latitude, loc.longitude)
                 stopLocationUpdate()
                 showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
@@ -273,9 +275,17 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
         val marker = MarkerOptions().position(LatLng(latitude, longitude))
         builder.include(marker.position)
-        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
+        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
+    private fun showCurrentLocation(latLng: LatLng, title: String) {
+        tv_current_address.text = title
+        val markerOptions = MarkerOptions()
+        markerOptions.position(latLng)
+        markerOptions.title(title).anchor(0.5f, 0.5f)
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+        mMap?.addMarker(markerOptions)
+    }
 
     override fun onClick(v: View?) {
         when (v) {

@@ -173,6 +173,7 @@ Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they se
     <string name="update_language">Update language</string>
     <string name="language_update_success">Language update success</string>
     <string name="send_offer">Send offer</string>
+    <string name="distance">Distance %1$s Km</string>
 
     <string-array name="org_types">
         <item>Organization type</item>

@@ -26,6 +26,13 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Shyam Narayan" />
 
+        <TextView
+            android:id="@+id/distance"
+            style="@style/StyleTextViewNormal"
+            android:text="@{@string/distance(item.distance)}"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            tools:text="@string/distance" />
+
         <RatingBar
             android:id="@+id/rating_bar"
             style="?android:attr/ratingBarStyleSmall"
@@ -34,7 +41,7 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:numStars="5"
             android:progressTint="@color/rating_color"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/distance"
             tools:rating="4" />
 
         <TextView

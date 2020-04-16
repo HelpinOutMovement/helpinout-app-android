@@ -104,9 +104,28 @@ class LocationService(private val preferencesService: PreferencesService, privat
     }
 
     suspend fun getNewSuggestionResult(body: SuggestionRequest): ActivityResponses {
-        return service.makeCall {
+        val response = service.makeCall {
             it.networkApi.getActivitySuggestionResponseAsync(createNewSuggestionRequest(body))
         }
+
+        response.data?.let { it ->
+            it.offers?.let { detailList ->
+                detailList.forEach {detail->
+                    try {
+                        val destinationLatLong = detail.geo_location?.split(",")
+                        if (!destinationLatLong.isNullOrEmpty()) {
+                            val lat1 = preferencesService.latitude
+                            val long1 = preferencesService.longitude
+                            val lat2 = destinationLatLong[0].toDouble()
+                            val long2 = destinationLatLong[1].toDouble()
+                            detail.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
+                        }
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        }
+        return response
     }
 
     private fun createNewSuggestionRequest(body: SuggestionRequest): String {

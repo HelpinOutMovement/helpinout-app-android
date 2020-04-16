@@ -6,14 +6,12 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -35,7 +33,6 @@ import org.helpinout.billonlights.view.activity.HomeActivity
 import org.helpinout.billonlights.view.activity.OfferHelpActivity
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.startActivity
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -89,6 +86,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         val latlong = LatLng(preferencesService.latitude, preferencesService.longitude)
         tv_current_address?.text = activity!!.getAddress(preferencesService.latitude, preferencesService.longitude)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlong, 14.0f))
+
         if (location != null && mMap != null) {
             updateLocation()
         }
@@ -108,26 +106,39 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                         val place = Autocomplete.getPlaceFromIntent(data)
                         val latLing = place.latLng
                         latLing?.let {
+                            preferencesService.latitude= it.latitude
+                            preferencesService.longitude= it.longitude
                             mMap?.clear()
+                            showCurrentLocation(it, place.address ?: "")
                             getRequesterAndHelper()
                         }
-                        tv_current_address.text = place.address
-                        tv_address.text = place.address
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
                 }
                 RESULT_CANCELED -> {
-                    // The user canceled the operation.
                 }
             }
         }
     }
 
+    private fun showCurrentLocation(latLng: LatLng, title: String) {
+        tv_current_address.text = title
+        val markerOptions = MarkerOptions()
+        markerOptions.position(latLng)
+        markerOptions.title(title).anchor(0.5f, 0.5f)
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+        mMap?.addMarker(markerOptions)
+    }
+
     private fun fitMap() {
-        val bounds = builder.build()
-        val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
-        mMap?.moveCamera(cu)
+        try {
+            val bounds = builder.build()
+            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
+            mMap?.moveCamera(cu)
+        } catch (e: Exception) {
+
+        }
     }
 
     override fun onLocationChanged(location: Location?) {
@@ -139,27 +150,22 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun updateLocation() {
-        location?.let { loc ->
-            mMap?.let {
-                mMap!!.isMyLocationEnabled = true
-                changeMyLocationButton()
-                mMap!!.clear()
-//                val currentLocation = LatLng(loc.latitude, loc.longitude)
-//                it.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 14.0f))
-                mMap?.setOnCameraIdleListener {
-                    val midLatLng = mMap!!.cameraPosition.target
-                    current_map_pin.show()
-                    tv_address?.show()
-                    tv_current_address?.text = activity!!.getAddress(midLatLng.latitude, midLatLng.longitude)
-                    tv_address?.text = tv_current_address.text
-                }
-                tv_current_address?.text = activity!!.getAddress(loc.latitude, loc.longitude)
-                tv_address?.text = tv_current_address.text
-                stopLocationUpdate()
-                try {
-                    getRequesterAndHelper()
-                } catch (e: Exception) {
+        activity?.let {
+            location?.let { loc ->
+                mMap?.let {
+                    mMap!!.isMyLocationEnabled = true
+                    changeMyLocationButton()
+                    mMap!!.clear()
+                    val latLng = LatLng(location!!.latitude, location!!.longitude)
+                    val address = activity!!.getAddress(latLng.latitude, latLng.longitude)
+                    showCurrentLocation(latLng, address)
+                    tv_current_address?.text = activity!!.getAddress(loc.latitude, loc.longitude)
+                    stopLocationUpdate()
+                    try {
+                        getRequesterAndHelper()
+                    } catch (e: Exception) {
 
+                    }
                 }
             }
         }
@@ -200,7 +206,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
             } ?: kotlin.run {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }else toastError(it.second)
+                } else toastError(it.second)
             }
         })
     }
@@ -224,7 +230,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
         val marker = MarkerOptions().position(LatLng(latitude, longitude))
         builder.include(marker.position)
-        mMap?.addMarker(marker.anchor(0.5f, 0.5f).title(title).snippet(snippet).icon(BitmapDescriptorFactory.fromResource(iconResID)))
+        mMap?.addMarker(marker.anchor(0.5f, 0.5f).title(title).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
 

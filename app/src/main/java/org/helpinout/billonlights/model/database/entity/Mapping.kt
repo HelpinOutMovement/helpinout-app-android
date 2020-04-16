@@ -1,6 +1,7 @@
 package org.helpinout.billonlights.model.database.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -34,4 +35,6 @@ class MappingDetail {
     var activity_uuid: String? = ""
     var offer_condition: String? = ""
     var request_mapping_initiator: Int? = 0
+    @Ignore
+    var distance:String?=null//this is for calculate distance
 }
