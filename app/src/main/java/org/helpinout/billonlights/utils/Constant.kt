@@ -3,6 +3,11 @@ package org.helpinout.billonlights.utils
 const val CALENDER_FORMAT = "yyyy-MM-dd hh:mm:ss"
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 
+
+const val SECOND_MILLIS = 1000
+const val MINUTE_MILLIS = 60 * SECOND_MILLIS
+const val HOUR_MILLIS = 60 * MINUTE_MILLIS
+const val DAY_MILLIS = 24 * HOUR_MILLIS
 const val DISPLAY_DATE_FORMAT = "dd MMMM yyyy, h:mm a"
 const val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
 const val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2

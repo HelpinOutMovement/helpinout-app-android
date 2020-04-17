@@ -117,7 +117,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }else toastError(it.second)
+                } else toastError(it.second)
             }
         })
     }
@@ -140,7 +140,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }else toastError(it.second)
+                } else toastError(it.second)
             }
         })
     }
@@ -152,7 +152,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 if (isUpdate) {
                     toastSuccess(R.string.toast_success_update_success)
                 } else {
-                    toastSuccess(R.string.toast_success_registrtion_success)
+                    toastSuccess(R.string.toast_success_registration_success)
                     preferencesService.step = HOME_STEP
                     startActivity<HomeActivity>()
                 }

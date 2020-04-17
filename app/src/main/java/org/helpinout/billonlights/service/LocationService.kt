@@ -103,14 +103,14 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getNewSuggestionResult(body: SuggestionRequest): ActivityResponses {
+    suspend fun getNewSuggestionResult(body: SuggestionRequest, radius: Float): ActivityResponses {
         val response = service.makeCall {
-            it.networkApi.getActivitySuggestionResponseAsync(createNewSuggestionRequest(body))
+            it.networkApi.getActivitySuggestionResponseAsync(createNewSuggestionRequest(body, radius))
         }
 
         response.data?.let { it ->
             it.offers?.let { detailList ->
-                detailList.forEach {detail->
+                detailList.forEach { detail ->
                     try {
                         val destinationLatLong = detail.geo_location?.split(",")
                         if (!destinationLatLong.isNullOrEmpty()) {
@@ -125,7 +125,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
             }
             it.requests?.let { detailList ->
-                detailList.forEach {detail->
+                detailList.forEach { detail ->
                     try {
                         val destinationLatLong = detail.geo_location?.split(",")
                         if (!destinationLatLong.isNullOrEmpty()) {
@@ -143,7 +143,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return response
     }
 
-    private fun createNewSuggestionRequest(body: SuggestionRequest): String {
+    private fun createNewSuggestionRequest(body: SuggestionRequest, radius: Float): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -159,6 +159,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("activity_uuid", body.activity_uuid)
                 bodyJson.put("geo_location", body.latitude.toString() + "," + body.longitude)
                 bodyJson.put("geo_accuracy", body.accuracy)
+                bodyJson.put("radius", radius)
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -197,11 +198,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getUserCurrentLocationResult(): ActivityResponses {
-        return service.makeCall { it.networkApi.getUserLocationResponseAsync(createLocationRequest()) }
+    suspend fun getUserCurrentLocationResult(radius: Float): ActivityResponses {
+        return service.makeCall { it.networkApi.getUserLocationResponseAsync(createLocationRequest(radius)) }
     }
 
-    private fun createLocationRequest(): String {
+    private fun createLocationRequest(radius: Float): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -215,6 +216,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
+                bodyJson.put("radius", radius)
+
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -424,7 +427,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
                         mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                         mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                        mapping.offer_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                     } else if (mapping.request_detail != null) {
                         mapping.request_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.request_detail?.user_detail?.activity_type = offer.activity_type
@@ -433,7 +436,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
                         mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                         mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                        mapping.request_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                        mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                     }
                 }
                 val mappingList = ArrayList<MappingDetail>()
@@ -503,7 +506,21 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
 
     fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): List<MappingDetail> {
-        return db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
+        val response = db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
+        response.forEach { detail ->
+            try {
+                val destinationLatLong = detail.geo_location?.split(",")
+                if (!destinationLatLong.isNullOrEmpty()) {
+                    val lat1 = preferencesService.latitude
+                    val long1 = preferencesService.longitude
+                    val lat2 = destinationLatLong[0].toDouble()
+                    val long2 = destinationLatLong[1].toDouble()
+                    detail.distance = Utils.getDistance(lat1, long1, lat2, long2)
+                }
+            } catch (e: Exception) {
+            }
+        }
+        return response
     }
 
     suspend fun getPeopleResponse(peopleHelp: AddData): ActivityResponses {

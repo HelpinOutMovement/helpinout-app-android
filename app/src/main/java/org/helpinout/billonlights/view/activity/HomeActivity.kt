@@ -15,7 +15,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -302,6 +301,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             }
         }
     }
+
     override fun getLayout(): Int {
         return R.layout.activity_home
     }

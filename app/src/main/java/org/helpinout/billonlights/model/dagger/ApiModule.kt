@@ -13,7 +13,6 @@ import org.helpinout.billonlights.model.retrofit.NetworkApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -42,7 +41,7 @@ class ApiModule {
     @Provides
     @Singleton
     fun httpLoggingInterceptor() = HttpLoggingInterceptor {
-        Timber.d("ApiLog=== ", it)
+        Log.d("ApiLog=== ", it)
     }.apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

@@ -35,7 +35,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        
+
         when (v) {
             btn_login -> {
                 if (validate()) {

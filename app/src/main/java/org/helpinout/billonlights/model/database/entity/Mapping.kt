@@ -9,7 +9,7 @@ class Mapping {
     var request_detail: ActivityAddDetail? = null
     var offer_detail: ActivityAddDetail? = null
     var status: Int? = null
-    var request_mapping_initiator: Int? = 0
+    var mapping_initiator: Int? = 0
 }
 
 @Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid"], unique = true)])
@@ -34,7 +34,8 @@ class MappingDetail {
     var parent_uuid: String? = ""
     var activity_uuid: String? = ""
     var offer_condition: String? = ""
-    var request_mapping_initiator: Int? = 0
+    var mapping_initiator: Int? = 0
+
     @Ignore
-    var distance:String?=null//this is for calculate distance
+    var distance: String? = null//this is for calculate distance
 }

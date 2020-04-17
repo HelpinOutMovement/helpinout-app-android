@@ -15,7 +15,7 @@ import org.jetbrains.anko.startActivity
 class SplashActivity : BaseActivity() {
 
     private var mDelayHandler: Handler? = null
-    private val delay: Long = if (DEBUG) 200 else 2000
+    private val delay: Long = if (DEBUG) 2000 else 2000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

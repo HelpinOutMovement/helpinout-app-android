@@ -60,6 +60,7 @@ abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.
             override fun onPermissionGranted(response: PermissionGrantedResponse) {
                 onPermissionAllow()
             }
+
             override fun onPermissionDenied(response: PermissionDeniedResponse) {
             }
 

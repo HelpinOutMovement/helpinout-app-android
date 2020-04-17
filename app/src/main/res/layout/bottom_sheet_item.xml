@@ -35,12 +35,17 @@
             android:progressTint="@color/rating_color"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
             tools:rating="4" />
+
         <TextView
             android:id="@+id/distance"
             style="@style/StyleTextViewNormal"
-            android:text="@{@string/distance(item.distance)}"
-            app:layout_constraintTop_toBottomOf="@+id/rating_bar"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar"
             tools:text="@string/distance" />
+
         <TextView
             android:id="@+id/tv_message"
             style="@style/StyleTextViewNormal"

@@ -66,7 +66,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(offerType, itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail -> onDetailClick(name, detail) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        adapter = RequestDetailAdapter(itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail -> onDetailClick(name, detail) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -120,7 +120,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }else toastError(it.second)
+                } else toastError(it.second)
             }
         })
     }

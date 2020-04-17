@@ -88,7 +88,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
-                }else toastError(it.second)
+                } else toastError(it.second)
                 dialog?.dismiss()
                 CrashReporter.logCustomLogs(it.second)
             }
@@ -157,6 +157,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
         finishWithFade()
     }
+
     override fun getLayout(): Int {
         return R.layout.activity_people_help
     }

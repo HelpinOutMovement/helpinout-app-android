@@ -93,11 +93,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-    fun sendUserLocationToServer(): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun sendUserLocationToServer(radius: Float): MutableLiveData<Pair<ActivityResponses?, String>> {
         val currentLocationResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                currentLocationResponse.postValue(Pair(locationService.getUserCurrentLocationResult(), ""))
+                currentLocationResponse.postValue(Pair(locationService.getUserCurrentLocationResult(radius), ""))
             } catch (e: Exception) {
                 currentLocationResponse.postValue(Pair(null, e.getStringException()))
             }
@@ -105,11 +105,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return currentLocationResponse
     }
 
-    fun getSuggestion(body: SuggestionRequest): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun getSuggestion(body: SuggestionRequest, radius: Float): MutableLiveData<Pair<ActivityResponses?, String>> {
         val suggestionResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                suggestionResponse.postValue(Pair(locationService.getNewSuggestionResult(body), ""))
+                suggestionResponse.postValue(Pair(locationService.getNewSuggestionResult(body, radius), ""))
             } catch (e: Exception) {
                 suggestionResponse.postValue(Pair(null, e.getStringException()))
             }

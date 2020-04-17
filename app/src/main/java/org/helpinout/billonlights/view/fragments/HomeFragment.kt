@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -41,8 +43,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
-    private var builder: LatLngBounds.Builder = LatLngBounds.Builder()
-    private var mapPadding: Int = 20
+    private var radius: Float = 0.0F
+    private var zoomLevel = 10.7F
 
     @Inject
     lateinit var preferencesService: PreferencesService
@@ -56,7 +58,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         super.onViewCreated(view, savedInstanceState)
         (activity!!.application as BillionLightsApplication).getAppComponent().inject(this)
         if (!Places.isInitialized()) {
-            Places.initialize(activity!!, getString(R.string.google_api_key))
+            Places.initialize(activity!!, getString(R.string.google_maps_key))
         }
         checkPermissionAndAccessLocation()
         mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -83,61 +85,11 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latlong = LatLng(preferencesService.latitude, preferencesService.longitude)
-        tv_current_address?.text = activity!!.getAddress(preferencesService.latitude, preferencesService.longitude)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlong, 14.0f))
-
+        val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
+        showPinOnCurrentLocation(preferencesService.latitude, preferencesService.longitude)
         if (location != null && mMap != null) {
             updateLocation()
-        }
-    }
-
-    override fun onPermissionAllow() {
-        buildGoogleApiClient()
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    data?.let {
-                        val place = Autocomplete.getPlaceFromIntent(data)
-                        val latLing = place.latLng
-                        latLing?.let {
-                            preferencesService.latitude= it.latitude
-                            preferencesService.longitude= it.longitude
-                            mMap?.clear()
-                            showCurrentLocation(it, place.address ?: "")
-                            getRequesterAndHelper()
-                        }
-                    }
-                }
-                AutocompleteActivity.RESULT_ERROR -> {
-                }
-                RESULT_CANCELED -> {
-                }
-            }
-        }
-    }
-
-    private fun showCurrentLocation(latLng: LatLng, title: String) {
-        tv_current_address.text = title
-        val markerOptions = MarkerOptions()
-        markerOptions.position(latLng)
-        markerOptions.title(title).anchor(0.5f, 0.5f)
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-        mMap?.addMarker(markerOptions)
-    }
-
-    private fun fitMap() {
-        try {
-            val bounds = builder.build()
-            val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
-            mMap?.moveCamera(cu)
-        } catch (e: Exception) {
-
         }
     }
 
@@ -150,22 +102,84 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun updateLocation() {
-        activity?.let {
-            location?.let { loc ->
-                mMap?.let {
-                    mMap!!.isMyLocationEnabled = true
-                    changeMyLocationButton()
-                    mMap!!.clear()
-                    val latLng = LatLng(location!!.latitude, location!!.longitude)
-                    val address = activity!!.getAddress(latLng.latitude, latLng.longitude)
-                    showCurrentLocation(latLng, address)
-                    tv_current_address?.text = activity!!.getAddress(loc.latitude, loc.longitude)
-                    stopLocationUpdate()
-                    try {
-                        getRequesterAndHelper()
-                    } catch (e: Exception) {
+        location?.let { loc ->
+            mMap?.let {
+                mMap!!.clear()
+                mMap!!.isMyLocationEnabled = true
+                changeMyLocationButton()
+                val latlng = LatLng(loc.latitude, loc.longitude)
+                mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
 
+                detectRadius()
+                stopLocationUpdate()
+            }
+        }
+    }
+
+    private fun showPinOnCurrentLocation(latitude: Double, longitude: Double) {
+        tv_toolbar_address?.text = activity!!.getAddress(latitude, longitude)
+        current_map_pin?.show()
+        tv_address?.show()
+        tv_address?.text = tv_toolbar_address.text
+    }
+
+    private fun detectRadius() {
+        mMap?.setOnCameraIdleListener {
+            mMap?.let {
+                val midLatLng = mMap!!.cameraPosition.target
+                preferencesService.latitude = midLatLng.latitude
+                preferencesService.longitude = midLatLng.longitude
+                showPinOnCurrentLocation(midLatLng!!.latitude, midLatLng.longitude)
+                val visibleRegion = it.projection.visibleRegion
+                val farRight: LatLng = visibleRegion.farRight
+                val farLeft: LatLng = visibleRegion.farLeft
+                val nearRight: LatLng = visibleRegion.nearRight
+                val nearLeft: LatLng = visibleRegion.nearLeft
+
+                val distanceWidth = FloatArray(2)
+                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceWidth)
+
+
+                val distanceHeight = FloatArray(2)
+                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceHeight)
+
+
+                radius = if (distanceWidth[0] > distanceHeight[0]) {
+                    distanceWidth[0]
+                } else {
+                    distanceHeight[0]
+                }
+                radius = radius.convertIntoKms().toFloat()
+                getRequesterAndHelper()
+            }
+        }
+    }
+
+    override fun onPermissionAllow() {
+        buildGoogleApiClient()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    data?.let {
+                        val place = Autocomplete.getPlaceFromIntent(data)
+                        val latLing = place.latLng
+                        latLing?.let {
+                            preferencesService.latitude = it.latitude
+                            preferencesService.longitude = it.longitude
+                            mMap?.clear()
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, zoomLevel))
+                        }
+                        tv_toolbar_address.text = place.address
+                        tv_address.text = place.address
                     }
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                }
+                RESULT_CANCELED -> {
                 }
             }
         }
@@ -173,16 +187,21 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     private fun getRequesterAndHelper() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.sendUserLocationToServer().observe(this, Observer { it ->
+        viewModel.sendUserLocationToServer(radius).observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
-                    builder = LatLngBounds.Builder()
+
+
+//                    Log.d("======== Total requests: ", it.requests?.size.toString())
+//                    Log.d("======== Total offers: ", it.offers?.size.toString())
+
                     it.offers?.forEach { detail ->
                         try {
                             val loc = detail.geo_location!!.split(",")
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
                             val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
+                            // Log.d("======== Location ", activity!!.getAddress(lat,lon))
                             createMarker(lat, lon, name, name, R.drawable.ic_help_provider)
                         } catch (e: Exception) {
 
@@ -194,13 +213,11 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
                             val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
+                            //Log.d("======== Location ", activity!!.getAddress(lat,lon))
                             createMarker(lat, lon, name, name, R.drawable.ic_help_requester)
                         } catch (e: Exception) {
 
                         }
-                    }
-                    mMap?.let {
-                        fitMap()
                     }
                 }
             } ?: kotlin.run {
@@ -229,8 +246,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
         val marker = MarkerOptions().position(LatLng(latitude, longitude))
-        builder.include(marker.position)
-        mMap?.addMarker(marker.anchor(0.5f, 0.5f).title(title).icon(BitmapDescriptorFactory.fromResource(iconResID)))
+        mMap?.addMarker(marker.title(title).icon(BitmapDescriptorFactory.fromResource(iconResID)))
     }
 
 

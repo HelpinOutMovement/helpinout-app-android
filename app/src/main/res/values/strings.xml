@@ -12,8 +12,8 @@
     <string name="label_logs">Crash logs</string>
     <string name="menu_logout">Logout</string>
     <string name="toast_error_phone_number">Please enter phone number</string>
-    <string name="google_maps_key" translatable="false">AIzaSyB6IPxvjM8ivhpBwf1eP4g4m4HKhWTd17w</string>
-    <string name="toast_success_registrtion_success">Registration success</string>
+    <string name="google_maps_key" translatable="false">AIzaSyB8NqmLEtpaVR_DAqZsrmY3hpdclJAbCj8</string>
+    <string name="toast_success_registration_success">Registration success</string>
     <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
     <string name="button_verify">Verify</string>
     <string name="label_register">Register</string>
@@ -155,14 +155,15 @@
     <string name="help_request_received_from">Help requests received from</string>
     <string name="request_help_text">They will call you if they can help you</string>
     <string name="request_offer_receive_text">View availability &amp; time</string>
+    <string name="view_details">View details</string>
     <string name="offer_help_text">They will call you if they need your help</string>
     <string name="call_them">Call them</string>
     <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map<br/><br/> This request will automatically cancel after 5 days]]></string>
     <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent
 Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
 
-    <string name="no_offer_sended">No offer has been made</string>
-    <string name="label_no_request_send">No request has been made</string>
+    <string name="no_offer_sended">You have not offered to help yet.</string>
+    <string name="label_no_request_send">You have not requested for any help.</string>
     <string name="cancel_this_request">Cancel this request</string>
     <string name="cancel_this_offer">Cancel this offer</string>
     <string name="request_send_success">Request send success</string>
@@ -174,6 +175,11 @@ Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they se
     <string name="language_update_success">Language update success</string>
     <string name="send_offer">Send offer</string>
     <string name="distance">Distance %1$s Km</string>
+    <string name="distance_km">%1$s Km</string>
+
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="days_ago">%1$s days ago</string>
 
     <string-array name="org_types">
         <item>Organization type</item>

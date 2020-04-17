@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
@@ -13,10 +14,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.avneesh.crashreporter.CrashReporter
-import com.google.android.gms.maps.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -44,6 +47,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
+
 class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, View.OnClickListener {
     private var mapFragment: SupportMapFragment? = null
     private var dialog: ProgressDialog? = null
@@ -52,14 +56,17 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private var location: Location? = null
     private var bottomItemList = ArrayList<ActivityAddDetail>()
     private var bottomAdapter: BottomSheetHelpAdapter? = null
-    private var mapPadding: Int = 0
-    private var builder: LatLngBounds.Builder = LatLngBounds.Builder()
+    private var radius: Float = 0.0F
+    private var zoomLevel = 10.7F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkLocationPermission()
+        val data = intent.getStringExtra(SUGGESTION_DATA)!!
+        suggestionData = Gson().fromJson(data, SuggestionRequest::class.java)
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment?.getMapAsync(this)
+
         iv_menu.setImageResource(R.drawable.ic_arrow_back)
         iv_menu.setOnClickListener {
             goToRequestDetailScreen()
@@ -78,24 +85,40 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
         bottom_sheet.hide()
+
         mRecyclerView
     }
 
     private fun loadSuggestionData() {
-        val data = intent.getStringExtra(SUGGESTION_DATA)!!
-        suggestionData = Gson().fromJson(data, SuggestionRequest::class.java)
+
         iv_item.setImageResource(suggestionData!!.activity_category.getIcon())
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.getSuggestion(suggestionData!!).observe(this, Observer {
+        viewModel.getSuggestion(suggestionData!!, radius).observe(this, Observer {
             it.first?.let { res ->
                 if (helpType == HELP_TYPE_REQUEST) {
                     if (!res.data?.offers.isNullOrEmpty()) {
+                        Log.d("======== Total offers: ", res.data?.offers?.size.toString())
+                        res.data?.offers!!.forEach {
+                            val loc = it.geo_location!!.split(",")
+                            val lat = loc[0].toDouble()
+                            val lon = loc[1].toDouble()
+                            Log.d("======== Address: ", getAddress(lat, lon))
+                        }
+
                         bottomItemList.clear()
                         bottomItemList.addAll(res.data?.offers!!)
                         bottomAdapter?.notifyDataSetChanged()
                     }
                 } else {
                     if (!res.data?.requests.isNullOrEmpty()) {
+
+                        Log.d("======== Total requests: ", res.data?.requests?.size.toString())
+                        res.data?.requests!!.forEach {
+                            val loc = it.geo_location!!.split(",")
+                            val lat = loc[0].toDouble()
+                            val lon = loc[1].toDouble()
+                            Log.d("======== Address: ", getAddress(lat, lon))
+                        }
                         bottomItemList.clear()
                         bottomItemList.addAll(res.data?.requests!!)
                         bottomAdapter?.notifyDataSetChanged()
@@ -112,13 +135,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 recycler_view.inVisibleIf(bottomItemList.isEmpty())
 
                 mMap?.let {
-                    it.clear()
-                    val latLng = LatLng(location!!.latitude, location!!.longitude)
+                    mMap!!.clear()
+                    val latLng = LatLng(suggestionData!!.latitude, suggestionData!!.longitude)
                     val address = getAddress(latLng.latitude, latLng.longitude)
                     showCurrentLocation(latLng, address)
-                    builder = LatLngBounds.Builder()
                     showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
-                    fitMap()
                 }
             } ?: kotlin.run {
                 toastError(it.second)
@@ -154,14 +175,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         val place = Autocomplete.getPlaceFromIntent(data)
                         val latLing = place.latLng
                         latLing?.let {
-                            preferencesService.latitude= it.latitude
-                            preferencesService.longitude= it.longitude
                             suggestionData?.latitude = latLing.latitude
                             suggestionData?.longitude = latLing.longitude
                             mMap?.clear()
                             showCurrentLocation(it, place.address ?: "")
-                            builder = LatLngBounds.Builder()
-                            fitMap()
+                            detectRadius()
                         }
                     }
                 }
@@ -173,17 +191,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         }
     }
 
-    private fun fitMap() {
-       try {
-           if (bottomItemList.isNotEmpty()) {
-               val bounds = builder.build()
-               val cu: CameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, mapPadding)
-               mMap?.moveCamera(cu)
-           }
-       }catch (e:Exception){
-
-       }
-    }
 
     override fun onPermissionAllow() {
         buildGoogleApiClient()
@@ -220,9 +227,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latlong = LatLng(preferencesService.latitude, preferencesService.longitude)
-        tv_current_address?.text = getAddress(preferencesService.latitude, preferencesService.longitude)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlong, 14.0f))
+        val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
+        tv_toolbar_address?.text = getAddress(preferencesService.latitude, preferencesService.longitude)
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
         if (location != null && mMap != null) {
             updateLocation()
         }
@@ -231,13 +238,47 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun updateLocation() {
         location?.let { loc ->
             mMap?.let {
-                mMap?.isMyLocationEnabled = true
                 mMap!!.clear()
+                mMap?.isMyLocationEnabled = true
                 changeMyLocationButton()
-                loadSuggestionData()
-                tv_current_address.text = getAddress(loc.latitude, loc.longitude)
+                val latlng = LatLng(loc.latitude, loc.longitude)
+                mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
+                detectRadius()
                 stopLocationUpdate()
-                showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
+            }
+        }
+    }
+
+    private fun detectRadius() {
+        mMap?.setOnCameraIdleListener {
+            mMap?.let {
+                val midLatLng = mMap!!.cameraPosition.target
+                suggestionData!!.latitude = midLatLng.latitude
+                suggestionData!!.longitude = midLatLng.longitude
+                val address = getAddress(midLatLng.latitude, midLatLng.longitude)
+                tv_toolbar_address?.text = address
+                showCurrentLocation(midLatLng, address)
+
+                val visibleRegion = it.projection.visibleRegion
+                val farRight: LatLng = visibleRegion.farRight
+                val farLeft: LatLng = visibleRegion.farLeft
+                val nearRight: LatLng = visibleRegion.nearRight
+                val nearLeft: LatLng = visibleRegion.nearLeft
+
+                val distanceWidth = FloatArray(2)
+                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceWidth)
+
+                val distanceHeight = FloatArray(2)
+                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceHeight)
+
+
+                radius = if (distanceWidth[0] > distanceHeight[0]) {
+                    distanceWidth[0]
+                } else {
+                    distanceHeight[0]
+                }
+                radius = radius.convertIntoKms().toFloat()
+                loadSuggestionData()
             }
         }
     }
@@ -273,16 +314,15 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun createMarker(latitude: Double, longitude: Double, title: String?, snippet: String?, iconResID: Int) {
-        val marker = MarkerOptions().position(LatLng(latitude, longitude))
-        builder.include(marker.position)
-        mMap?.addMarker(MarkerOptions().position(LatLng(latitude, longitude)).anchor(0.5f, 0.5f).title(title).icon(BitmapDescriptorFactory.fromResource(iconResID)))
+        val marker = MarkerOptions().position(LatLng(latitude, longitude)).title(title).icon(BitmapDescriptorFactory.fromResource(iconResID))
+        mMap?.addMarker(marker)
     }
 
     private fun showCurrentLocation(latLng: LatLng, title: String) {
-        tv_current_address.text = title
+        tv_toolbar_address.text = title
         val markerOptions = MarkerOptions()
         markerOptions.position(latLng)
-        markerOptions.title(title).anchor(0.5f, 0.5f)
+        markerOptions.title(title)
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         mMap?.addMarker(markerOptions)
     }
@@ -341,7 +381,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
                             mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                             mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                            mapping.offer_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                            mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         } else if (mapping.request_detail != null) {
                             mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
                             mapping.request_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
@@ -350,7 +390,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
                             mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                             mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                            mapping.request_detail?.user_detail?.request_mapping_initiator = mapping.request_mapping_initiator
+                            mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         }
                     }
                     if (it.first!!.data!!.mapping.isNullOrEmpty()) {

@@ -6,18 +6,21 @@ import kotlinx.android.synthetic.main.bottom_sheet_item.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.BottomSheetItemBinding
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
+import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 import org.helpinout.billonlights.utils.inflate
 
 
-class BottomSheetHelpAdapter(private var homeItemList: ArrayList<ActivityAddDetail>) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
+class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDetail>) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottomSheetViewHolder {
         val viewLayout: BottomSheetItemBinding = parent.inflate(R.layout.bottom_sheet_item)
         return BottomSheetViewHolder(viewLayout)
     }
 
     override fun onBindViewHolder(holder: BottomSheetViewHolder, position: Int) {
-        val homeItem = homeItemList[position]
+        val homeItem = appDetailItems[position]
         holder.item.item = homeItem.user_detail
+        holder.itemView.distance.text = timeAgo(homeItem.date_time ?: "", holder.itemView.context) + "  |  " + holder.itemView.context.getString(R.string.distance_km, homeItem.user_detail!!.distance)
+
         if (homeItem.user_detail?.rating_count != 0) {
             holder.itemView.rating_bar.rating = homeItem.user_detail?.rating_avg ?: 0F
         }
@@ -28,11 +31,11 @@ class BottomSheetHelpAdapter(private var homeItemList: ArrayList<ActivityAddDeta
     }
 
     override fun getItemCount(): Int {
-        return homeItemList.size
+        return appDetailItems.size
     }
 
     fun getCheckedItemsList(): List<ActivityAddDetail> {
-        return homeItemList.filter { it.isSelected }
+        return appDetailItems.filter { it.isSelected }
     }
 
 

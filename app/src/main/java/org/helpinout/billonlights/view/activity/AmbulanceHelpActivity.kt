@@ -122,6 +122,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
         finishWithFade()
     }
+
     override fun getLayout(): Int {
         return R.layout.activity_ambulance_help
     }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.location.Address
@@ -27,7 +26,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.databinding.BindingAdapter
@@ -35,10 +33,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import es.dmoral.toasty.Toasty
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.view.activity.RegistrationActivity
-import org.jetbrains.anko.*
+import org.helpinout.billonlights.view.toast.Toasty
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.configuration
+import org.jetbrains.anko.newTask
 import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -241,7 +240,7 @@ fun Context.toastInfo(message: String, duration: Int = Toast.LENGTH_LONG) {
 }
 
 fun androidx.fragment.app.Fragment.toastInfo(message: String, duration: Int = Toast.LENGTH_LONG) {
-    Toasty.info(activity!!, message, duration, true).show()
+    Toasty.normal(activity!!, message, duration).show()
 }
 
 fun Context.toastSuccess(messageId: Int, duration: Int = Toast.LENGTH_LONG) {
@@ -321,6 +320,11 @@ fun String.getValidPhoneNumber(): String {
 
 fun String.isEmailValid(email: String): Boolean {
     return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+}
+
+
+fun Float.convertIntoKms(): Double {
+    return 1.609 * this
 }
 
 fun String.isValidPinCode(): Boolean {
