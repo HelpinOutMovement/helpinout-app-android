@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:text="@string/availability_time"
+        android:text="@string/note"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"

@@ -140,7 +140,6 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     home.isChecked = true
                     bottom_nav_view.menu.getItem(0).isChecked = true
                     home.actionView = getMenuDotView()
-                    toolbar?.setTitle(R.string.title_home)
                     homeFragment = HomeFragment()
                     loadFragment(homeFragment!!)
                 }

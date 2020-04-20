@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="parent" />
 
-    <Button
+w    <Button
         android:id="@+id/btnContinue"
         style="@style/StyleLoginButton"
         android:layout_marginBottom="@dimen/_20sdp"

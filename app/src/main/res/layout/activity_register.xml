@@ -50,6 +50,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/last_name"
                     style="@style/StyleEditTextFull"
+                    android:layout_height="match_parent"
                     android:hint="@string/label_last_name"
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>

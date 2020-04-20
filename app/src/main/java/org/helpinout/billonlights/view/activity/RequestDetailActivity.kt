@@ -74,7 +74,15 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
-        loadRequestDetails()
+        if (isFromNotification) {
+            checkOfferList()
+        } else loadRequestDetails()
+    }
+    private fun checkOfferList() {
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
+        viewModel.getUserRequestOfferList(this, 0).observe(this, Observer {
+            loadRequestDetails()
+        })
     }
 
     private fun loadRequestDetails() {

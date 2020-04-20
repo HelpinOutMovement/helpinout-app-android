@@ -25,7 +25,6 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/bottom_nav_view"
             android:layout_below="@+id/layout_toolbar"
-            android:text="@string/title_home"
             app:layout_constraintBottom_toTopOf="@+id/nav_view" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
