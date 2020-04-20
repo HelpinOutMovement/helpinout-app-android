@@ -39,6 +39,7 @@
             android:id="@+id/distance"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
+            android:textSize="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
             app:layout_constraintEnd_toEndOf="parent"
