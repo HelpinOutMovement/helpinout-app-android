@@ -35,6 +35,7 @@ class MappingDetail {
     var activity_uuid: String? = ""
     var offer_condition: String? = ""
     var mapping_initiator: Int? = 0
+    var detail: String? = ""
 
     @Ignore
     var distance: String? = null//this is for calculate distance

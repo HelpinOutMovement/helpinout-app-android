@@ -39,6 +39,7 @@
                 android:hint="@string/hint_how_many_people"
                 android:inputType="number"
                 android:maxLength="5"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

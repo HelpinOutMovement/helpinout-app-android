@@ -6,7 +6,9 @@ import kotlinx.android.synthetic.main.bottom_sheet_item.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.BottomSheetItemBinding
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
+import org.helpinout.billonlights.utils.fromHtml
 import org.helpinout.billonlights.utils.inflate
 
 
@@ -19,12 +21,18 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
     override fun onBindViewHolder(holder: BottomSheetViewHolder, position: Int) {
         val homeItem = appDetailItems[position]
         holder.item.item = homeItem.user_detail
+        holder.itemView.tv_name.text = homeItem.user_detail?.first_name + " " + homeItem.user_detail?.last_name
         holder.itemView.distance.text = timeAgo(homeItem.date_time ?: "", holder.itemView.context) + "  |  " + holder.itemView.context.getString(R.string.distance_km, homeItem.user_detail!!.distance)
 
         if (homeItem.user_detail?.rating_count != 0) {
             holder.itemView.rating_bar.rating = homeItem.user_detail?.rating_avg ?: 0F
         }
-        holder.itemView.tv_message.text = homeItem.offer_condition
+
+        if (homeItem.activity_type == HELP_TYPE_REQUEST) {
+            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (holder.itemView.context.getString(R.string.need_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
+        } else {
+            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (holder.itemView.context.getString(R.string.can_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
+        }
         holder.itemView.tv_name.setOnClickListener {
             homeItem.isSelected = !homeItem.isSelected
         }

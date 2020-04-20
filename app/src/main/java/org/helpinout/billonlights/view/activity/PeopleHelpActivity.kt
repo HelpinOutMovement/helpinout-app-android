@@ -1,7 +1,6 @@
 package org.helpinout.billonlights.view.activity
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -109,10 +108,10 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
             singleItem.address = peopleHelp.address
             var detail = ""
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
-                detail += activityDetail.volunters_detail + "(" + activityDetail.volunters_quantity + "),"
+                detail += activityDetail.volunters_detail ?: "" + "(" + activityDetail.volunters_quantity ?: "" + ")<br/>"
             }
             if (!activityDetail.technical_personal_detail.isNullOrEmpty() || !activityDetail.technical_personal_quantity.isNullOrEmpty()) {
-                detail += activityDetail.technical_personal_detail + "(" + activityDetail.technical_personal_quantity + ")"
+                detail += activityDetail.technical_personal_detail ?: "" + "(" + activityDetail.technical_personal_quantity ?: "" + ")"
             }
 
             singleItem.detail = detail
@@ -130,7 +129,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
                 dialog?.dismiss()
                 if (it) {
                     toastSuccess(R.string.toast_success_data_save_success)
-                    askForConfirmation()
+                    askForConfirmation(peopleHelp.activity_uuid)
                 }
             })
         } ?: kotlin.run {
@@ -138,8 +137,8 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun askForConfirmation() {
-        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, onYesClick = { onYesClick() }, onNoClick = { onNoClick() })
+    private fun askForConfirmation(activity_uuid: String) {
+        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, activity_uuid, onConfirmationYesClick = { onYesClick() }, onConfirmationNoClick = { type, uuid -> onConfirmationNoClick(type, uuid) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -148,13 +147,6 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         overridePendingTransition(R.anim.enter, R.anim.exit)
-        finish()
-    }
-
-    private fun onNoClick() {
-        val intent = Intent(baseContext!!, HomeActivity::class.java)
-        intent.putExtra(SELECTED_INDEX, helpType)
-        startActivity(intent)
         finishWithFade()
     }
 

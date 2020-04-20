@@ -59,7 +59,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-    fun getOfferHelpItems(context: Context): MutableLiveData<List<OfferHelpItem>> {
+    fun getOfferHelpItems(context: Context, radius: Float): MutableLiveData<List<OfferHelpItem>> {
         val list = MutableLiveData<List<OfferHelpItem>>()
         val offerItemList = ArrayList<OfferHelpItem>()
 
@@ -75,7 +75,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val response = locationService.getRequesterSummary()
+                val response = locationService.getRequesterSummary(radius)
                 if (response.status == 1) {
                     offerItemList.forEach { off ->
                         val item = response.data.find { off.type == it.activity_category }

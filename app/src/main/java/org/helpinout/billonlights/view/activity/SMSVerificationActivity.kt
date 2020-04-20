@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.SystemClock
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.TaskExecutors
 import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
@@ -29,11 +31,14 @@ class SMSVerificationActivity : BaseActivity() {
     private var resendToken: String? = null
     private var mAuth: FirebaseAuth? = null
     private val timerTime = 60//sec
+    private var isTimerEnd = false
+    private var maxTry = 3
+    private var retry = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        sendVerificationCode(preferencesService.countryCode + preferencesService.mobileNumber)
+        requestCode()
         btn_verify.setOnClickListener {
             hideKeyboard()
             if (edt_otp.text.toString().isNotEmpty()) {
@@ -42,13 +47,29 @@ class SMSVerificationActivity : BaseActivity() {
                 toastError(R.string.toast_error_please_enter_otp)
             }
         }
+        tv_timer.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime()
+
+            retry++
+            if (retry >= maxTry) {
+                toastError(getString(R.string.you_can_try_max_try, maxTry))
+            } else if (isTimerEnd) {
+                requestCode()
+            }
+        }
+    }
+
+    private fun requestCode() {
+        sendVerificationCode(preferencesService.countryCode + preferencesService.mobileNumber)
     }
 
     private fun sendVerificationCode(number: String) {
-        if (number == ALLOW_NUMBER1 || number == ALLOW_NUMBER2) {
+        if (number == ALLOW_NUMBER1) {
             checkIfNotRegistered()
         } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
-        tv_message.show()
     }
 
     private val mCallBack = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -71,7 +92,9 @@ class SMSVerificationActivity : BaseActivity() {
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            //toastError(e.message + "")
+            if (e is FirebaseTooManyRequestsException) {
+                toastError(e.message ?: "")
+            }
             btn_verify.isEnabled = true
         }
     }
@@ -80,6 +103,7 @@ class SMSVerificationActivity : BaseActivity() {
         timer = object : CountDownTimer(timerTime * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 try {
+                    isTimerEnd = false
                     val totalSec = millisUntilFinished / 1000
                     val seconds = (totalSec % 60).toInt()
                     val minutes = (totalSec / 60).toInt()
@@ -91,7 +115,8 @@ class SMSVerificationActivity : BaseActivity() {
 
             override fun onFinish() {
                 try {
-                    tv_timer.text = "00:00"
+                    isTimerEnd = true
+                    tv_timer.setText(R.string.retry_msg)
                 } catch (e: Exception) {
                 }
             }
@@ -117,8 +142,6 @@ class SMSVerificationActivity : BaseActivity() {
             if (task.isSuccessful) {
                 preferencesService.step = REGISTRATION_STEP
                 checkIfNotRegistered()
-            } else {
-                toastError(task.exception!!.message + "")
             }
         }
     }

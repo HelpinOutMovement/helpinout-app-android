@@ -20,7 +20,7 @@ import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.utils.*
-import org.helpinout.billonlights.view.activity.HomeActivity
+import org.helpinout.billonlights.view.activity.RequestDetailActivity
 import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -55,20 +55,29 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val bundle = Bundle()
         val intent1 = Intent(DATA_REFRESH)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
+
         val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
         val action = data[ACTION]?.toInt() ?: 0
+        val sendName = data[SENDER_NAME].toString()
+        val activity_uuid = data[ACTIVITY_UUID].toString()
         var message = "New offer or request"
         if (activityType == 1) {
-            if (action == 1) {//request accepted
-                message = getString(R.string.someone_accept_offer)
+            if (action == 2) {//request accepted
+                message = getString(R.string.someone_accept_offer, sendName)
             }
         } else if (activityType == 2) {
-            if (action == 2) {//offer accepted
-                message = getString(R.string.someone_receive_your_request)
+            if (action == 1) {//offer accepted
+                message = getString(R.string.someone_receive_your_request, sendName)
             }
         }
-        val intent = Intent(this, HomeActivity::class.java)
-        intent.putExtra(SELECTED_INDEX, activityType)
+
+        val intent = Intent(this, RequestDetailActivity::class.java)
+        intent.putExtra(OFFER_TYPE, activityType)
+        intent.putExtra(INITIATOR, action)
+        intent.putExtra(ACTIVITY_UUID, activity_uuid)
+        intent.putExtra(FROM_NOTIFICATION, true)
+        intent.putExtra(HELP_TYPE, activityType)
+
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.putExtras(bundle)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

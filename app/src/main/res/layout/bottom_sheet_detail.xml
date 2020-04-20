@@ -31,6 +31,18 @@
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
     <TextView
+        android:id="@+id/tv_items"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="Can help with" />
+
+    <TextView
         android:id="@+id/tv_time"
         style="@style/StyleTextView"
         android:layout_width="0dp"
@@ -38,9 +50,10 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:text="@string/availability_time"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_items" />
 
     <TextView
         android:id="@+id/tv_condition"

@@ -10,121 +10,130 @@
             type="org.helpinout.billonlights.model.database.entity.MappingDetail" />
     </data>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card"
-        style="@style/CardViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainItem"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="14 April 2020,2:00 pm" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/StyleTextView"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/iv_call"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_time"
+            tools:text="Tina Jamna" />
+
+        <ImageView
+            android:id="@+id/iv_call"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/rating_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_name"
+            app:srcCompat="@drawable/ic_phone"
+            tools:visibility="visible" />
+
+
+        <TextView
+            android:id="@+id/tv_cal_them"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:text="@string/call_them"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_call"
+            app:layout_constraintTop_toBottomOf="@+id/iv_call"
+            tools:visibility="visible" />
+
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:numStars="5"
+            android:progressTint="@color/rating_color"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            tools:rating="4" />
+
+        <TextView
+            android:id="@+id/tv_detail"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintEnd_toStartOf="@+id/tv_cal_them"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating_bar"
+            tools:text="has offered to help you. 14 April 2020, 10:45 am Call them on +91 543053490 Time: 6pm to 9pm." />
+
+        <TextView
+            android:id="@+id/tv_view_detail"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/view_details"
+            app:layout_constraintEnd_toStartOf="@+id/tv_cal_them"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
+
+
+        <TextView
+            android:id="@+id/tv_rate_report"
+            style="@style/StyleTextView"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
-            android:padding="@dimen/_10sdp">
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="@string/rate_report"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
 
-            <TextView
-                android:id="@+id/tv_time"
-                style="@style/StyleTextViewNormal"
-                android:layout_width="0dp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="14 April 2020,2:00 pm" />
+        <TextView
+            android:id="@+id/tv_delete"
+            style="@style/StyleTextView"
+            android:layout_width="wrap_content"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="@string/closed"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />
 
-            <TextView
-                android:id="@+id/tv_name"
-                style="@style/StyleTextView"
-                android:layout_width="0dp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/iv_call"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_time"
-                tools:text="Tina Jamna" />
-
-            <ImageView
-                android:id="@+id/iv_call"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/rating_bar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_name"
-                app:layout_constraintTop_toTopOf="@+id/tv_name"
-                app:srcCompat="@drawable/ic_phone"
-                tools:visibility="visible" />
-
-
-            <TextView
-                android:id="@+id/tv_cal_them"
-                style="@style/StyleTextViewNormal"
-                android:layout_width="0dp"
-                android:gravity="center"
-                android:text="@string/call_them"
-                android:textColor="@color/colorPrimary"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@+id/iv_call"
-                app:layout_constraintTop_toBottomOf="@+id/iv_call"
-                tools:visibility="visible" />
-
-
-            <RatingBar
-                android:id="@+id/rating_bar"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:numStars="5"
-                android:progressTint="@color/rating_color"
-                app:layout_constraintTop_toBottomOf="@+id/tv_name"
-                tools:rating="4" />
-
-            <TextView
-                android:id="@+id/tv_detail"
-                style="@style/StyleTextViewNormal"
-                android:layout_width="0dp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                app:layout_constraintEnd_toStartOf="@+id/tv_cal_them"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rating_bar"
-                tools:text="has offered to help you. 14 April 2020, 10:45 am Call them on +91 543053490 Time: 6pm to 9pm." />
-
-
-            <TextView
-                android:id="@+id/tv_rate_report"
-                style="@style/StyleTextView"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/_25sdp"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:padding="@dimen/_8sdp"
-                android:text="@string/rate_report"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
-
-            <TextView
-                android:id="@+id/tv_delete"
-                style="@style/StyleTextView"
-                android:layout_width="wrap_content"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:padding="@dimen/_8sdp"
-                android:text="@string/closed"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

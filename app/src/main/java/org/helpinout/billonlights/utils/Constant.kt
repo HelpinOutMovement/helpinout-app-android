@@ -2,7 +2,7 @@ package org.helpinout.billonlights.utils
 
 const val CALENDER_FORMAT = "yyyy-MM-dd hh:mm:ss"
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-
+const val APP_INSTALL_FORMAT = "dd-MM-yyyy hh:mm a"
 
 const val SECOND_MILLIS = 1000
 const val MINUTE_MILLIS = 60 * SECOND_MILLIS
@@ -21,20 +21,20 @@ const val UPDATE_LANGAUGE = "UpdateLanguage"
 const val OFFER_TYPE = "OfferType"
 const val INITIATOR = "initiator"
 const val DATA_REFRESH = "DataRefresh"
-
+const val RADIUS = "Radius"
 const val LANGUAGE_STEP = 0
 const val INSTRUCTION_STEP = 1
 const val LOGIN_STEP = 2
 const val REGISTRATION_STEP = 3
 const val HOME_STEP = 4
-
+const val DEFAULT_ZOOM_LEVEL = 10.5f
 const val ENGLISH = 1
 const val HINDI = 2
 const val KANNAD = 3
 const val MARATHI = 4
 const val GUJRATI = 5
 const val ALLOW_NUMBER1 = "+917303767448"
-const val ALLOW_NUMBER2 = "+918097090069"
+//const val ALLOW_NUMBER2 = "+918097090069"
 
 const val ENGLISH_CODE = "en"
 const val HINDI_CODE = "hi"
@@ -66,3 +66,5 @@ const val ACTION = "action"
 const val NOTIFICATION_CATEGORY_TYPE = "category_type"
 const val ACTIVITY_TIME = "activity_time"
 const val ACTIVITY_UUID = "activity_uuid"
+const val SENDER_NAME = "sender_name"
+const val FROM_NOTIFICATION = "FromNotification"

@@ -35,7 +35,6 @@ abstract class BaseFragment : Fragment() {
                 suggestionData.longitude = latt[1].toDouble()
                 suggestionData.accuracy = ""
             } catch (e: Exception) {
-
             }
             val suggestionDataAsString = Gson().toJson(suggestionData)
             activity!!.startActivity<HelpProviderRequestersActivity>(SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to item.activity_type)
@@ -55,16 +54,6 @@ abstract class BaseFragment : Fragment() {
                 toastError(it.second)
             }
         })
-    }
-
-    fun onSendRequestClick(item: AddCategoryDbItem) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-
-        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.activity_type, item.parent_uuid, item.activity_uuid, onDeleteYesClick = { uuid1, uuid2 -> onDeleteYesClick(uuid1, uuid2) })
-        deleteDialog.show(childFragmentManager, null)
     }
 
     fun onSendRequestClick(offerType: Int, initiator: Int, helpType: Int, item: AddCategoryDbItem) {

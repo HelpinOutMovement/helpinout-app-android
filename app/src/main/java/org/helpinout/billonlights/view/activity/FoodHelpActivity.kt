@@ -171,9 +171,14 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
             val addItemList = ArrayList<AddCategoryDbItem>()
             var itemDetail = ""
             item.activity_detail?.forEachIndexed { index, detail ->
-                itemDetail += detail.detail + "(" + detail.quantity + ")"
+                if (!detail.detail.isNullOrEmpty()) {
+                    itemDetail += detail.detail
+                }
+                if (detail.quantity != null) {
+                    itemDetail += "(" + detail.quantity + ")"
+                }
                 if (item.activity_detail!!.size - 1 != index) {
-                    itemDetail += ","
+                    itemDetail += "<br/>"
                 }
             }
             val categoryItem = AddCategoryDbItem()
@@ -194,7 +199,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
                 dialog?.dismiss()
                 if (it) {
                     toastSuccess(R.string.toast_success_data_save_success)
-                    askForConfirmation()
+                    askForConfirmation(addData.activity_uuid)
                 }
             })
         } ?: kotlin.run {
@@ -209,8 +214,8 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun askForConfirmation() {
-        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, onYesClick = { onYesClick() }, onNoClick = { onNoClick() })
+    private fun askForConfirmation(activity_uuid: String) {
+        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, activity_uuid, onConfirmationYesClick = { onYesClick() }, onConfirmationNoClick = { type, uuid -> onConfirmationNoClick(type, uuid) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -219,14 +224,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         overridePendingTransition(R.anim.enter, R.anim.exit)
-        finish()
-    }
-
-    private fun onNoClick() {
-        val intent = Intent(baseContext!!, HomeActivity::class.java)
-        intent.putExtra(SELECTED_INDEX, helpType)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
         finishWithFade()
     }
 

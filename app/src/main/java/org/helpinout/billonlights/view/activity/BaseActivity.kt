@@ -1,5 +1,7 @@
 package org.helpinout.billonlights.view.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
@@ -11,13 +13,14 @@ import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.entity.OfferHelpItem
 import org.helpinout.billonlights.utils.*
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
     var helpType: Int = 0
     var toolbar: Toolbar? = null
     var mLastClickTime: Long = 0
+    val noClickResultCode = 56
 
     @Inject
     lateinit var preferencesService: PreferencesService
@@ -58,7 +61,6 @@ abstract class BaseActivity : AppCompatActivity() {
                 supportActionBar?.setTitle(R.string.toolbar_offer_help_with)
                 tvAvailability?.show()
                 edtCondition?.show()
-                edtCondition?.hint = getString(R.string.hint_conditions).fromHtml()
                 weCanPay?.setText(R.string.we_change)
                 weCanNotPay?.setText(R.string.for_free)
             }
@@ -84,34 +86,55 @@ abstract class BaseActivity : AppCompatActivity() {
     fun onItemClick(item: OfferHelpItem) {
         when (item.type) {
             CATEGORY_FOOD -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_FOOD)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_FOOD)
             }
             CATEGORY_PEOPLE -> {
-                startActivity<PeopleHelpActivity>(HELP_TYPE to helpType)
+                startActivityForResult<PeopleHelpActivity>(noClickResultCode, HELP_TYPE to helpType)
             }
             CATEGORY_SHELTER -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_SHELTER)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_SHELTER)
             }
             CATEGORY_MED_PPE -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MED_PPE)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MED_PPE)
             }
             CATEGORY_TESTING -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_TESTING)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_TESTING)
             }
             CATEGORY_MEDICINES -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICINES)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICINES)
             }
             CATEGORY_AMBULANCE -> {
-                startActivity<AmbulanceHelpActivity>(HELP_TYPE to helpType)
+                startActivityForResult<AmbulanceHelpActivity>(noClickResultCode, HELP_TYPE to helpType)
             }
             CATEGORY_MEDICAL_EQUIPMENT -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT)
             }
             CATEGORY_OTHERS -> {
-                startActivity<FoodHelpActivity>(HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_OTHERS)
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_OTHERS)
             }
         }
         overridePendingTransition(R.anim.enter, R.anim.exit)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data1: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data1)
+        if (resultCode == Activity.RESULT_OK && requestCode == noClickResultCode) {
+            val intent = Intent(baseContext!!, HomeActivity::class.java)
+            intent.putExtra(SELECTED_INDEX, helpType)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    fun onConfirmationNoClick(type: Int, uuid: String) {
+        val intent = Intent(baseContext!!, HomeActivity::class.java)
+        intent.putExtra(SELECTED_INDEX, helpType)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        finishWithSlideAnimation()
     }
 
     fun updateTitle(title: String) {

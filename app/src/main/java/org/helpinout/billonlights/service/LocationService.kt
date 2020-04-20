@@ -110,30 +110,145 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
         response.data?.let { it ->
             it.offers?.let { detailList ->
-                detailList.forEach { detail ->
+                detailList.forEach { detailItem ->
                     try {
-                        val destinationLatLong = detail.geo_location?.split(",")
+                        val destinationLatLong = detailItem.geo_location?.split(",")
                         if (!destinationLatLong.isNullOrEmpty()) {
                             val lat1 = preferencesService.latitude
                             val long1 = preferencesService.longitude
                             val lat2 = destinationLatLong[0].toDouble()
                             val long2 = destinationLatLong[1].toDouble()
-                            detail.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
+                            detailItem.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
                         }
+
+                        try {
+                            var detail = ""
+
+                            when (detailItem.activity_category) {
+                                CATEGORY_AMBULANCE -> {
+                                    detailItem.activity_detail?.forEachIndexed { _, it ->
+                                        if (!it.quantity.isNullOrEmpty()) {
+                                            detail += it.quantity
+                                        }
+                                    }
+                                }
+                                CATEGORY_PEOPLE -> {
+                                    detailItem.activity_detail?.forEachIndexed { _, it ->
+
+                                        if (!it.volunters_detail.isNullOrEmpty()) {
+                                            detail += it.volunters_detail?.take(30)
+
+                                        }
+                                        if (!it.volunters_quantity.isNullOrEmpty()) {
+                                            detail += "(" + it.volunters_quantity + ")"
+
+                                        }
+                                        if (!it.technical_personal_detail.isNullOrEmpty()) {
+                                            if (detail.isNotEmpty()) {
+                                                detail += "<br/>"
+                                            }
+
+                                            if (!it.technical_personal_detail.isNullOrEmpty()) {
+                                                detail += it.technical_personal_detail?.take(30)
+                                            }
+                                            if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                                                detail += "(" + it.technical_personal_quantity + ")"
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else -> {
+                                    detailItem.activity_detail?.forEachIndexed { index, it ->
+                                        if (!it.detail.isNullOrEmpty()) {
+                                            detail += it.detail?.take(30)
+                                        }
+                                        if (!it.quantity.isNullOrEmpty()) {
+                                            detail += "(" + it.quantity + ")"
+                                        }
+
+
+                                        if (detailItem.activity_detail!!.size - 1 != index) {
+                                            detail += "<br/>"
+                                        }
+                                    }
+                                }
+                            }
+                            detailItem.user_detail?.detail = detail
+
+                        } catch (e: Exception) {
+
+                        }
+
                     } catch (e: Exception) {
                     }
                 }
             }
             it.requests?.let { detailList ->
-                detailList.forEach { detail ->
+                detailList.forEach { detailItem ->
                     try {
-                        val destinationLatLong = detail.geo_location?.split(",")
+                        val destinationLatLong = detailItem.geo_location?.split(",")
                         if (!destinationLatLong.isNullOrEmpty()) {
                             val lat1 = preferencesService.latitude
                             val long1 = preferencesService.longitude
                             val lat2 = destinationLatLong[0].toDouble()
                             val long2 = destinationLatLong[1].toDouble()
-                            detail.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
+                            detailItem.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
+                        }
+                        try {
+                            var detail = ""
+
+                            when (detailItem.activity_category) {
+                                CATEGORY_AMBULANCE -> {
+                                    detailItem.activity_detail?.forEachIndexed { _, it ->
+                                        if (!it.quantity.isNullOrEmpty()) {
+                                            detail += it.quantity
+                                        }
+                                    }
+                                }
+                                CATEGORY_PEOPLE -> {
+                                    detailItem.activity_detail?.forEachIndexed { _, it ->
+
+                                        if (!it.volunters_detail.isNullOrEmpty()) {
+                                            detail += it.volunters_detail?.take(30)
+
+                                        }
+                                        if (!it.volunters_quantity.isNullOrEmpty()) {
+                                            detail += "(" + it.volunters_quantity + ")"
+
+                                        }
+                                        if (!it.technical_personal_detail.isNullOrEmpty()) {
+                                            if (detail.isNotEmpty()) {
+                                                detail += "<br/>"
+                                            }
+
+                                            if (!it.technical_personal_detail.isNullOrEmpty()) {
+                                                detail += it.technical_personal_detail?.take(30)
+                                            }
+                                            if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                                                detail += "(" + it.technical_personal_quantity + ")"
+                                            }
+                                        }
+
+                                    }
+                                }
+                                else -> {
+                                    detailItem.activity_detail?.forEachIndexed { index, it ->
+                                        if (!it.detail.isNullOrEmpty()) {
+                                            detail += it.detail?.take(30)
+                                        }
+                                        if (!it.quantity.isNullOrEmpty()) {
+                                            detail += "(" + it.quantity + ")"
+                                        }
+                                        if (detailItem.activity_detail!!.size - 1 != index) {
+                                            detail += "<br/>"
+                                        }
+                                    }
+                                }
+                            }
+                            detailItem.user_detail?.detail = detail
+                        } catch (e: Exception) {
+
                         }
                     } catch (e: Exception) {
                     }
@@ -170,11 +285,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getRequesterSummary(): OfferHelpResponses {
-        return service.makeCall { it.networkApi.getRequestSummaryResponseAsync(createRequesterSummaryRequest()) }
+    suspend fun getRequesterSummary(radius: Float): OfferHelpResponses {
+        return service.makeCall { it.networkApi.getRequestSummaryResponseAsync(createRequesterSummaryRequest(radius)) }
     }
 
-    private fun createRequesterSummaryRequest(): String {
+    private fun createRequesterSummaryRequest(radius: Float): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -188,6 +303,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
+                bodyJson.put("radius", radius)
+
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {
                 CrashReporter.logException(e)
@@ -397,24 +514,31 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         item.technical_personal_quantity = it.technical_personal_quantity
 
                         if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                            itemDetail += it.volunters_detail + "(" + it.volunters_quantity + ")"
+                            itemDetail += it.volunters_detail?.take(30) + "(" + it.volunters_quantity + ")"
 
                         }
                         if (!it.technical_personal_detail.isNullOrEmpty()) {
                             if (itemDetail.isNotEmpty()) {
-                                itemDetail += ","
+                                itemDetail += "<br/>"
                             }
-                            itemDetail += it.technical_personal_detail + "(" + it.technical_personal_quantity + ")"
+                            itemDetail += it.technical_personal_detail?.take(30) + "(" + it.technical_personal_quantity + ")"
                         }
 
                     } else if (offer.activity_category == CATEGORY_AMBULANCE) {
                         item.qty = it.quantity
                         itemDetail = ""
                     } else {
-                        itemDetail += it.detail + "(" + it.quantity + ")"
-                        if (offer.activity_detail!!.size - 1 != index) {
-                            itemDetail += ","
+                        if (!it.detail.isNullOrEmpty()) {
+                            itemDetail += it.detail?.take(30)
                         }
+                        if (!it.quantity.isNullOrEmpty()) {
+                            itemDetail += "(" + it.quantity + ")"
+                        }
+
+                        if (offer.activity_detail!!.size - 1 != index) {
+                            itemDetail += "<br/>"
+                        }
+
                     }
                 }
 
@@ -428,6 +552,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                         mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                        setOfferDetail(mapping)
+
                     } else if (mapping.request_detail != null) {
                         mapping.request_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.request_detail?.user_detail?.activity_type = offer.activity_type
@@ -437,6 +563,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                         mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                        setRequestDetail(mapping)
                     }
                 }
                 val mappingList = ArrayList<MappingDetail>()
@@ -464,6 +591,108 @@ class LocationService(private val preferencesService: PreferencesService, privat
         }
         addDataList.reverse()
         saveFoodItemsToDb(addDataList)
+    }
+
+    private fun setRequestDetail(mapping: Mapping) {
+        try {
+            var detail = ""
+
+            if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (it.quantity.isNullOrEmpty()) {
+                        it.quantity = ""
+                    }
+                    detail += it.quantity
+                }
+            } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
+
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.volunters_detail.isNullOrEmpty()) {
+                        detail += it.volunters_detail?.take(30)
+                    }
+                    if (!it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.volunters_quantity + ")"
+                    }
+
+                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                        if (detail.isNotEmpty()) {
+                            detail += "<br/>"
+                        }
+                        detail += it.technical_personal_detail?.take(30)
+                    }
+                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.technical_personal_quantity + ")"
+                    }
+                }
+
+            } else {
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.detail.isNullOrEmpty()) {
+                        detail += it.detail?.take(30)
+                    }
+                    if (!it.quantity.isNullOrEmpty()) {
+                        detail += "(" + it.quantity + ")"
+                    }
+                    if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
+                        detail += "<br/>"
+                    }
+                }
+            }
+            mapping.request_detail?.user_detail?.detail = detail
+        } catch (e: Exception) {
+            Timber.d("")
+        }
+    }
+
+    private fun setOfferDetail(mapping: Mapping) {
+        try {
+            var detail = ""
+
+            if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (it.quantity.isNullOrEmpty()) {
+                        it.quantity = ""
+                    }
+                    detail += it.quantity
+                }
+            } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
+
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.volunters_detail.isNullOrEmpty()) {
+                        detail += it.volunters_detail?.take(30)
+                    }
+                    if (!it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.volunters_quantity + ")"
+                    }
+
+                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                        if (detail.isNotEmpty()) {
+                            detail += "<br/>"
+                        }
+                        detail += it.technical_personal_detail?.take(30)
+                    }
+                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.technical_personal_quantity + ")"
+                    }
+                }
+
+            } else {
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.detail.isNullOrEmpty()) {
+                        detail += it.detail?.take(30)
+                    }
+                    if (!it.quantity.isNullOrEmpty()) {
+                        detail += "(" + it.quantity + ")"
+                    }
+                    if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
+                        detail += "<br/>"
+                    }
+                }
+            }
+            mapping.offer_detail?.user_detail?.detail = detail
+        } catch (e: Exception) {
+            Timber.d("")
+        }
     }
 
     private fun createOfferRequest(activityType: Int): String {
@@ -632,7 +861,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
         } catch (e: Exception) {
             false
         }
-
     }
 
     fun deleteMappingFromDb(parent_uuid: String?, activity_uuid: String): Boolean {

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+
+    <TextView
+        android:id="@+id/tvAppVersion"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        tools:text="@string/label_app_version" />
+
+    <TextView
+        android:id="@+id/tvVersionDate"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginStart="@dimen/_20sdp"
+        tools:text="@string/version_date" />
+
+    <TextView
+        android:id="@+id/tvInstallDate"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginStart="@dimen/_20sdp"
+        tools:text="@string/app_install_date" />
+
+</LinearLayout>

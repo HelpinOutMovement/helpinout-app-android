@@ -9,8 +9,10 @@ import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.iv_expend
 import kotlinx.android.synthetic.main.bottom_sheet_detail.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.fromHtml
+import org.helpinout.billonlights.utils.show
 
-class BottomSheetsDetailFragment(private val offerType: Int, private val name: String, private val detail: String) : BottomSheetDialogFragment() {
+class BottomSheetsDetailFragment(private val offerType: Int, private val name: String, private val detail: String, private val description: String) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (offerType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -22,8 +24,15 @@ class BottomSheetsDetailFragment(private val offerType: Int, private val name: S
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (offerType == HELP_TYPE_REQUEST) {
+            tv_time.show()
+            tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description).fromHtml()
+        } else {
+            tv_items.text = (getString(R.string.need_help_with) + "<br/>" + description).fromHtml()
+        }
 
         tv_name.text = name
+
         tv_condition.text = detail
 
         iv_expend_collapse.setOnClickListener {

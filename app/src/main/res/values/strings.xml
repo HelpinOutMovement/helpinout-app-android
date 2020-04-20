@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">HelpinOut</string>
+
+    <!-- Splash screen -->
+
+    <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
+
+    <!--End Splash screen -->
+
+
     <string name="toast_press_again_to_exit">Please click BACK again to exit</string>
-    <string name="label_login">Login/Signup</string>
+    <string name="label_login">Login / Signup</string>
     <string name="alert_logout_msg">Are you sure you want to logout?</string>
     <string name="label_logout">Logout</string>
     <string name="label_yes">Yes</string>
@@ -41,7 +49,7 @@
     <string name="label_choose_language">Choose language</string>
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_enter_otp">Enter OTP</string>
-    <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
+
     <string name="label_first_name">First Name</string>
     <string name="label_last_name">Last Name</string>
     <string name="label_org_name">Organization Name</string>
@@ -51,7 +59,7 @@
     <string name="toast_error_please_enter_organization_name">Please enter organization name</string>
     <string name="btn_continue">Continue</string>
     <string name="website_name" translatable="false">www.helpinout.org</string>
-    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for help</font> = Offer help<br/> wherever you are.<br/><br/><br/> Search for help-providers and<br/> help-requesters around you.]]></string>
+    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-providers and help- <br/>requesters around you]]></string>
     <string name="offer_help_with">Offer help with</string>
     <string name="title_home">Home</string>
     <string name="title_my_request">My Requests</string>
@@ -61,8 +69,6 @@
     <string name="identify_location">Identify your location above, then select below</string>
     <string name="hint_enter_item">Enter items</string>
     <string name="hint_qty">Qty</string>
-    <string name="title_need_help_with">Need help with</string>
-    <string name="title_offer_help_with">Offer help with</string>
     <string name="toolbar_need_help_with">Need help with...</string>
     <string name="toolbar_offer_help_with">Offer help with...</string>
     <string name="add_more_items">"+ Add more "</string>
@@ -71,7 +77,7 @@
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
     <string name="terms_Of_service" translatable="false"><![CDATA[Terms of Service]]></string>
     <string name="privacy_policy" translatable="false"><![CDATA[Privacy Policy]]></string>
-    <string name="label_representing_as_org">Representing an Organization</string>
+    <string name="label_representing_as_org">I’m Representing an Organization</string>
     <string name="label_unit_division">Unit / Division / Function / Location</string>
     <string name="toast_error_please_enter_unit_division">Please enter Unit / Division / Function / Location</string>
     <string name="toast_error_please_choose_org_type">Please choose organization type</string>
@@ -85,12 +91,12 @@
     <string name="offers_received">Offers Received</string>
     <string name="requests_sent">Requests</string>
     <string name="rate_report">Rate / Report</string>
-    <string name="closed">Closed</string>
-    <string name="sent_requests">Requests Sent</string>
-    <string name="sent_offers">Offers Sent</string>
+    <string name="closed">Cancel</string>
+    <string name="sent_requests">Sent Requests</string>
+    <string name="sent_offers">Sent Offers</string>
     <string name="request_received">Request Received</string>
     <string name="offers_sent">Offers</string>
-    <string name="delete_confirmation">Are you sure you want to close ?</string>
+    <string name="delete_confirmation">Are you sure you want to cancel ?</string>
     <string name="help_from_them">Should others take help from them?</string>
     <string name="submit">Submit</string>
     <string name="toast_error_some_error">Some error occurred</string>
@@ -101,15 +107,14 @@
     <string name="label_no_data_available">No data available</string>
     <string name="you_are_here">You are here</string>
     <string name="change">Change</string>
-    <string name="availability_condition">Conditions of Availability / Time</string>
+    <string name="availability_condition">Note to requesters</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="select_time">Select time</string>
-    <string name="request_near_me">%1$s Requests near me</string>
+    <string name="request_near_me">%1$s requests near me</string>
     <string name="request_total">%1$s Total</string>
-    <string name="hint_conditions" translatable="false"><![CDATA[We can supply once a day after 12 noon with a minimum 1 day notice.<br/><br/> Food will need to be picked up, it cannot be delivered.]]></string>
     <string name="comment">Comments</string>
-    <string name="select_help_provider">Select help providers</string>
+    <string name="select_help_provider">Select Help Providers</string>
     <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
     <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
     <string name="send_request">Send Request</string>
@@ -123,18 +128,15 @@
 
     <string name="mapping_template"><![CDATA[was sent a help request on %1$s They will call you if they can help you.]]></string>
 
-    <string name="request_template">%1$s;  %2$s</string>
-
-
     <string name="other_thing_template_request">%1$s;  %2$s</string>
     <string name="other_thing_template_offer">%1$s;  %2$s</string>
-    <string name="toast_delete_success">Delete success</string>
-    <string name="select_help_requester">Select help requesters</string>
+    <string name="toast_delete_success">Cancel success</string>
+    <string name="select_help_requester">Select Help Requesters</string>
     <string name="search_for_help_provider">Search for Help Provider</string>
     <string name="search_for_help_requester">Search for Requesters</string>
     <string name="rating_success">Rating success</string>
     <string name="otp_send_success">OTP send success</string>
-    <string name="otp_description">Check for OPT message and verify</string>
+    <string name="otp_description">Check for OTP message and verify</string>
     <string name="enable_location">Please enable your location without location app will not work</string>
     <string name="label_app_need_location_permission">Application need location permission, please click the below button to allow permission</string>
     <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
@@ -145,8 +147,8 @@
     <string name="no_help_requeter">Currently there are no help-requesters in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
     <string name="no_help_provider">Currently there are no help-providers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
     <string name="please_select_provider_helper">Please select provider or helper first</string>
-    <string name="someone_accept_offer">You received new offers</string>
-    <string name="someone_receive_your_request">Some one send you request</string>
+    <string name="someone_accept_offer">You received new offers from %1$s</string>
+    <string name="someone_receive_your_request">%1$s send you request</string>
     <string name="total_offers">%1$s Offers</string>
     <string name="total_requests">%1$s Requests</string>
     <string name="request_send_to">Requests have been sent to</string>
@@ -158,9 +160,8 @@
     <string name="view_details">View details</string>
     <string name="offer_help_text">They will call you if they need your help</string>
     <string name="call_them">Call them</string>
-    <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map<br/><br/> This request will automatically cancel after 5 days]]></string>
-    <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent
-Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
+    <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map]]></string>
+    <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
 
     <string name="no_offer_sended">You have not offered to help yet.</string>
     <string name="label_no_request_send">You have not requested for any help.</string>
@@ -168,18 +169,25 @@ Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they se
     <string name="cancel_this_offer">Cancel this offer</string>
     <string name="request_send_success">Request send success</string>
     <string name="offer_send_success">Offer send success</string>
-    <string name="availability_time"><![CDATA[Availability & time]]></string>
+    <string name="availability_time">Note:</string>
     <string name="label_start">Start</string>
     <string name="language">Language</string>
     <string name="update_language">Update language</string>
     <string name="language_update_success">Language update success</string>
     <string name="send_offer">Send offer</string>
-    <string name="distance">Distance %1$s Km</string>
-    <string name="distance_km">%1$s Km</string>
-
+    <string name="distance_km">%1$skms away</string>
+    <string name="label_app_version">App version: %1$s</string>
+    <string name="version_date">Version date: %1$s</string>
+    <string name="app_install_date">App install date: %1$s</string>
+    <string name="can_help_with">Can help you with ...</string>
+    <string name="need_help_with">Needs help with...</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="days_ago">%1$s days ago</string>
+    <string name="you_can_try_max_try">You can try maximum %1$s otp</string>
+    <string name="retry_msg">Resend OTP</string>
+    <string name="hint_conditions">Enter constraints on timings, delivery, selection ... ANY info useful for the requestor to know.</string>
+    <string name="request_call_him">They will call you, or you may call them</string>
 
     <string-array name="org_types">
         <item>Organization type</item>
@@ -199,6 +207,10 @@ Tina Rashomon to anyone yet.<br/><br/> Others may request your help when they se
         <item>4</item>
         <item>5</item>
         <item>0</item>
+    </integer-array>
+
+    <integer-array name="gplus_colors">
+        <item>@color/gplus_color_4</item>
     </integer-array>
 
 </resources>

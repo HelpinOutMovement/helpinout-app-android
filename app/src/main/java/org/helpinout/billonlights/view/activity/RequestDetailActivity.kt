@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.view.MenuItem
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -21,7 +23,7 @@ import org.helpinout.billonlights.view.adapters.RequestDetailAdapter
 import org.helpinout.billonlights.view.fragments.BottomSheetRateReportFragmentForMapping
 import org.helpinout.billonlights.view.fragments.BottomSheetsDeleteConfirmationFragment
 import org.helpinout.billonlights.view.fragments.BottomSheetsDetailFragment
-import org.helpinout.billonlights.view.view.ItemOffsetDecoration
+import org.helpinout.billonlights.view.view.DividerItemDecoration
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
@@ -33,6 +35,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     private var initiator: Int = 0
     private var offerType: Int = 0
     private var itemList = ArrayList<MappingDetail>()
+    private var isFromNotification: Boolean = false
 
     lateinit var adapter: RequestDetailAdapter
 
@@ -41,6 +44,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         offerType = intent.getIntExtra(OFFER_TYPE, HELP_TYPE_REQUEST)
         initiator = intent.getIntExtra(INITIATOR, HELP_TYPE_REQUEST)
         activity_uuid = intent.getStringExtra(ACTIVITY_UUID) ?: ""
+        isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
 
         if (offerType == HELP_TYPE_REQUEST) {
             if (initiator == HELP_TYPE_REQUEST) {//send request
@@ -66,9 +70,9 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail -> onDetailClick(name, detail) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
-        val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
-        recycler_view.addItemDecoration(itemDecorator)
+        adapter = RequestDetailAdapter(itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail, description -> onDetailClick(name, detail, description) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
+        recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
         loadRequestDetails()
     }
@@ -104,6 +108,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
                 suggestionData.accuracy = ""
             } catch (e: Exception) {
             }
+
             val suggestionDataAsString = Gson().toJson(suggestionData)
             startActivity<HelpProviderRequestersActivity>(SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to (item.activity_type ?: 0))
         } else {
@@ -173,12 +178,12 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun onDetailClick(name: String, detail: String) {
+    private fun onDetailClick(name: String, detail: String, description: String) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail)
+        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail, description)
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -204,6 +209,32 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
                 finishWithFade()
             }
         })
+    }
+
+    override fun onBackPressed() {
+        if (isFromNotification) {
+            goToHome()
+        }
+        super.onBackPressed()
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == android.R.id.home) {
+            if (isFromNotification) {
+                goToHome()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun goToHome() {
+        val intent = Intent(baseContext!!, HomeActivity::class.java)
+        intent.putExtra(SELECTED_INDEX, helpType)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        finishWithSlideAnimation()
     }
 
     override fun onClick(v: View?) {

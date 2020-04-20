@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.OfferHelpItem
+import org.helpinout.billonlights.utils.RADIUS
 import org.helpinout.billonlights.utils.hide
 import org.helpinout.billonlights.utils.show
 import org.helpinout.billonlights.view.adapters.OfferHelpAdapter
@@ -47,7 +48,8 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
     @Synchronized
     private fun loadOfferHelpList() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.getOfferHelpItems(this).observe(this, Observer { list ->
+        val radius = intent.getFloatExtra(RADIUS, 50000F)
+        viewModel.getOfferHelpItems(this, radius).observe(this, Observer { list ->
             progress_bar.hide()
             list?.let {
                 itemList.clear()
@@ -58,11 +60,7 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
     }
 
     override fun onLocationChanged(location: Location?) {
-        location?.let {
-            preferencesService.latitude = location.latitude
-            preferencesService.longitude = location.longitude
-            preferencesService.gpsAccuracy = location.accuracy.toInt().toString()
-        }
+
     }
 
     override fun onPermissionAllow() {

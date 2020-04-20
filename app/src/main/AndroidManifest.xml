@@ -52,7 +52,8 @@
         <activity
             android:name=".view.activity.HomeActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/HomeTheme" />
 
 
         <service
@@ -70,11 +71,11 @@
 
         <activity
             android:name=".view.activity.AskForHelpActivity"
-            android:label="@string/title_need_help_with"
+            android:label="@string/toolbar_need_help_with"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.OfferHelpActivity"
-            android:label="@string/title_offer_help_with"
+            android:label="@string/toolbar_offer_help_with"
             android:screenOrientation="portrait" />
 
         <activity
@@ -100,6 +101,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.RequestDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.AboutActivity"
+            android:label="@string/about"
             android:screenOrientation="portrait" />
 
         <meta-data

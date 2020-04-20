@@ -4,13 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -38,6 +36,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
     private var updateLanguage = 349
+    var radius: Float = 0.0F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +56,29 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         when (intent.getIntExtra(SELECTED_INDEX, 0)) {
             0 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_home
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val window: Window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                }
             }
             1 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_my_request
                 supportActionBar?.setTitle(R.string.title_my_request)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val window: Window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                }
             }
             2 -> {
                 bottom_nav_view.selectedItemId = R.id.navigation_my_offers
                 supportActionBar?.setTitle(R.string.title_my_offers)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val window: Window = window
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                    window.statusBarColor = getColor(R.color.colorAccentDark)
+                }
             }
         }
         checkLocationPermission()
@@ -117,7 +131,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     selectedItem = 0
                     layout_toolbar.hide()
                     checkFragmentItems()
-
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val window: Window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                    }
                     val home = nav_view.menu.findItem(R.id.nav_home)
                     home.isChecked = true
                     bottom_nav_view.menu.getItem(0).isChecked = true
@@ -134,6 +152,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     checkFragmentItems()
                     supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary)))
                     val my_request = nav_view.menu.findItem(R.id.nav_my_request)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val window: Window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                    }
                     my_request.isChecked = true
                     bottom_nav_view.menu.getItem(1).isChecked = true
                     my_request.actionView = getMenuDotView()
@@ -149,6 +172,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     checkFragmentItems()
                     supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
                     val my_offers = nav_view.menu.findItem(R.id.nav_my_offers)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        val window: Window = window
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                        window.statusBarColor = getColor(R.color.colorAccentDark)
+                    }
                     my_offers.isChecked = true
                     bottom_nav_view.menu.getItem(2).isChecked = true
                     toolbar?.setTitle(R.string.title_my_offers)
@@ -169,11 +197,13 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             }
 
             R.id.nav_about -> {
-                selectedItem = 5
-                checkFragmentItems()
-                val about = nav_view.menu.findItem(R.id.nav_about)
-                about.isChecked = true
-                about.actionView = getMenuDotView()
+                startActivity<AboutActivity>()
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+//                selectedItem = 5
+//                checkFragmentItems()
+//                val about = nav_view.menu.findItem(R.id.nav_about)
+//                about.isChecked = true
+//                about.actionView = getMenuDotView()
             }
         }
         closeDrawer()

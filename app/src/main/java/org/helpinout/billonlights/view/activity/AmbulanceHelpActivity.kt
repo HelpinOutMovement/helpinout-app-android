@@ -1,7 +1,6 @@
 package org.helpinout.billonlights.view.activity
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -82,7 +81,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         item.activity_count = ambulanceHelp.activity_count
         item.geo_location = ambulanceHelp.geo_location
         item.address = ambulanceHelp.address
-        item.qty = ambulanceHelp.qty
+        item.qty = ambulanceHelp.qty ?: ""
         item.status = 1
 
 
@@ -98,13 +97,13 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
             dialog?.dismiss()
             if (it) {
                 toastSuccess(R.string.toast_success_data_save_success)
-                askForConfirmation()
+                askForConfirmation(ambulanceHelp.activity_uuid)
             }
         })
     }
 
-    private fun askForConfirmation() {
-        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, onYesClick = { onYesClick() }, onNoClick = { onNoClick() })
+    private fun askForConfirmation(activity_uuid: String) {
+        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, activity_uuid, onConfirmationYesClick = { onYesClick() }, onConfirmationNoClick = { type, uuid -> onConfirmationNoClick(type, uuid) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -113,15 +112,9 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         overridePendingTransition(R.anim.enter, R.anim.exit)
-        finish()
-    }
-
-    private fun onNoClick() {
-        val intent = Intent(baseContext!!, HomeActivity::class.java)
-        intent.putExtra(SELECTED_INDEX, helpType)
-        startActivity(intent)
         finishWithFade()
     }
+
 
     override fun getLayout(): Int {
         return R.layout.activity_ambulance_help

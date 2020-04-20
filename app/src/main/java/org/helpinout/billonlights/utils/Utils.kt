@@ -40,7 +40,7 @@ class Utils {
                 distance = acos(distance)
                 distance = rad2deg(distance)
                 distance *= 60 * 1.1515
-                return String.format("%.2f", distance * km)
+                return String.format("%.1f", distance * km)
             } catch (e: Exception) {
                 "Unknown"
             }

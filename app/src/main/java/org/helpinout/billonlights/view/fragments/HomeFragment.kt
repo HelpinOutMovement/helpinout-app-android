@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.avneesh.crashreporter.CrashReporter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,6 +25,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import org.helpinout.billonlights.R
@@ -43,8 +45,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
-    private var radius: Float = 0.0F
-    private var zoomLevel = 10.7F
+    private var retry = 0
+    private var retryCount = 3
 
     @Inject
     lateinit var preferencesService: PreferencesService
@@ -85,11 +87,17 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
-        showPinOnCurrentLocation(preferencesService.latitude, preferencesService.longitude)
-        if (location != null && mMap != null) {
-            updateLocation()
+        try {
+            if (preferencesService.latitude !== 0.0) {
+                val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
+                mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, preferencesService.zoomLevel))
+                showPinOnCurrentLocation(preferencesService.latitude, preferencesService.longitude)
+            }
+            if (location != null && mMap != null) {
+                updateLocation()
+            }
+        } catch (e: Exception) {
+            CrashReporter.logException(e)
         }
     }
 
@@ -108,7 +116,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 mMap!!.isMyLocationEnabled = true
                 changeMyLocationButton()
                 val latlng = LatLng(loc.latitude, loc.longitude)
-                mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
+                mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, preferencesService.zoomLevel))
 
                 detectRadius()
                 stopLocationUpdate()
@@ -131,25 +139,10 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 preferencesService.longitude = midLatLng.longitude
                 showPinOnCurrentLocation(midLatLng!!.latitude, midLatLng.longitude)
                 val visibleRegion = it.projection.visibleRegion
+
                 val farRight: LatLng = visibleRegion.farRight
                 val farLeft: LatLng = visibleRegion.farLeft
-                val nearRight: LatLng = visibleRegion.nearRight
-                val nearLeft: LatLng = visibleRegion.nearLeft
-
-                val distanceWidth = FloatArray(2)
-                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceWidth)
-
-
-                val distanceHeight = FloatArray(2)
-                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceHeight)
-
-
-                radius = if (distanceWidth[0] > distanceHeight[0]) {
-                    distanceWidth[0]
-                } else {
-                    distanceHeight[0]
-                }
-                radius = radius.convertIntoKms().toFloat()
+                (activity as HomeActivity).radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
                 getRequesterAndHelper()
             }
         }
@@ -171,29 +164,42 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             preferencesService.latitude = it.latitude
                             preferencesService.longitude = it.longitude
                             mMap?.clear()
-                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, zoomLevel))
+                            // mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, preferencesService.zoomLevel))
+                            tv_toolbar_address.text = activity!!.getAddress(it.latitude, it.longitude) //(place.name + "<br/>" + place.address).fromHtml()
+                            tv_address.text = activity!!.getAddress(it.latitude, it.longitude)
                         }
-                        tv_toolbar_address.text = place.address
-                        tv_address.text = place.address
+
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
+
                 }
                 RESULT_CANCELED -> {
+
                 }
             }
         }
     }
 
     private fun getRequesterAndHelper() {
+
+        progressBar.show()
+
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.sendUserLocationToServer(radius).observe(this, Observer { it ->
+        viewModel.sendUserLocationToServer((activity as HomeActivity).radius).observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
+                    val offerSize = it.offers?.size ?: 0
+                    val requesterSize = it.requests?.size ?: 0
 
+                    if ((offerSize == 0 || requesterSize == 0) && retry != retryCount) {
+                        retry++
+                        makeRetryAfterZoomOut()
+                        return@Observer
+                    }
+                    progressBar.hide()
 
-//                    Log.d("======== Total requests: ", it.requests?.size.toString())
-//                    Log.d("======== Total offers: ", it.offers?.size.toString())
+                    preferencesService.zoomLevel = mMap?.cameraPosition?.zoom ?: 10F
 
                     it.offers?.forEach { detail ->
                         try {
@@ -213,7 +219,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
                             val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
-                            //Log.d("======== Location ", activity!!.getAddress(lat,lon))
                             createMarker(lat, lon, name, name, R.drawable.ic_help_requester)
                         } catch (e: Exception) {
 
@@ -221,11 +226,18 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                     }
                 }
             } ?: kotlin.run {
+                progressBar.hide()
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
                 } else toastError(it.second)
             }
         })
+    }
+
+    private fun makeRetryAfterZoomOut() {
+        val latlng = LatLng(preferencesService.latitude, preferencesService.longitude)
+        preferencesService.zoomLevel -= retry * 1F
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, preferencesService.zoomLevel))
     }
 
     private fun changeMyLocationButton() {
@@ -257,7 +269,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             offer_help -> {
-                activity?.startActivity<OfferHelpActivity>(HELP_TYPE to HELP_TYPE_OFFER)
+                activity?.startActivity<OfferHelpActivity>(HELP_TYPE to HELP_TYPE_OFFER, RADIUS to (activity as HomeActivity).radius)
                 activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
             }
         }

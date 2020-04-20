@@ -6,9 +6,7 @@ import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
-import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,12 +19,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
+import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.activity_help_map.*
 import kotlinx.android.synthetic.main.bottom_sheet_help_provider_requester.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
@@ -53,7 +50,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private var dialog: ProgressDialog? = null
     private var suggestionData: SuggestionRequest? = null
     private var mMap: GoogleMap? = null
-    private var location: Location? = null
+    private lateinit var location: Location
     private var bottomItemList = ArrayList<ActivityAddDetail>()
     private var bottomAdapter: BottomSheetHelpAdapter? = null
     private var radius: Float = 0.0F
@@ -63,7 +60,16 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         super.onCreate(savedInstanceState)
         checkLocationPermission()
         val data = intent.getStringExtra(SUGGESTION_DATA)!!
+
+
+        location = Location("")
         suggestionData = Gson().fromJson(data, SuggestionRequest::class.java)
+
+        zoomLevel = preferencesService.zoomLevel
+
+        location.latitude = suggestionData?.latitude ?: preferencesService.latitude
+        location.longitude = suggestionData?.longitude ?: preferencesService.longitude
+
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment?.getMapAsync(this)
 
@@ -71,9 +77,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         iv_menu.setOnClickListener {
             goToRequestDetailScreen()
         }
-        tv_change.setOnClickListener {
-            startLocationPicker()
-        }
+        tv_change.hide()
+
         layout_peek.setOnClickListener(this)
         if (helpType == HELP_TYPE_OFFER) {
             tv_title.setText(R.string.select_help_requester)
@@ -85,42 +90,36 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
         bottom_sheet.hide()
-
+        iv_item.setImageResource(suggestionData!!.activity_category.getIcon())
         mRecyclerView
     }
 
     private fun loadSuggestionData() {
 
-        iv_item.setImageResource(suggestionData!!.activity_category.getIcon())
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getSuggestion(suggestionData!!, radius).observe(this, Observer {
             it.first?.let { res ->
+                preferencesService.zoomLevel = mMap?.cameraPosition?.zoom ?: 10F
                 if (helpType == HELP_TYPE_REQUEST) {
-                    if (!res.data?.offers.isNullOrEmpty()) {
-                        Log.d("======== Total offers: ", res.data?.offers?.size.toString())
-                        res.data?.offers!!.forEach {
-                            val loc = it.geo_location!!.split(",")
-                            val lat = loc[0].toDouble()
-                            val lon = loc[1].toDouble()
-                            Log.d("======== Address: ", getAddress(lat, lon))
-                        }
 
+                    if (!res.data?.offers.isNullOrEmpty()) {
                         bottomItemList.clear()
-                        bottomItemList.addAll(res.data?.offers!!)
+
+                        val list = res.data?.offers!!.sortedBy { it.user_detail?.distance?.toDouble() }
+                        bottomItemList.addAll(list)
+                        bottomAdapter?.notifyDataSetChanged()
+                    } else {
+                        bottomItemList.clear()
                         bottomAdapter?.notifyDataSetChanged()
                     }
                 } else {
                     if (!res.data?.requests.isNullOrEmpty()) {
-
-                        Log.d("======== Total requests: ", res.data?.requests?.size.toString())
-                        res.data?.requests!!.forEach {
-                            val loc = it.geo_location!!.split(",")
-                            val lat = loc[0].toDouble()
-                            val lon = loc[1].toDouble()
-                            Log.d("======== Address: ", getAddress(lat, lon))
-                        }
                         bottomItemList.clear()
-                        bottomItemList.addAll(res.data?.requests!!)
+                        val list = res.data?.requests!!.sortedBy { it.user_detail?.distance?.toDouble() }
+                        bottomItemList.addAll(list)
+                        bottomAdapter?.notifyDataSetChanged()
+                    } else {
+                        bottomItemList.clear()
                         bottomAdapter?.notifyDataSetChanged()
                     }
                 }
@@ -130,7 +129,13 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 tv_comment.visibleIf(bottomItemList.isNotEmpty())
                 if (bottomItemList.isEmpty()) {
                     button_continue.setText(R.string.btn_continue)
+                } else if (helpType == HELP_TYPE_REQUEST) {
+                    button_continue.setText(R.string.send_request)
+                } else if (helpType == HELP_TYPE_OFFER) {
+                    button_continue.setText(R.string.send_offer)
                 }
+
+
                 tv_no_help_provider.visibleIf(bottomItemList.isEmpty())
                 recycler_view.inVisibleIf(bottomItemList.isEmpty())
 
@@ -158,13 +163,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
     }
-
-    private fun startLocationPicker() {
-        val fields: List<Place.Field> = listOf(Place.Field.ID, Place.Field.ADDRESS, Place.Field.NAME, Place.Field.LAT_LNG)
-        val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this)
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -215,10 +213,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     override fun onLocationChanged(location: Location?) {
-        this.location = location
-        if (location != null && mMap != null) {
-            updateLocation()
-        }
+
     }
 
     override fun onBackPressed() {
@@ -227,20 +222,20 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
-        tv_toolbar_address?.text = getAddress(preferencesService.latitude, preferencesService.longitude)
+        mMap?.uiSettings?.isZoomControlsEnabled = true
+        mMap?.uiSettings?.setAllGesturesEnabled(false)
+        val latLng = LatLng(location.latitude, location.longitude)
+        tv_toolbar_address?.text = getAddress(location.latitude, location.longitude)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
-        if (location != null && mMap != null) {
+        if (mMap != null) {
             updateLocation()
         }
     }
 
     private fun updateLocation() {
-        location?.let { loc ->
+        location.let { loc ->
             mMap?.let {
                 mMap!!.clear()
-                mMap?.isMyLocationEnabled = true
-                changeMyLocationButton()
                 val latlng = LatLng(loc.latitude, loc.longitude)
                 mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoomLevel))
                 detectRadius()
@@ -252,50 +247,12 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun detectRadius() {
         mMap?.setOnCameraIdleListener {
             mMap?.let {
-                val midLatLng = mMap!!.cameraPosition.target
-                suggestionData!!.latitude = midLatLng.latitude
-                suggestionData!!.longitude = midLatLng.longitude
-                val address = getAddress(midLatLng.latitude, midLatLng.longitude)
-                tv_toolbar_address?.text = address
-                showCurrentLocation(midLatLng, address)
-
                 val visibleRegion = it.projection.visibleRegion
                 val farRight: LatLng = visibleRegion.farRight
                 val farLeft: LatLng = visibleRegion.farLeft
-                val nearRight: LatLng = visibleRegion.nearRight
-                val nearLeft: LatLng = visibleRegion.nearLeft
-
-                val distanceWidth = FloatArray(2)
-                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceWidth)
-
-                val distanceHeight = FloatArray(2)
-                Location.distanceBetween((farRight.latitude + nearRight.latitude) / 2, (farRight.longitude + nearRight.longitude) / 2, (farLeft.latitude + nearLeft.latitude) / 2, (farLeft.longitude + nearLeft.longitude) / 2, distanceHeight)
-
-
-                radius = if (distanceWidth[0] > distanceHeight[0]) {
-                    distanceWidth[0]
-                } else {
-                    distanceHeight[0]
-                }
-                radius = radius.convertIntoKms().toFloat()
+                radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
                 loadSuggestionData()
             }
-        }
-    }
-
-    private fun changeMyLocationButton() {
-        try {
-            val locationButton = (mapFragment?.view?.findViewById<View>("1".toInt())?.parent as View).findViewById<View>("2".toInt())
-            val rlp = locationButton.layoutParams as RelativeLayout.LayoutParams
-            val ruleList = rlp.rules
-            for (i in ruleList.indices) {
-                rlp.removeRule(i)
-            }
-            rlp.bottomMargin = 100
-            rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
-            rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE)
-        } catch (e: Exception) {
-
         }
     }
 
@@ -331,10 +288,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         when (v) {
             button_continue -> {
                 if (bottomItemList.isEmpty()) {
-                    val intent = Intent(baseContext!!, HomeActivity::class.java)
-                    intent.putExtra(SELECTED_INDEX, 1)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
+                    goToRequestDetailScreen()
                 } else {
                     if (bottomAdapter!!.getCheckedItemsList().isEmpty()) {
                         toastError(R.string.please_select_provider_helper)
@@ -344,11 +298,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             layout_peek -> {
                 val bottomSheetBehavior = BottomSheetBehavior.from(bottom_sheet)
                 if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
-                    iv_expend_collapse.setImageResource(R.drawable.ic_expand_less)
+                    iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
                 } else {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                    iv_expend_collapse.setImageResource(R.drawable.ic_expand_more)
+                    iv_expend_collapse.setImageResource(R.drawable.ic_expand_less)
                 }
             }
             btnPermission -> {
@@ -382,6 +336,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                             mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
                             mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            setOfferDetail(mapping)
                         } else if (mapping.request_detail != null) {
                             mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
                             mapping.request_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
@@ -391,6 +346,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                             mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
                             mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            setRequestDetail(mapping)
                         }
                     }
                     if (it.first!!.data!!.mapping.isNullOrEmpty()) {
@@ -411,7 +367,108 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 CrashReporter.logCustomLogs(it.second)
             }
         })
+    }
 
+    private fun setRequestDetail(mapping: Mapping) {
+        try {
+            var detail = ""
+
+            if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (it.quantity.isNullOrEmpty()) {
+                        it.quantity = ""
+                    }
+                    detail += it.quantity
+                }
+            } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
+
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.volunters_detail.isNullOrEmpty()) {
+                        detail += it.volunters_detail?.take(30)
+                    }
+                    if (!it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.volunters_quantity + ")"
+                    }
+
+                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                        if (detail.isNotEmpty()) {
+                            detail += "<br/>"
+                        }
+                        detail += it.technical_personal_detail?.take(30)
+                    }
+                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.technical_personal_quantity + ")"
+                    }
+                }
+
+            } else {
+                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.detail.isNullOrEmpty()) {
+                        detail += it.detail?.take(30)
+                    }
+                    if (!it.quantity.isNullOrEmpty()) {
+                        detail += "(" + it.quantity + ")"
+                    }
+                    if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
+                        detail += "<br/>"
+                    }
+                }
+            }
+            mapping.request_detail?.user_detail?.detail = detail
+        } catch (e: Exception) {
+            Timber.d("")
+        }
+    }
+
+    private fun setOfferDetail(mapping: Mapping) {
+        try {
+            var detail = ""
+
+            if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (it.quantity.isNullOrEmpty()) {
+                        it.quantity = ""
+                    }
+                    detail += it.quantity
+                }
+            } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
+
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.volunters_detail.isNullOrEmpty()) {
+                        detail += it.volunters_detail?.take(30)
+                    }
+                    if (!it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.volunters_quantity + ")"
+                    }
+
+                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                        if (detail.isNotEmpty()) {
+                            detail += "<br/>"
+                        }
+                        detail += it.technical_personal_detail?.take(30)
+                    }
+                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
+                        detail += "(" + it.technical_personal_quantity + ")"
+                    }
+                }
+
+            } else {
+                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    if (!it.detail.isNullOrEmpty()) {
+                        detail += it.detail?.take(30)
+                    }
+                    if (!it.quantity.isNullOrEmpty()) {
+                        detail += "(" + it.quantity + ")"
+                    }
+                    if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
+                        detail += "<br/>"
+                    }
+                }
+            }
+            mapping.offer_detail?.user_detail?.detail = detail
+        } catch (e: Exception) {
+            Timber.d("")
+        }
     }
 
     private fun saveMappingToDataBase(mapping: List<Mapping>?) {
@@ -437,17 +494,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun goToRequestDetailScreen() {
-        if (helpType == HELP_TYPE_REQUEST) {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 1)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        } else {
-            val intent = Intent(baseContext!!, HomeActivity::class.java)
-            intent.putExtra(SELECTED_INDEX, 2)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        }
+        val intent = Intent(baseContext!!, HomeActivity::class.java)
+        intent.putExtra(SELECTED_INDEX, helpType)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        overridePendingTransition(R.anim.enter, R.anim.exit)
         finishWithSlideAnimation()
     }
 

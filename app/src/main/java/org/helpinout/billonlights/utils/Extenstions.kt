@@ -69,6 +69,19 @@ fun String.displayTime(): String {
 
 }
 
+fun Context.getInstallTime(): String {
+    val pm = packageManager
+    try {
+        val pi = pm.getPackageInfo(packageName, 0)
+        val sdf = SimpleDateFormat(APP_INSTALL_FORMAT, Locale.getDefault())
+        return sdf.format(Date(pi.lastUpdateTime))
+
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return "Error"
+}
+
 fun Context.isSimInserted(): Boolean {
     val tm: TelephonyManager = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager //gets the current TelephonyManager
     return !(tm.simState === TelephonyManager.SIM_STATE_ABSENT)

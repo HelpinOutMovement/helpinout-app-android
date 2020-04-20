@@ -23,8 +23,7 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         holder.item.item = item
         holder.itemView.count_text_view.goneIf(item.totalOffers == 0)
         holder.itemView.tv_time.text = item.date_time.displayTime()
-        val text = holder.itemView.context.getString(R.string.request_template, item.detail, item.date_time.displayTime())
-        holder.itemView.tv_detail.text = text
+        holder.itemView.tv_detail.text = item.detail?.fromHtml()
 
         if (item.activity_type == HELP_TYPE_REQUEST) {
             holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)

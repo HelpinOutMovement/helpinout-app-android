@@ -11,7 +11,7 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 
 
-class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onRateReportClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
+class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onRateReportClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String, String) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestDetailViewHolder {
         val viewLayout: ItemRequestDetailBinding = parent.inflate(R.layout.item_request_detail)
         return RequestDetailViewHolder(viewLayout)
@@ -25,22 +25,19 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
         holder.itemView.tv_name.text = item.first_name + " " + item.last_name
         holder.itemView.rating_bar.goneIf(item.rating_count == 0)
         holder.itemView.rating_bar.rating = item.rating_avg ?: 0.0F
-
+        holder.itemView.tv_view_detail.setOnClickListener {
+            onDetailClick(item.first_name + " " + item.last_name, item.offer_condition ?: "", item.detail ?: "")
+        }
 
         if (item.activity_type == HELP_TYPE_REQUEST) {
             if (item.activity_type == item.mapping_initiator) {//Requests have been sent to
-                val text = holder.itemView.context.getString(R.string.request_help_text)
+                val text = holder.itemView.context.getString(if (item.mobile_no_visibility == 1) R.string.request_call_him else R.string.request_help_text)
                 holder.itemView.tv_detail.text = text
                 holder.itemView.iv_call.visibleIf(item.mobile_no_visibility == 1)
                 holder.itemView.tv_cal_them.visibleIf(item.mobile_no_visibility == 1)
             } else {//Help offers received from
-                val text = holder.itemView.context.getString(R.string.view_details)
-                holder.itemView.tv_detail.text = text
                 holder.itemView.iv_call.show()
                 holder.itemView.tv_cal_them.show()
-                holder.itemView.tv_detail.setOnClickListener {
-                    onDetailClick(item.first_name + " " + item.last_name, item.offer_condition ?: "")
-                }
             }
 
         } else {
@@ -48,9 +45,8 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
                 val text = holder.itemView.context.getString(R.string.offer_help_text)
                 holder.itemView.tv_detail.text = text
             } else {//Help requests received from
-                val text = holder.itemView.context.getString(R.string.offer_help_text)
-                holder.itemView.tv_detail.text = text
-                holder.itemView.tv_detail.setTextColor(holder.itemView.tv_detail.context.getColor(R.color.colorAccent))
+                holder.itemView.iv_call.visibleIf(item.mobile_no_visibility == 1)
+                holder.itemView.tv_cal_them.visibleIf(item.mobile_no_visibility == 1)
                 holder.itemView.iv_call.show()
                 holder.itemView.tv_cal_them.show()
             }

@@ -2,6 +2,7 @@ package org.helpinout.billonlights.model.dagger
 
 import dagger.Module
 import org.helpinout.billonlights.utils.doubleProperty
+import org.helpinout.billonlights.utils.floatProperty
 import org.helpinout.billonlights.utils.integerProperty
 import org.helpinout.billonlights.utils.stringProperty
 
@@ -15,9 +16,10 @@ class PreferencesService {
     var countryCode by stringProperty()
     var mobileNumber by stringProperty()
     var step by integerProperty()
-    var latitude by doubleProperty(default = 20.5937)
-    var longitude by doubleProperty(default = 78.9629)
+    var latitude by doubleProperty(default = 0.0)
+    var longitude by doubleProperty(default = 0.0)
     var defaultLanguage by stringProperty()
+    var zoomLevel by floatProperty(default = 10.7F)
 
     var gpsAccuracy by stringProperty()
     var firebaseId by stringProperty(default = "fghgfghfgdgghghhggghghghghhgggggg")
