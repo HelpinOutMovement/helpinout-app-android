@@ -25,6 +25,7 @@ import org.helpinout.billonlights.view.fragments.BottomSheetsDeleteConfirmationF
 import org.helpinout.billonlights.view.fragments.BottomSheetsDetailFragment
 import org.helpinout.billonlights.view.view.DividerItemDecoration
 import org.helpinout.billonlights.viewmodel.OfferViewModel
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
@@ -78,6 +79,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             checkOfferList()
         } else loadRequestDetails()
     }
+
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getUserRequestOfferList(this, 0).observe(this, Observer {
@@ -126,8 +128,11 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onSubmitClick(item: MappingDetail, rating: String, recommendToOther: Int, comments: String) {
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.show()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.makeRating(item.parent_uuid, item.activity_uuid ?: "", offerType, rating, recommendToOther, comments).observe(this, Observer {
+            dialog.dismiss()
             if (it.first != null) {
                 toastSuccess(R.string.rating_success)
             } else {
@@ -149,10 +154,14 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String) {
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
 
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.show()
+
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         if (parent_uuid.isNullOrEmpty()) {
             viewModel.deleteActivity(activity_uuid, offerType).observe(this, Observer {
+                dialog.dismiss()
                 it.first?.let { delete ->
                     deleteActivityFromDatabase(delete.data?.activity_uuid)
                 } ?: kotlin.run {
@@ -163,6 +172,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             })
         } else {
             viewModel.deleteMapping(parent_uuid, activity_uuid, offerType).observe(this, Observer {
+                dialog.dismiss()
                 it.first?.let {
                     deleteMappingFromDatabase(parent_uuid, activity_uuid)
                 } ?: kotlin.run {
@@ -196,8 +206,11 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun deleteMappingFromDatabase(parent_uuid: String?, activity_uuid: String) {
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.show()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.deleteMappingFromDatabase(parent_uuid, activity_uuid).observe(this, Observer {
+            dialog.dismiss()
             if (it) {
                 toastSuccess(R.string.toast_delete_success)
                 loadRequestDetails()
@@ -208,10 +221,16 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun deleteActivityFromDatabase(activityUuid: String?) {
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.show()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.deleteActivityFromDatabase(activityUuid).observe(this, Observer {
+            dialog.dismiss()
             if (it) {
                 toastSuccess(R.string.toast_delete_success)
+                val intent1 = Intent(DATA_REFRESH)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
+
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_OK, returnIntent)
                 finishWithFade()

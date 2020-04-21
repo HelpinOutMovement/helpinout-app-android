@@ -292,7 +292,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 } else {
                     if (bottomAdapter!!.getCheckedItemsList().isEmpty()) {
                         toastError(R.string.please_select_provider_helper)
-                    } else sendRequestOffersToServer()
+                    } else {
+                        sendRequestOffersToServer()
+                    }
                 }
             }
             layout_peek -> {

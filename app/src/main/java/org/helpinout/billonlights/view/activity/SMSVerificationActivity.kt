@@ -1,6 +1,7 @@
 package org.helpinout.billonlights.view.activity
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -27,6 +28,7 @@ import java.util.concurrent.TimeUnit
 
 class SMSVerificationActivity : BaseActivity() {
 
+    private  var dialog: ProgressDialog?=null
     private var timer: CountDownTimer? = null
     private var resendToken: String? = null
     private var mAuth: FirebaseAuth? = null
@@ -131,6 +133,8 @@ class SMSVerificationActivity : BaseActivity() {
 
     private fun verifyCode(code: String?) {
         if (resendToken != null) {
+            dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+            dialog?.show()
             val credential = PhoneAuthProvider.getCredential(resendToken!!, code!!)
             signInWithCredential(credential)
         }
@@ -139,8 +143,8 @@ class SMSVerificationActivity : BaseActivity() {
     private fun signInWithCredential(credential: PhoneAuthCredential) {
         mAuth!!.signInWithCredential(credential).addOnCompleteListener { task ->
             btn_verify.isEnabled = true
+            dialog?.dismiss()
             if (task.isSuccessful) {
-                preferencesService.step = REGISTRATION_STEP
                 checkIfNotRegistered()
             }
         }

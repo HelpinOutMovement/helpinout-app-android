@@ -12,6 +12,7 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.HelpProviderRequestersActivity
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
 import org.helpinout.billonlights.viewmodel.OfferViewModel
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 
@@ -45,9 +46,12 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun onSubmitClick(item: AddCategoryDbItem, rating: String, recommendToOther: Int, comments: String) {
+        val dialog = activity?.indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog?.show()
         val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.makeRating(item.parent_uuid, item.activity_uuid, offerType, rating, recommendToOther, comments).observe(this, Observer {
+            dialog?.dismiss()
             if (it.first != null) {
                 toastSuccess(R.string.rating_success)
             } else {
@@ -75,54 +79,6 @@ abstract class BaseFragment : Fragment() {
         activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 
-
-    private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String) {
-        val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-
-        if (parent_uuid.isNullOrEmpty()) {
-            viewModel.deleteActivity(activity_uuid, offerType).observe(this, Observer {
-                it.first?.let { delete ->
-                    deleteActivityFromDatabase(delete.data?.activity_uuid)
-                } ?: kotlin.run {
-                    if (!activity!!.isNetworkAvailable()) {
-                        toastError(R.string.toast_error_internet_issue)
-                    } else toastError(it.second)
-                }
-
-            })
-        } else {
-            viewModel.deleteMapping(parent_uuid, activity_uuid, offerType).observe(this, Observer {
-                it.first?.let {
-                    deleteMappingFromDatabase(parent_uuid, activity_uuid)
-                } ?: kotlin.run {
-                    if (!activity!!.isNetworkAvailable()) {
-                        toastError(R.string.toast_error_internet_issue)
-                    } else toastError(it.second)
-                }
-            })
-        }
-    }
-
-    private fun deleteActivityFromDatabase(activityUuid: String?) {
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.deleteActivityFromDatabase(activityUuid).observe(this, Observer {
-            if (it) {
-                toastSuccess(R.string.toast_delete_success)
-                loadRequestList()
-            }
-        })
-    }
-
     abstract fun loadRequestList()
 
-    private fun deleteMappingFromDatabase(parent_uuid: String?, activity_uuid: String) {
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.deleteMappingFromDatabase(parent_uuid, activity_uuid).observe(this, Observer {
-            if (it) {
-                toastSuccess(R.string.toast_delete_success)
-                loadRequestList()
-            }
-        })
-    }
 }

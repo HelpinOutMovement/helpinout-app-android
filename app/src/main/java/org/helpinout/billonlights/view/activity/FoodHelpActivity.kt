@@ -198,7 +198,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
             viewModel.saveFoodItemToDatabase(addItemList).observe(this, Observer {
                 dialog?.dismiss()
                 if (it) {
-                    toastSuccess(R.string.toast_success_data_save_success)
                     askForConfirmation(addData.activity_uuid)
                 }
             })

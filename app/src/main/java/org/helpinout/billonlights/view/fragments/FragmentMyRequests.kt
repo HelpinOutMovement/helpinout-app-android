@@ -92,21 +92,21 @@ class FragmentMyRequests : BaseFragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        activity?.let {
-            LocalBroadcastManager.getInstance(it).unregisterReceiver(uploadStatusReceiver)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         activity?.let {
             val filter = IntentFilter()
             filter.addAction(DATA_REFRESH)
             LocalBroadcastManager.getInstance(it).registerReceiver(uploadStatusReceiver, filter)
         }
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(uploadStatusReceiver)
+        }
+    }
+
 
     private val uploadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

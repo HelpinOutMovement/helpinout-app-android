@@ -88,6 +88,14 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         try {
+            mMap!!.setOnMarkerClickListener { marker ->
+                if (marker.isInfoWindowShown) {
+                    marker.hideInfoWindow()
+                } else {
+                    marker.showInfoWindow()
+                }
+                true
+            }
             if (preferencesService.latitude !== 0.0) {
                 val latLng = LatLng(preferencesService.latitude, preferencesService.longitude)
                 mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, preferencesService.zoomLevel))
@@ -206,8 +214,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             val loc = detail.geo_location!!.split(",")
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
-                            val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
-                            // Log.d("======== Location ", activity!!.getAddress(lat,lon))
+                            val name = getString(detail.activity_category.getName())
                             createMarker(lat, lon, name, name, R.drawable.ic_help_provider)
                         } catch (e: Exception) {
 
@@ -218,7 +225,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             val loc = detail.geo_location!!.split(",")
                             val lat = loc[0].toDouble()
                             val lon = loc[1].toDouble()
-                            val name = detail.user_detail?.first_name + " " + detail.user_detail?.last_name
+                            val name = getString(detail.activity_category.getName())
                             createMarker(lat, lon, name, name, R.drawable.ic_help_requester)
                         } catch (e: Exception) {
 

@@ -4,7 +4,7 @@
     <!-- Splash screen -->
 
     <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
-
+    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
     <!--End Splash screen -->
 
 
@@ -154,28 +154,18 @@
     <string name="volunteers">Volunteers</string>
     <string name="technical_personnel">Technical Personnel</string>
     <string name="hint_how_many_people">How many people ?</string>
-    <string name="offers_received">Offers Received</string>
-    <string name="requests_sent">Requests</string>
     <string name="rate_report">Rate / Report</string>
-    <string name="closed">Cancel</string>
+    <string name="canceled">Cancel</string>
     <string name="sent_requests">Sent Requests</string>
     <string name="sent_offers">Sent Offers</string>
-    <string name="request_received">Request Received</string>
-    <string name="offers_sent">Offers</string>
     <string name="delete_confirmation">Are you sure you want to cancel ?</string>
     <string name="help_from_them">Should others take help from them?</string>
     <string name="submit">Submit</string>
     <string name="toast_error_some_error">Some error occurred</string>
 
-    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
-    <string name="current_location">Current location</string>
-    <string name="label_no_data_available">No data available</string>
     <string name="you_are_here">You are here</string>
     <string name="change">Change</string>
     <string name="availability_condition">Note to requesters</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="select_time">Select time</string>
 
     <string name="comment">Comments</string>
     <string name="select_help_provider">Select Help Providers</string>
@@ -186,13 +176,7 @@
 
     <string name="request_confirmation" translatable="false"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
     <string name="offer_confirmation" translatable="false"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
-    <string name="toast_success_data_save_success">Data save success</string>
 
-
-    <string name="mapping_template"><![CDATA[was sent a help request on %1$s They will call you if they can help you.]]></string>
-
-    <string name="other_thing_template_request">%1$s;  %2$s</string>
-    <string name="other_thing_template_offer">%1$s;  %2$s</string>
     <string name="toast_delete_success">Cancel success</string>
     <string name="select_help_requester">Select Help Requesters</string>
     <string name="search_for_help_provider">Search for Help Provider</string>
@@ -218,7 +202,6 @@
     <string name="offer_send_to">Offers have been sent to</string>
     <string name="help_request_received_from">Help requests received from</string>
     <string name="request_help_text">They will call you if they can help you</string>
-    <string name="request_offer_receive_text">View availability &amp; time</string>
     <string name="view_details">View details</string>
     <string name="offer_help_text">They will call you if they need your help</string>
     <string name="call_them">Call them</string>
@@ -244,11 +227,8 @@
     <string name="yesterday">Yesterday</string>
     <string name="days_ago">%1$s days ago</string>
 
-
     <string name="hint_conditions">Enter constraints on timings, delivery, selection ... ANY info useful for the requestor to know.</string>
     <string name="request_call_him">They will call you, or you may call them</string>
-
-
 
     <integer-array name="gplus_colors">
         <item>@color/gplus_color_4</item>

@@ -3,7 +3,8 @@ package org.helpinout.billonlights.utils
 const val CALENDER_FORMAT = "yyyy-MM-dd hh:mm:ss"
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 const val APP_INSTALL_FORMAT = "dd-MM-yyyy hh:mm a"
-
+const val TERMS_OF_SERVICE = "https://helpinout.org/docs/terms_of_service.html"
+const val PRIVACY_POLICY = "https://helpinout.org/docs/privacy.html"
 const val SECOND_MILLIS = 1000
 const val MINUTE_MILLIS = 60 * SECOND_MILLIS
 const val HOUR_MILLIS = 60 * MINUTE_MILLIS

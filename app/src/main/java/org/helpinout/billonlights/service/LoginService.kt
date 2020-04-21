@@ -25,35 +25,28 @@ class LoginService(private val preferencesService: PreferencesService, private v
 
     private fun createLoginRequest(countryCode: String, mobileNumber: String): String {
         val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
-            val bodyJson = JSONObject()
 
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-                bodyJson.put("app_id", preferencesService.appId)
-                bodyJson.put("imei_no", preferencesService.imeiNumber)
-                bodyJson.put("os_type", "Android")
-                bodyJson.put("manufacturer_name", Build.MANUFACTURER + " " + Build.MODEL)
-                bodyJson.put("os_version", Build.VERSION.SDK_INT.toString())
-                bodyJson.put("firebase_token", preferencesService.firebaseId)
-                bodyJson.put("app_version", preferencesService.appVersion)
-                bodyJson.put("time_zone", getTimeZoneString())
-                bodyJson.put("date_time", currentDateTime())
-                bodyJson.put("country_code", countryCode)
-                bodyJson.put("mobile_no", mobileNumber)
-                mainData.put("data", bodyJson)
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
+        mainData.put("app_id", preferencesService.appId)
+        mainData.put("imei_no", preferencesService.imeiNumber)
+        mainData.put("app_version", preferencesService.appVersion)
+        mainData.put("date_time", currentDateTime())
+        val bodyJson = JSONObject()
+
+        FirebaseInstanceId.getInstance().token?.let {
+            preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
         }
+        bodyJson.put("app_id", preferencesService.appId)
+        bodyJson.put("imei_no", preferencesService.imeiNumber)
+        bodyJson.put("os_type", "Android")
+        bodyJson.put("manufacturer_name", Build.MANUFACTURER + " " + Build.MODEL)
+        bodyJson.put("os_version", Build.VERSION.SDK_INT.toString())
+        bodyJson.put("firebase_token", preferencesService.firebaseId)
+        bodyJson.put("app_version", preferencesService.appVersion)
+        bodyJson.put("time_zone", getTimeZoneString())
+        bodyJson.put("date_time", currentDateTime())
+        bodyJson.put("country_code", countryCode)
+        bodyJson.put("mobile_no", mobileNumber)
+        mainData.put("data", bodyJson)
         return mainData.toString()
     }
 

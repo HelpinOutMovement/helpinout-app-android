@@ -24,6 +24,7 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
         holder.itemView.tv_name.text = homeItem.user_detail?.first_name + " " + homeItem.user_detail?.last_name
         holder.itemView.distance.text = timeAgo(homeItem.date_time ?: "", holder.itemView.context) + "  |  " + holder.itemView.context.getString(R.string.distance_km, homeItem.user_detail!!.distance)
 
+        holder.itemView.tv_name.isChecked = homeItem.isSelected
         if (homeItem.user_detail?.rating_count != 0) {
             holder.itemView.rating_bar.rating = homeItem.user_detail?.rating_avg ?: 0F
         }

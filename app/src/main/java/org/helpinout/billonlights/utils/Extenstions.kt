@@ -27,6 +27,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -109,6 +111,14 @@ fun Activity.changeAppLanguage(languageCode: String) {
     conf.locale = locale
     configuration.setLayoutDirection(locale)
     resources.updateConfiguration(conf, dm)
+}
+
+fun Activity.openUrl(url: String) {
+    val builder = CustomTabsIntent.Builder()
+    builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorAccent))
+    builder.enableUrlBarHiding()
+    val tab = builder.build()
+    tab.launchUrl(this, Uri.parse(url))
 }
 
 fun Int.getName(): Int {

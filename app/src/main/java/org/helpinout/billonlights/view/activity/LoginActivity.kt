@@ -49,10 +49,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
             }
             tv_terms_service -> {
-
+                openUrl(TERMS_OF_SERVICE)
             }
             tv_privacy_policy -> {
-
+                openUrl(PRIVACY_POLICY)
             }
         }
     }
