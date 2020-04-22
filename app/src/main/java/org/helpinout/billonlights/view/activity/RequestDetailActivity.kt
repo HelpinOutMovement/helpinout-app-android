@@ -46,11 +46,11 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         initiator = intent.getIntExtra(INITIATOR, HELP_TYPE_REQUEST)
         activity_uuid = intent.getStringExtra(ACTIVITY_UUID) ?: ""
         isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
-
+        layout_bottom.show()
         if (offerType == HELP_TYPE_REQUEST) {
             if (initiator == HELP_TYPE_REQUEST) {//send request
                 supportActionBar?.title = getString(R.string.request_send_to)
-                layout_bottom.show()
+
             } else {//offer received
                 supportActionBar?.title = getString(R.string.help_offers_received_from)
             }
@@ -59,7 +59,6 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             if (initiator == HELP_TYPE_OFFER) {//send offer
                 supportActionBar?.title = getString(R.string.offer_send_to)
                 btn_cancel_request.setText(R.string.cancel_this_offer)
-                layout_bottom.show()
             } else {//request received from
                 supportActionBar?.title = getString(R.string.help_request_received_from)
             }

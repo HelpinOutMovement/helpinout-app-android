@@ -70,44 +70,35 @@ class LoginService(private val preferencesService: PreferencesService, private v
 
     private fun createRegistrationRequest(registration: Registration): String {
         val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
+        mainData.put("app_id", preferencesService.appId)
+        mainData.put("imei_no", preferencesService.imeiNumber)
+        mainData.put("app_version", preferencesService.appVersion)
+        mainData.put("date_time", currentDateTime())
 
-            val bodyJson = JSONObject()
+        val bodyJson = JSONObject()
 
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-
-                bodyJson.put("imei_no", preferencesService.imeiNumber)
-                bodyJson.put("os_type", "Android")
-                bodyJson.put("manufacturer_name", Build.MANUFACTURER + " " + Build.MODEL)
-                bodyJson.put("os_version", Build.VERSION.SDK_INT.toString())
-                bodyJson.put("firebase_token", preferencesService.firebaseId)
-                bodyJson.put("app_version", preferencesService.appVersion)
-                bodyJson.put("time_zone", getTimeZone())
-                bodyJson.put("country_code", preferencesService.countryCode)
-                bodyJson.put("mobile_no", preferencesService.mobileNumber)
-                bodyJson.put("first_name", registration.first_name)
-                bodyJson.put("time_zone", getTimeZoneString())
-                bodyJson.put("last_name", registration.last_name)
-                bodyJson.put("mobile_no_visibility", registration.mobile_no_visibility)
-                bodyJson.put("user_type", if (registration.org_type == 0) 1 else 2)
-                bodyJson.put("org_name", registration.org_name)
-                bodyJson.put("org_type", registration.org_type)
-                bodyJson.put("org_division", registration.org_division)
-                mainData.put("data", bodyJson)
-
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
+        FirebaseInstanceId.getInstance().token?.let {
+            preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
         }
+        bodyJson.put("imei_no", preferencesService.imeiNumber)
+        bodyJson.put("os_type", "Android")
+        bodyJson.put("manufacturer_name", Build.MANUFACTURER + " " + Build.MODEL)
+        bodyJson.put("os_version", Build.VERSION.SDK_INT.toString())
+        bodyJson.put("firebase_token", preferencesService.firebaseId)
+        bodyJson.put("app_version", preferencesService.appVersion)
+        bodyJson.put("time_zone", getTimeZone())
+        bodyJson.put("country_code", preferencesService.countryCode)
+        bodyJson.put("mobile_no", preferencesService.mobileNumber)
+        bodyJson.put("first_name", registration.first_name)
+        bodyJson.put("time_zone", getTimeZoneString())
+        bodyJson.put("last_name", registration.last_name)
+        bodyJson.put("mobile_no_visibility", registration.mobile_no_visibility)
+        bodyJson.put("user_type", if (registration.org_type == 0) 1 else 2)
+        bodyJson.put("org_name", registration.org_name)
+        bodyJson.put("org_type", registration.org_type)
+        bodyJson.put("org_division", registration.org_division)
+        mainData.put("data", bodyJson)
+
         return mainData.toString()
     }
 

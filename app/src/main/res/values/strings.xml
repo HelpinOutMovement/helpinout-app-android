@@ -97,6 +97,15 @@
     <string name="language">Language</string>
     <string name="title_about">About</string>
     <string name="toast_press_again_to_exit">Please click BACK again to exit</string>
+    <string name="you_are_here">You are here</string>
+    <string name="change">Change</string>
+    <string name="enable_location">Please enable your location without location app will not work</string>
+    <string name="label_app_need_location_permission">Application need location permission, please click the below button to allow permission</string>
+    <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
+    <string name="message_need_permission">Need Permissions</string>
+    <string name="title_go_to_setting">GOTO SETTINGS</string>
+    <string name="label_location">Enable location</string>
+    <string name="label_permission">Allow permission</string>
 
     <!-- End Home screen -->
 
@@ -140,65 +149,39 @@
     <string name="toolbar_offer_help_with">Offer help with...</string>
     <string name="request_near_me">%1$s requests near me</string>
     <string name="request_total">%1$s Total</string>
+
     <!-- End Offer help screen -->
+
+
+    <!-- Need help screen -->
 
     <string name="hint_enter_item">Enter items</string>
     <string name="hint_qty">Qty</string>
-
     <string name="add_more_items">"+ Add more "</string>
     <string name="we_can_pay">We Can Pay</string>
     <string name="we_can_not_pay">We Cannot Pay</string>
-
-
-    <string name="alert_msg_please_wait">Please wait...</string>
-    <string name="we_change">We Charge</string>
-    <string name="for_free">For Free</string>
     <string name="volunteers">Volunteers</string>
     <string name="technical_personnel">Technical Personnel</string>
     <string name="hint_how_many_people">How many people ?</string>
+    <!-- End Need help screen -->
+
+    <!-- Offer help screen -->
+
+    <string name="we_change">We Charge</string>
+    <string name="for_free">For Free</string>
+    <string name="hint_conditions">Enter constraints on timings, delivery, selection ... ANY info useful for the requestor to know.</string>
+    <!-- End Offer help screen -->
+
+    <string name="alert_msg_please_wait">Please wait...</string>
+
+
+    <!-- Offer Detail screen -->
     <string name="rate_report">Rate / Report</string>
     <string name="canceled">Cancel</string>
-    <string name="sent_requests">Sent Requests</string>
-    <string name="sent_offers">Sent Offers</string>
-    <string name="delete_confirmation">Are you sure you want to cancel ?</string>
-    <string name="help_from_them">Should others take help from them?</string>
-    <string name="submit">Submit</string>
-    <string name="toast_error_some_error">Some error occurred</string>
-
-    <string name="you_are_here">You are here</string>
-    <string name="change">Change</string>
-    <string name="availability_condition">Note to requesters</string>
-
-    <string name="comment">Comments</string>
-    <string name="select_help_provider">Select Help Providers</string>
-    <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
-    <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
-    <string name="send_request">Send Request</string>
-    <string name="loading">Loading...</string>
-
     <string name="request_confirmation" translatable="false"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
     <string name="offer_confirmation" translatable="false"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
-
+    <string name="availability_condition">Note to requesters</string>
     <string name="toast_delete_success">Cancel success</string>
-    <string name="select_help_requester">Select Help Requesters</string>
-    <string name="search_for_help_provider">Search for Help Provider</string>
-    <string name="search_for_help_requester">Search for Requesters</string>
-    <string name="rating_success">Rating success</string>
-
-    <string name="enable_location">Please enable your location without location app will not work</string>
-    <string name="label_app_need_location_permission">Application need location permission, please click the below button to allow permission</string>
-    <string name="message_permission">This app needs permission to use this feature. You can grant them in app settings.</string>
-    <string name="message_need_permission">Need Permissions</string>
-    <string name="title_go_to_setting">GOTO SETTINGS</string>
-    <string name="label_location">Enable location</string>
-    <string name="label_permission">Allow permission</string>
-    <string name="no_help_requeter">Currently there are no help-requesters in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
-    <string name="no_help_provider">Currently there are no help-providers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
-    <string name="please_select_provider_helper">Please select provider or helper first</string>
-    <string name="someone_accept_offer">%1$s has responded to your offer! Please follow up with them.</string>
-    <string name="someone_receive_your_request">%1$s has responded to your request! Please follow up with them</string>
-    <string name="total_offers">%1$s Offers</string>
-    <string name="total_requests">%1$s Requests</string>
     <string name="request_send_to">Requests have been sent to</string>
     <string name="help_offers_received_from">Help offers received from</string>
     <string name="offer_send_to">Offers have been sent to</string>
@@ -207,6 +190,23 @@
     <string name="view_details">View details</string>
     <string name="offer_help_text">They will call you if they need your help</string>
     <string name="call_them">Call them</string>
+    <!-- End Offer Detail screen -->
+
+    <!-- Rate report screen -->
+    <string name="comment">Comments</string>
+    <string name="submit">Submit</string>
+    <string name="help_from_them">Should others take help from them?</string>
+    <string name="rating_success">Rating success</string>
+    <!-- End Rate report screen -->
+
+    <!-- My Offers screen -->
+
+    <string name="sent_requests">Sent Requests</string>
+    <string name="sent_offers">Sent Offers</string>
+    <string name="delete_confirmation">Are you sure you want to cancel ?</string>
+    <string name="total_offers">%1$s Offers</string>
+    <string name="total_requests">%1$s Requests</string>
+
     <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map]]></string>
     <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
 
@@ -218,19 +218,48 @@
     <string name="offer_send_success">Offer send success</string>
     <string name="note">Note:</string>
 
-    <string name="send_offer">Send offer</string>
+    <!-- End My offers screen -->
+
+
+    <!-- Offerer/Requester chooser screen -->
+    <string name="select_help_provider">Select Help Providers</string>
+    <string name="select_help_requester">Select Help Requesters</string>
+    <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
+    <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
+    <string name="send_request">Send Request</string>
+    <string name="search_for_help_provider">Search for Help Provider</string>
+    <string name="search_for_help_requester">Search for Requesters</string>
+    <string name="no_help_requeter">Currently there are no help-requesters in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="no_help_provider">Currently there are no help-providers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="please_select_provider_helper">Please select provider or helper first</string>
     <string name="distance_km">%1$skms away</string>
+    <string name="send_offer">Send offer</string>
+
+    <!-- End Offerer/Requester chooser screen -->
+
+
+    <!-- About screen -->
+
     <string name="label_app_version">App version: %1$s</string>
     <string name="version_date">Version date: %1$s</string>
     <string name="app_install_date">App install date: %1$s</string>
+
+    <!-- End About screen -->
+
+    <!-- Bottom Sheet -->
     <string name="can_help_with">Can help you with ...</string>
     <string name="need_help_with">Needs help with...</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="days_ago">%1$s days ago</string>
 
-    <string name="hint_conditions">Enter constraints on timings, delivery, selection ... ANY info useful for the requestor to know.</string>
+    <!-- End Bottom Sheet -->
+
     <string name="request_call_him">They will call you, or you may call them</string>
+    <string name="toast_error_some_error">Some error occurred</string>
+    <string name="loading">Loading...</string>
+    <string name="someone_accept_offer">%1$s has responded to your offer! Please follow up with them.</string>
+    <string name="someone_receive_your_request">%1$s has responded to your request! Please follow up with them</string>
 
     <integer-array name="gplus_colors">
         <item>@color/gplus_color_4</item>
