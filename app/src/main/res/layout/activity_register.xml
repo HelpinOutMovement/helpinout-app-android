@@ -11,10 +11,6 @@
         layout="@layout/toolbar"
         android:visibility="gone" />
 
-    <include
-        android:id="@+id/layout_logo"
-        layout="@layout/layout_logo"
-        android:layout_gravity="center" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,6 +24,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="@dimen/_20sdp">
+
+            <include
+                android:id="@+id/layout_logo"
+                layout="@layout/layout_logo"
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/tv_register"

@@ -51,7 +51,6 @@
             android:digits="0123456789"
             android:imeOptions="actionDone"
             android:inputType="number"
-            android:maxLength="10"
             android:maxLines="1"
             android:paddingStart="@dimen/_6sdp"
             android:paddingTop="@dimen/_2sdp"

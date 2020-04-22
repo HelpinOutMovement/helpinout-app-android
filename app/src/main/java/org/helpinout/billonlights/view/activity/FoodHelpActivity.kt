@@ -209,7 +209,9 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == showMapCode) {
-            finish()
+            val returnIntent = Intent()
+            setResult(Activity.RESULT_OK, returnIntent)
+            finishWithSlideAnimation()
         }
     }
 
@@ -223,7 +225,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         val suggestionDataAsString = Gson().toJson(suggestionData)
         startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
         overridePendingTransition(R.anim.enter, R.anim.exit)
-        finishWithFade()
     }
 
     override fun getLayout(): Int {

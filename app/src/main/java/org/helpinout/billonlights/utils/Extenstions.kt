@@ -35,6 +35,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.view.toast.Toasty
 import org.jetbrains.anko.alert
@@ -177,6 +178,13 @@ fun Activity.showSettingsDialog() {
             openSettings()
         }
     }.show()
+}
+
+fun String.getMobileNumberLength(): Int {
+    val phoneNumberUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
+    val isoCode: String = phoneNumberUtil.getRegionCodeForCountryCode(this.toInt())
+    val exampleNumber: String = java.lang.String.valueOf(phoneNumberUtil.getExampleNumber(isoCode).getNationalNumber())
+    return exampleNumber.length
 }
 
 fun Activity.openSettings() {

@@ -2,12 +2,22 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <include
         android:id="@+id/layout_logo"
         layout="@layout/layout_logo" />
+
+    <TextView
+        android:id="@+id/tv_otp_sms"
+        style="@style/StyleTextView"
+        android:layout_marginTop="@dimen/_25sdp"
+        tools:text="@string/otp_send_to"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
 
     <TextView
         android:id="@+id/tv_otp"
@@ -16,7 +26,7 @@
         android:text="@string/label_enter_otp"
         android:textAlignment="center"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_logo" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_otp_sms" />
 
 
     <org.helpinout.billonlights.view.view.OtpEditText
@@ -49,5 +59,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_timer" />
+
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
+        android:id="@+id/tv_change_phone_number"
+        style="@style/StyleTextViewNormal"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/change_phone_number"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

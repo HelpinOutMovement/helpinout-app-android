@@ -73,9 +73,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         tv_change.setOnClickListener {
             startLocationPicker()
         }
-        Handler().postDelayed({
-            tvInstruction?.hide()
-        }, 5000)
     }
 
 
@@ -88,12 +85,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         try {
-            mMap!!.setOnMarkerClickListener { marker ->
-                if (marker.isInfoWindowShown) {
-                    marker.hideInfoWindow()
-                } else {
-                    marker.showInfoWindow()
-                }
+            mMap!!.setOnMarkerClickListener { _ ->
                 true
             }
             if (preferencesService.latitude !== 0.0) {

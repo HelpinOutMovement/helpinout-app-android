@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.TaskExecutors
@@ -26,9 +27,9 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.concurrent.TimeUnit
 
-class SMSVerificationActivity : BaseActivity() {
+class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
 
-    private  var dialog: ProgressDialog?=null
+    private var dialog: ProgressDialog? = null
     private var timer: CountDownTimer? = null
     private var resendToken: String? = null
     private var mAuth: FirebaseAuth? = null
@@ -40,28 +41,11 @@ class SMSVerificationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
+        tv_otp_sms.text = getString(R.string.otp_send_to, preferencesService.countryCode  + preferencesService.mobileNumber)
         requestCode()
-        btn_verify.setOnClickListener {
-            hideKeyboard()
-            if (edt_otp.text.toString().isNotEmpty()) {
-                verifyCode(edt_otp.text.toString())
-            } else {
-                toastError(R.string.toast_error_please_enter_otp)
-            }
-        }
-        tv_timer.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-                return@setOnClickListener
-            }
-            mLastClickTime = SystemClock.elapsedRealtime()
-
-            retry++
-            if (retry >= maxTry) {
-                toastError(getString(R.string.you_can_try_max_try, maxTry))
-            } else if (isTimerEnd) {
-                requestCode()
-            }
-        }
+        btn_verify.setOnClickListener(this)
+        tv_timer.setOnClickListener(this)
+        tv_change_phone_number.setOnClickListener(this)
     }
 
     private fun requestCode() {
@@ -196,5 +180,34 @@ class SMSVerificationActivity : BaseActivity() {
 
     override fun getLayout(): Int {
         return R.layout.activity_sms_verification
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            tv_change_phone_number -> {
+                finishWithFade()
+            }
+            tv_timer -> {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+                    return
+                }
+                mLastClickTime = SystemClock.elapsedRealtime()
+
+                retry++
+                if (retry >= maxTry) {
+                    toastError(getString(R.string.you_can_try_max_try, maxTry))
+                } else if (isTimerEnd) {
+                    requestCode()
+                }
+            }
+            btn_verify -> {
+                hideKeyboard()
+                if (edt_otp.text.toString().isNotEmpty()) {
+                    verifyCode(edt_otp.text.toString())
+                } else {
+                    toastError(R.string.toast_error_please_enter_otp)
+                }
+            }
+        }
     }
 }

@@ -70,6 +70,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         location.latitude = suggestionData?.latitude ?: preferencesService.latitude
         location.longitude = suggestionData?.longitude ?: preferencesService.longitude
 
+
+
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment?.getMapAsync(this)
 
@@ -141,8 +143,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
                 mMap?.let {
                     mMap!!.clear()
-                    val latLng = LatLng(suggestionData!!.latitude, suggestionData!!.longitude)
-                    val address = getAddress(latLng.latitude, latLng.longitude)
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    val address = getAddress(location.latitude, location.longitude)
                     showCurrentLocation(latLng, address)
                     showPinsOnMap(bottomItemList, if (helpType == HELP_TYPE_REQUEST) R.drawable.ic_help_provider else R.drawable.ic_help_requester)
                 }
@@ -163,32 +165,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    data?.let {
-                        val place = Autocomplete.getPlaceFromIntent(data)
-                        val latLing = place.latLng
-                        latLing?.let {
-                            suggestionData?.latitude = latLing.latitude
-                            suggestionData?.longitude = latLing.longitude
-                            mMap?.clear()
-                            showCurrentLocation(it, place.address ?: "")
-                            detectRadius()
-                        }
-                    }
-                }
-                AutocompleteActivity.RESULT_ERROR -> {
-                }
-                Activity.RESULT_CANCELED -> {
-                }
-            }
-        }
-    }
-
 
     override fun onPermissionAllow() {
         buildGoogleApiClient()
@@ -223,7 +199,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap?.uiSettings?.isZoomControlsEnabled = true
-        mMap?.uiSettings?.setAllGesturesEnabled(false)
+        mMap?.uiSettings?.setAllGesturesEnabled(true)
         val latLng = LatLng(location.latitude, location.longitude)
         tv_toolbar_address?.text = getAddress(location.latitude, location.longitude)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
@@ -248,6 +224,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         mMap?.setOnCameraIdleListener {
             mMap?.let {
                 val visibleRegion = it.projection.visibleRegion
+                val midLatLng = mMap!!.cameraPosition.target
+                suggestionData?.latitude = midLatLng.latitude
+                suggestionData?.longitude = midLatLng.longitude
                 val farRight: LatLng = visibleRegion.farRight
                 val farLeft: LatLng = visibleRegion.farLeft
                 radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
