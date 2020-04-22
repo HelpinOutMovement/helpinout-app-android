@@ -12,7 +12,7 @@ class Mapping {
     var mapping_initiator: Int? = 0
 }
 
-@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid"], unique = true)])
+@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid","mapping_initiator"], unique = true)])
 class MappingDetail {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

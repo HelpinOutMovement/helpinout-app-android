@@ -6,10 +6,7 @@ import android.os.Handler
 import android.provider.Settings
 import org.helpinout.billonlights.BuildConfig.DEBUG
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.INSTRUCTION_STEP
-import org.helpinout.billonlights.utils.LANGUAGE_STEP
-import org.helpinout.billonlights.utils.LOGIN_STEP
-import org.helpinout.billonlights.utils.REGISTRATION_STEP
+import org.helpinout.billonlights.utils.*
 import org.jetbrains.anko.startActivity
 
 class SplashActivity : BaseActivity() {
@@ -19,6 +16,8 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         preferencesService.imeiNumber = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         try {
             val pInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
