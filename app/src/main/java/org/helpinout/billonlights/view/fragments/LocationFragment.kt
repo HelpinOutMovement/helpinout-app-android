@@ -141,7 +141,7 @@ abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.
     override fun onDestroy() {
         super.onDestroy()
         try {
-            if (mGoogleApiClient != null) {
+            if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {
@@ -151,7 +151,7 @@ abstract class LocationFragment : Fragment(), LocationListener, GoogleApiClient.
 
     fun stopLocationUpdate() {
         try {
-            if (mGoogleApiClient != null) {
+            if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {

@@ -41,9 +41,7 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         holder.itemView.tv_rate_report.setOnClickListener {
             onRateReportClick(item)
         }
-        holder.itemView.tv_rate_report.setOnClickListener {
-            onRateReportClick(item)
-        }
+
         holder.itemView.tv_send_requests.setOnClickListener {
             onSendRequestClick(offerType, initiator, helpType, item)
         }

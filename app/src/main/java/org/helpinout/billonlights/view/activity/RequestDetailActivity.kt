@@ -134,6 +134,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             dialog.dismiss()
             if (it.first != null) {
                 toastSuccess(R.string.rating_success)
+                checkOfferList()
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)

@@ -4,6 +4,8 @@ import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import com.avneesh.crashreporter.CrashReporter
+import com.crashlytics.android.Crashlytics
 import org.helpinout.billonlights.BuildConfig.DEBUG
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.*
@@ -16,7 +18,6 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         preferencesService.imeiNumber = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         try {

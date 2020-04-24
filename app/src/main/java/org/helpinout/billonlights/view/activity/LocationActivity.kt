@@ -25,7 +25,6 @@ import com.karumi.dexter.listener.single.PermissionListener
 import org.helpinout.billonlights.utils.*
 
 abstract class LocationActivity : BaseActivity(), LocationListener, OnPermissionListener, GoogleApiClient.ConnectionCallbacks, ResultCallback<LocationSettingsResult> {
-
     var mGoogleApiClient: GoogleApiClient? = null
     private val TAG = "MoreActivity"
     private var mLocationSettingsRequest: LocationSettingsRequest? = null
@@ -149,7 +148,7 @@ abstract class LocationActivity : BaseActivity(), LocationListener, OnPermission
     override fun onDestroy() {
         super.onDestroy()
         try {
-            if (mGoogleApiClient != null) {
+            if (mGoogleApiClient != null&& mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {
@@ -157,7 +156,7 @@ abstract class LocationActivity : BaseActivity(), LocationListener, OnPermission
         }
         try {
             unregisterReceiver(locationServicesChangeReceiver)
-            if (mGoogleApiClient != null) {
+            if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {
@@ -167,7 +166,7 @@ abstract class LocationActivity : BaseActivity(), LocationListener, OnPermission
 
     fun stopLocationUpdate() {
         try {
-            if (mGoogleApiClient != null) {
+            if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {

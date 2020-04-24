@@ -204,7 +204,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         tv_toolbar_address?.text = getAddress(location.latitude, location.longitude)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
         if (mMap != null) {
-            updateLocation()
+            try {
+                updateLocation()
+            }catch (e:Exception){
+                Timber.d("")
+            }
         }
     }
 

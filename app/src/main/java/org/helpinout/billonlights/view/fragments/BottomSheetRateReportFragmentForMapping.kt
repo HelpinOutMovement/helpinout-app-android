@@ -10,6 +10,7 @@ import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 
+
 class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private val onSubmitClick: (MappingDetail, String, Int, String) -> Unit) : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,4 +33,5 @@ class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private v
         }
         tv_name.text = item.first_name + " " + item.last_name
     }
+
 }

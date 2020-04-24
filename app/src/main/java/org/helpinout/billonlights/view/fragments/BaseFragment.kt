@@ -39,26 +39,13 @@ abstract class BaseFragment : Fragment() {
             }
             val suggestionDataAsString = Gson().toJson(suggestionData)
             activity!!.startActivity<HelpProviderRequestersActivity>(SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to item.activity_type)
-        } else {
-            val rateReport = BottomSheetRateReportFragment(item, onSubmitClick = { _, rating, recommendToOther, comments -> onSubmitClick(item, rating, recommendToOther, comments) })
-            rateReport.show(childFragmentManager, null)
         }
+//        else {
+//            val rateReport = BottomSheetRateReportFragment(item, onSubmitClick = { _, rating, recommendToOther, comments -> onSubmitClick(item, rating, recommendToOther, comments) })
+//            rateReport.show(childFragmentManager, null)
+//        }
     }
 
-    private fun onSubmitClick(item: AddCategoryDbItem, rating: String, recommendToOther: Int, comments: String) {
-        val dialog = activity?.indeterminateProgressDialog(R.string.alert_msg_please_wait)
-        dialog?.show()
-        val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.makeRating(item.parent_uuid, item.activity_uuid, offerType, rating, recommendToOther, comments).observe(this, Observer {
-            dialog?.dismiss()
-            if (it.first != null) {
-                toastSuccess(R.string.rating_success)
-            } else {
-                toastError(it.second)
-            }
-        })
-    }
 
     fun onSendRequestClick(offerType: Int, initiator: Int, helpType: Int, item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
