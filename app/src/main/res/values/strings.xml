@@ -4,7 +4,7 @@
     <!-- Splash screen -->
 
     <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
-    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
+    <string name="all_right_reserved"  translatable="false">© Helpinout. All rights reserved.</string>
     <!--End Splash screen -->
 
 
@@ -19,8 +19,8 @@
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_login">Login / Signup</string>
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
-    <string name="terms_Of_service" translatable="false"><![CDATA[Terms of Service]]></string>
-    <string name="privacy_policy" translatable="false"><![CDATA[Privacy Policy]]></string>
+    <string name="terms_Of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string name="toast_error_phone_number">Please enter phone number</string>
     <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
     <!-- End Login screen -->
@@ -158,7 +158,7 @@
 
     <string name="hint_enter_item">Enter items</string>
     <string name="hint_qty">Qty</string>
-    <string name="add_more_items">"+ Add more "</string>
+    <string name="add_more_items">+ Add more </string>
     <string name="we_can_pay">We Can Pay</string>
     <string name="we_can_not_pay">We Cannot Pay</string>
     <string name="volunteers">Volunteers</string>
@@ -179,8 +179,8 @@
     <!-- Offer Detail screen -->
     <string name="rate_report">Rate / Report</string>
     <string name="canceled">Cancel</string>
-    <string name="request_confirmation" translatable="false"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
-    <string name="offer_confirmation" translatable="false"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
+    <string name="request_confirmation"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
+    <string name="offer_confirmation"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
     <string name="availability_condition">Note to requesters</string>
     <string name="toast_delete_success">Cancel success</string>
     <string name="request_send_to">Requests have been sent to</string>
@@ -261,9 +261,5 @@
     <string name="loading">Loading...</string>
     <string name="someone_accept_offer">%1$s has responded to your offer! Please follow up with them.</string>
     <string name="someone_receive_your_request">%1$s has responded to your request! Please follow up with them</string>
-
-    <integer-array name="gplus_colors">
-        <item>@color/gplus_color_4</item>
-    </integer-array>
 
 </resources>

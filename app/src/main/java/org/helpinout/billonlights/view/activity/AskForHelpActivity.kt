@@ -21,6 +21,7 @@ class AskForHelpActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setTitle(R.string.toolbar_need_help_with)
         mRecyclerView
     }
 

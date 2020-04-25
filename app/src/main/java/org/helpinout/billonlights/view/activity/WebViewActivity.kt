@@ -34,7 +34,7 @@ class WebViewActivity : BaseActivity() {
         val postData = "imei_no=" + URLEncoder.encode(preferencesService.imeiNumber, "UTF-8") + "&app_version=" + URLEncoder.encode(preferencesService.appVersion, "UTF-8") + "&app_id=" + URLEncoder.encode(preferencesService.appId, "UTF-8")
         webView.webViewClient = AppWebViewClients(progress)
         webView.webChromeClient = MyWebChromeClient()
-        webView.postUrl(FEEDBACK_URL, postData.toByteArray())
+        webView.loadUrl(FEEDBACK_URL)
         val webSettings = webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true
@@ -71,7 +71,7 @@ class WebViewActivity : BaseActivity() {
                 } catch (e: Exception) {
 
                 }
-            }, 2000)
+            }, 100)
         }
     }
 

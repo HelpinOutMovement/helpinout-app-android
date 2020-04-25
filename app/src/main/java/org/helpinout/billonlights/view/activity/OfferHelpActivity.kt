@@ -28,6 +28,7 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.setTitle(R.string.toolbar_offer_help_with)
         checkLocationPermission()
         btnPermission.setOnClickListener(this)
         btnPermission.setOnClickListener(this)

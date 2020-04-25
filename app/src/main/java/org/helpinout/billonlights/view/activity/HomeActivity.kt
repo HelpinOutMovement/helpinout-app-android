@@ -85,6 +85,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         checkOfferList()
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
+        setLanguage()
     }
 
 
@@ -126,7 +127,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.navigation_home, R.id.nav_home, R.id.nav_ask_help, R.id.nav_offer_help -> {
+            R.id.navigation_home, R.id.nav_home-> {
                 if (selectedItem != 0) {
                     selectedItem = 0
                     layout_toolbar.hide()
@@ -190,23 +191,98 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
 
-            R.id.nav_language -> {
-                startActivityForResult<LanguageChooserActivity>(updateLanguage, UPDATE_LANGAUGE to true)
-                overridePendingTransition(R.anim.enter, R.anim.exit)
-            }
-
             R.id.nav_about -> {
                 startActivity<AboutActivity>()
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             R.id.nav_feedback -> {
-//                startActivity<WebViewActivity>()
-                openUrl(FEEDBACK_URL)
+                startActivity<WebViewActivity>()
                 overridePendingTransition(R.anim.enter, R.anim.exit)
+            }
+            R.id.nav_english -> {
+                checkLanguageItem()
+                val english = nav_view.menu.findItem(R.id.nav_english)
+                english.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != ENGLISH_CODE) {
+                    preferencesService.defaultLanguage = ENGLISH_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
+            }
+
+            R.id.nav_hindi -> {
+                checkLanguageItem()
+                val hindi = nav_view.menu.findItem(R.id.nav_hindi)
+                hindi.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != HINDI_CODE) {
+                    preferencesService.defaultLanguage = HINDI_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
+            }
+
+            R.id.nav_kannad -> {
+                checkLanguageItem()
+                val kannad = nav_view.menu.findItem(R.id.nav_kannad)
+                kannad.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != KANNAD_CODE) {
+                    preferencesService.defaultLanguage = KANNAD_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
+            }
+
+            R.id.nav_marathi -> {
+                checkLanguageItem()
+                val marathi = nav_view.menu.findItem(R.id.nav_marathi)
+                marathi.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != MARATHI_CODE) {
+                    preferencesService.defaultLanguage = MARATHI_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
+            }
+
+            R.id.nav_gujrati -> {
+                checkLanguageItem()
+                val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
+                gujrati.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != GUJRATI_CODE) {
+                    preferencesService.defaultLanguage = GUJRATI_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
             }
         }
         closeDrawer()
         return false
+    }
+
+    private fun checkLanguageItem() {
+        val english = nav_view.menu.findItem(R.id.nav_english)
+        english.isChecked = false
+        val hindi = nav_view.menu.findItem(R.id.nav_hindi)
+        hindi.isChecked = false
+
+        val kannad = nav_view.menu.findItem(R.id.nav_kannad)
+        kannad.isChecked = false
+
+        val marathi = nav_view.menu.findItem(R.id.nav_marathi)
+        marathi.isChecked = false
+
+        val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
+        gujrati.isChecked = false
+
+        nav_view.menu.findItem(R.id.nav_english).actionView = null
+        nav_view.menu.findItem(R.id.nav_hindi).actionView = null
+        nav_view.menu.findItem(R.id.nav_kannad).actionView = null
+        nav_view.menu.findItem(R.id.nav_marathi).actionView = null
+        nav_view.menu.findItem(R.id.nav_gujrati).actionView = null
     }
 
     private fun restartActivity() {
@@ -226,11 +302,6 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val my_offers = nav_view.menu.findItem(R.id.nav_my_offers)
         my_offers.isChecked = false
 
-        val ask_help = nav_view.menu.findItem(R.id.nav_ask_help)
-        ask_help.isChecked = false
-
-        val offer_help = nav_view.menu.findItem(R.id.nav_offer_help)
-        offer_help.isChecked = false
 
         val profiles = nav_view.menu.findItem(R.id.nav_profiles)
         profiles.isChecked = false
@@ -245,18 +316,48 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         nav_view.menu.findItem(R.id.nav_home).actionView = null
         nav_view.menu.findItem(R.id.nav_my_request).actionView = null
         nav_view.menu.findItem(R.id.nav_my_offers).actionView = null
-        nav_view.menu.findItem(R.id.nav_ask_help).actionView = null
-        nav_view.menu.findItem(R.id.nav_offer_help).actionView = null
         nav_view.menu.findItem(R.id.nav_profiles).actionView = null
         nav_view.menu.findItem(R.id.nav_about).actionView = null
         nav_view.menu.findItem(R.id.nav_feedback).actionView = null
     }
 
+    private fun setLanguage() {
+        when (preferencesService.defaultLanguage) {
+            ENGLISH_CODE -> {
+                val english = nav_view.menu.findItem(R.id.nav_english)
+                english.isChecked = true
+                nav_view.menu.findItem(R.id.nav_english).actionView = getMenuImageView()
+            }
+            HINDI_CODE -> {
+                val hindi = nav_view.menu.findItem(R.id.nav_hindi)
+                hindi.isChecked = true
+                nav_view.menu.findItem(R.id.nav_hindi).actionView = getMenuImageView()
+            }
+            KANNAD_CODE -> {
+                val kannad = nav_view.menu.findItem(R.id.nav_kannad)
+                kannad.isChecked = true
+                nav_view.menu.findItem(R.id.nav_kannad).actionView = getMenuImageView()
+            }
+            MARATHI_CODE -> {
+                val marathi = nav_view.menu.findItem(R.id.nav_marathi)
+                marathi.isChecked = true
+                nav_view.menu.findItem(R.id.nav_marathi).actionView = getMenuImageView()
+            }
+            GUJRATI_CODE -> {
+                val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
+                gujrati.isChecked = true
+                nav_view.menu.findItem(R.id.nav_gujrati).actionView = getMenuImageView()
+            }
+        }
+    }
 
     private fun getMenuDotView(): View {
         return layoutInflater.inflate(R.layout.drawer_dot, null)
     }
 
+    private fun getMenuImageView(): View {
+        return layoutInflater.inflate(R.layout.menu_image, null)
+    }
 
     private fun loadFragment(fragment: Fragment): Boolean {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()

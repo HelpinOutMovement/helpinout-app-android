@@ -1,0 +1,234 @@
+<resources>
+    <string name="app_name">ಹೆಲ್ಪಿನ್ ut ಟ್</string>
+
+    
+
+    <string name="label_app_name" translatable="false">&lt;font color=#EE6B6B&gt;ಸಹಾಯ&lt;/font&gt;&lt;font color=#4F5065&gt;.ಟ್&lt;/font&gt; </string>
+    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
+
+    
+    <string name="website_name" translatable="false">www.helpinout.org</string>
+    <string name="instruction_text" translatable="false">&lt;font color=#EE6B6B&gt;ಸಹಾಯ ಕೇಳಿ&lt;/font&gt; &lt;br/&gt; ಸಹಾಯವನ್ನು ನೀಡಿ&lt;br/&gt;&lt;br/&gt; ಸಹಾಯ-ಪೂರೈಕೆದಾರರನ್ನು ಹುಡುಕಿ ಮತ್ತು ಸಹಾಯ- &lt;br/&gt;ನಿಮ್ಮ ಸುತ್ತಲಿನ ವಿನಂತಿಗಳು</string>
+    <string name="btn_continue">ಮುಂದುವರಿಸಿ</string>
+
+    
+    <string name="label_enter_your_mobile_no">ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="label_login">ಲಾಗಿನ್ / ಸೈನ್ ಅಪ್</string>
+    <string name="by_signing_you_are_agree">ಸೈನ್ ಅಪ್ ಮಾಡುವ ಮೂಲಕ ನೀವು ಒಪ್ಪುತ್ತೀರಿ</string>
+    <string name="terms_Of_service">ಸೇವಾ ನಿಯಮಗಳು</string>
+    <string name="privacy_policy">ಗೌಪ್ಯತಾ ನೀತಿ</string>
+    <string name="toast_error_phone_number">ದಯವಿಟ್ಟು ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="toast_error_invalid_phone_number">ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
+    
+
+
+    
+    <string name="label_enter_otp">ಒಟಿಪಿ ನಮೂದಿಸಿ</string>
+    <string name="button_verify">ಪರಿಶೀಲಿಸಿ</string>
+    <string name="retry_msg">ಒಟಿಪಿಯನ್ನು ಮರುಹೊಂದಿಸಿ</string>
+    <string name="toast_error_please_enter_otp">ದಯವಿಟ್ಟು ಒಟಿಪಿ ನಮೂದಿಸಿ</string>
+    <string name="you_can_try_max_try">ನೀವು ಗರಿಷ್ಠ %1$s otp ಅನ್ನು ಪ್ರಯತ್ನಿಸಬಹುದು</string>
+    <string name="otp_send_success">ಒಟಿಪಿ ಯಶಸ್ಸನ್ನು ಕಳುಹಿಸುತ್ತದೆ</string>
+    <string name="otp_description">ಒಟಿಪಿ ಸಂದೇಶವನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಪರಿಶೀಲಿಸಿ</string>
+    <string name="otp_send_to">OTP ಕೋಡ್ ಅನ್ನು %1$s ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ</string>
+    <string name="change_phone_number">ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಬದಲಾಯಿಸಿ</string>
+    
+
+
+    
+
+    <string name="label_register">ನೋಂದಣಿ</string>
+    <string name="label_first_name">ಮೊದಲ ಹೆಸರು</string>
+    <string name="label_last_name">ಕೊನೆಯ ಹೆಸರು</string>
+    <string name="label_visible_text">ಸಹಾಯದ ಬಳಕೆದಾರರಿಗೆ ನನ್ನ ಸಂಪರ್ಕ ಸಂಖ್ಯೆ ಗೋಚರಿಸಲಿ.</string>
+    <string name="label_representing_as_org">ನಾನು ಸಂಸ್ಥೆಯನ್ನು ಪ್ರತಿನಿಧಿಸುತ್ತಿದ್ದೇನೆ</string>
+    <string name="label_org_name">ಸಂಸ್ಥೆಯ ಹೆಸರು</string>
+    <string name="label_unit_division">ಘಟಕ / ವಿಭಾಗ / ಕಾರ್ಯ / ಸ್ಥಳ</string>
+    <string name="label_start">ಪ್ರಾರಂಭಿಸಿ</string>
+
+    <string name="toast_error_please_enter_first_name">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಮೊದಲ ಹೆಸರನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="toast_error_please_enter_last_name">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಕೊನೆಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="toast_error_please_enter_organization_name">ದಯವಿಟ್ಟು ಸಂಸ್ಥೆಯ ಹೆಸರನ್ನು ನಮೂದಿಸಿ</string>
+
+    <string name="toast_error_please_enter_unit_division">ದಯವಿಟ್ಟು ಘಟಕ / ವಿಭಾಗ / ಕಾರ್ಯ / ಸ್ಥಳವನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="toast_error_please_choose_org_type">ದಯವಿಟ್ಟು ಸಂಸ್ಥೆಯ ಪ್ರಕಾರವನ್ನು ಆರಿಸಿ</string>
+    <string name="toast_success_registration_success">ನೋಂದಣಿ ಯಶಸ್ಸು</string>
+
+    <string-array name="org_types">
+        <item>ಸಂಸ್ಥೆಯ ಪ್ರಕಾರ</item>
+        <item>ವಾಣಿಜ್ಯ ಸಂಸ್ಥೆ</item>
+        <item>ಸಮುದಾಯ ಸಂಸ್ಥೆ</item>
+        <item>ಸರ್ಕಾರ</item>
+        <item>ಆರೋಗ್ಯ ಸಂಸ್ಥೆ</item>
+        <item>ಲಾಭರಹಿತ ಸಂಸ್ಥೆ</item>
+        <item>ಇತರೆ</item>
+    </string-array>
+
+    <integer-array name="org_types_index">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>0</item>
+    </integer-array>
+
+    
+    <string name="update_profile">ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಿ</string>
+    <string name="toast_success_update_success">ಪ್ರೊಫೈಲ್ ನವೀಕರಣ ಯಶಸ್ಸು</string>
+
+    
+    <string name="identify_location">ಮೇಲಿನ ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ಗುರುತಿಸಿ, ನಂತರ ಕೆಳಗೆ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="title_home">ಮನೆ</string>
+    <string name="ask_for_help">ಸಹಾಯ ಕೇಳಿ</string>
+    <string name="offer_help">ಸಹಾಯವನ್ನು ನೀಡಿ</string>
+    <string name="title_my_request">ನನ್ನ ವಿನಂತಿಗಳು</string>
+    <string name="title_my_offers">ನನ್ನ ಕೊಡುಗೆಗಳು</string>
+    <string name="title_profiles">ಪ್ರೊಫೈಲ್</string>
+    <string name="language">ಭಾಷೆ</string>
+    <string name="title_about">ಬಗ್ಗೆ</string>
+    <string name="title_feedback">ಪ್ರತಿಕ್ರಿಯೆ</string>
+    <string name="toast_press_again_to_exit">ನಿರ್ಗಮಿಸಲು ದಯವಿಟ್ಟು ಮತ್ತೆ ಹಿಂತಿರುಗಿ ಕ್ಲಿಕ್ ಮಾಡಿ</string>
+    <string name="you_are_here">ನೀವು ಇಲ್ಲಿದ್ದೀರಿ</string>
+    <string name="change">ಬದಲಾವಣೆ</string>
+    <string name="enable_location">ಸ್ಥಳ ಅಪ್ಲಿಕೇಶನ್ ಇಲ್ಲದೆ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
+    <string name="label_app_need_location_permission">ಅಪ್ಲಿಕೇಶನ್ಗೆ ಸ್ಥಳ ಅನುಮತಿ ಬೇಕು, ದಯವಿಟ್ಟು ಅನುಮತಿಯನ್ನು ಅನುಮತಿಸಲು ಕೆಳಗಿನ ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ</string>
+    <string name="message_permission">ಈ ವೈಶಿಷ್ಟ್ಯವನ್ನು ಬಳಸಲು ಈ ಅಪ್ಲಿಕೇಶನ್ಗೆ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್ಗಳಲ್ಲಿ ನೀವು ಅವುಗಳನ್ನು ನೀಡಬಹುದು.</string>
+    <string name="message_need_permission">ಅನುಮತಿಗಳು ಬೇಕು</string>
+    <string name="title_go_to_setting">ಗೊಟೊ ಸೆಟ್ಟಿಂಗ್ಸ್</string>
+    <string name="label_location">ಸ್ಥಳವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
+    <string name="label_permission">ಅನುಮತಿಯನ್ನು ಅನುಮತಿಸಿ</string>
+
+
+    <string name="english" translatable="false">English</string>
+    <string name="hindi" translatable="false">हिन्दी</string>
+    <string name="kannad" translatable="false">ಕನ್ನಡ</string>
+    <string name="marathi" translatable="false">मराठी</string>
+    <string name="gujrati" translatable="false">ગુજરાતી</string>
+
+    
+    <string name="update_language">ಭಾಷೆಯನ್ನು ನವೀಕರಿಸಿ</string>
+    <string name="language_update_success">ಭಾಷಾ ನವೀಕರಣ ಯಶಸ್ಸು</string>
+
+
+    <string name="toast_error_internet_issue">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
+    <string name="label_yes">ಹೌದು</string>
+    <string name="label_no">ಇಲ್ಲ</string>
+    <string name="about">ಬಗ್ಗೆ</string>
+    <string name="label_logs">ಕ್ರ್ಯಾಶ್ ಲಾಗ್ಗಳು</string>
+
+    <string name="google_maps_key" translatable="false">AIzaSyB8NqmLEtpaVR_DAqZsrmY3hpdclJAbCj8</string>
+
+
+    <string name="food">ಆಹಾರ</string>
+    <string name="people">ಜನರು</string>
+    <string name="shelter">ಆಶ್ರಯ</string>
+    <string name="med_ppe">ಮೆಡ್ ಪಿಪಿಇ</string>
+    <string name="testing">ಪರೀಕ್ಷೆ</string>
+    <string name="medicines">ಔಷಧಿಗಳು</string>
+    <string name="ambulance">ಆಂಬ್ಯುಲೆನ್ಸ್</string>
+    <string name="medical_equipment">ವೈದ್ಯಕೀಯ ಉಪಕರಣಗಳು</string>
+    <string name="other_things">ಇತರ ವಿಷಯಗಳ</string>
+    <string name="toolbar_need_help_with">ಸಹಾಯ ಬೇಕು ...</string>
+    
+
+    
+    <string name="toolbar_offer_help_with">ಸಹಾಯವನ್ನು ನೀಡಿ ...</string>
+    <string name="request_near_me">ನನ್ನ ಹತ್ತಿರ %1$s ವಿನಂತಿಗಳು</string>
+    <string name="request_total">%1$s ಒಟ್ಟು</string>
+
+
+    <string name="hint_enter_item">ಐಟಂಗಳನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="hint_qty">ಕ್ಯೂಟಿ</string>
+    <string name="add_more_items">ಇನ್ನಷ್ಟು ಸೇರಿಸಿ</string>
+    <string name="we_can_pay">ನಾವು ಪಾವತಿಸಬಹುದು</string>
+    <string name="we_can_not_pay">ನಾವು ಪಾವತಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
+    <string name="volunteers">ಸ್ವಯಂಸೇವಕರು</string>
+    <string name="technical_personnel">ತಾಂತ್ರಿಕ ಸಿಬ್ಬಂದಿ</string>
+    <string name="hint_how_many_people">ಎಷ್ಟು ಜನರು?</string>
+
+
+    <string name="we_change">ನಾವು ಚಾರ್ಜ್ ಮಾಡುತ್ತೇವೆ</string>
+    <string name="for_free">ಉಚಿತವಾಗಿ</string>
+    <string name="hint_conditions">ಸಮಯ, ವಿತರಣೆ, ಆಯ್ಕೆಯ ಮೇಲೆ ನಿರ್ಬಂಧಗಳನ್ನು ನಮೂದಿಸಿ ... ವಿನಂತಿಸುವವರಿಗೆ ತಿಳಿಯಲು ಯಾವುದೇ ಮಾಹಿತಿ ಉಪಯುಕ್ತವಾಗಿದೆ.</string>
+    
+
+    <string name="alert_msg_please_wait">ದಯಮಾಡಿ ನಿರೀಕ್ಷಿಸಿ...</string>
+
+
+    <string name="rate_report">ದರ / ವರದಿ</string>
+    <string name="canceled">ರದ್ದುಮಾಡಿ</string>
+    <string name="request_confirmation">ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ. &lt;br/&gt; &lt;br/&gt; ನಿಮ್ಮ ಸ್ಥಳದಲ್ಲಿ ಸಹಾಯ-ಪೂರೈಕೆದಾರರನ್ನು ಹುಡುಕಲು ನೀವು ಬಯಸುವಿರಾ?</string>
+    <string name="offer_confirmation">ಸಹಾಯಕ್ಕಾಗಿ ನಿಮ್ಮ ಕೊಡುಗೆಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ. &lt;br/&gt; &lt;br/&gt; ನಿಮ್ಮ ಸ್ಥಳದಲ್ಲಿ ಸಹಾಯ-ವಿನಂತಿಗಳನ್ನು ಹುಡುಕಲು ನೀವು ಬಯಸುವಿರಾ?</string>
+    <string name="availability_condition">ವಿನಂತಿಸುವವರಿಗೆ ಟಿಪ್ಪಣಿ</string>
+    <string name="toast_delete_success">ಯಶಸ್ಸನ್ನು ರದ್ದುಗೊಳಿಸಿ</string>
+    <string name="request_send_to">ಗೆ ವಿನಂತಿಗಳನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
+    <string name="help_offers_received_from">ಸಹಾಯ ಕೊಡುಗೆಗಳನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ</string>
+    <string name="offer_send_to">ಕೊಡುಗೆಗಳನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
+    <string name="help_request_received_from">ಸಹಾಯ ವಿನಂತಿಗಳನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ</string>
+    <string name="request_help_text">ಅವರು ನಿಮಗೆ ಸಹಾಯ ಮಾಡಬಹುದಾದರೆ ಅವರು ನಿಮ್ಮನ್ನು ಕರೆಯುತ್ತಾರೆ</string>
+    <string name="view_details">ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ</string>
+    <string name="offer_help_text">ನಿಮ್ಮ ಸಹಾಯ ಬೇಕಾದರೆ ಅವರು ನಿಮ್ಮನ್ನು ಕರೆಯುತ್ತಾರೆ</string>
+    <string name="call_them">ಅವರನ್ನು ಕರೆಯಿರಿ</string>
+
+    
+    <string name="comment">ಪ್ರತಿಕ್ರಿಯೆಗಳು</string>
+    <string name="submit">ಸಲ್ಲಿಸು</string>
+    <string name="help_from_them">ಇತರರು ಅವರಿಂದ ಸಹಾಯ ತೆಗೆದುಕೊಳ್ಳಬೇಕೇ?</string>
+    <string name="rating_success">ರೇಟಿಂಗ್ ಯಶಸ್ಸು</string>
+
+
+    <string name="sent_requests">ವಿನಂತಿಗಳನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
+    <string name="sent_offers">ಕಳುಹಿಸಿದ ಕೊಡುಗೆಗಳು</string>
+    <string name="delete_confirmation">ನೀವು ರದ್ದು ಮಾಡಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
+    <string name="total_offers">%1$s ಕೊಡುಗೆಗಳು</string>
+    <string name="total_requests">%1$s ವಿನಂತಿಗಳು</string>
+
+    <string name="no_request_sent">ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ, ಆದರೆ ಯಾವುದೇ ನೇರ ವಿನಂತಿಯನ್ನು ಇನ್ನೂ ಯಾರಿಗೂ ಕಳುಹಿಸಲಾಗಿಲ್ಲ. &lt;br/&gt; &lt;br/&gt; ಇತರರು ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿದಾಗ ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ಮುಂದಾಗಬಹುದು</string>
+    <string name="no_offer_sent">ನಿಮ್ಮ ಪ್ರಸ್ತಾಪವನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ, ಆದರೆ ಇನ್ನೂ ಯಾರಿಗೂ ನೇರ ಪ್ರಸ್ತಾಪವನ್ನು ಕಳುಹಿಸಲಾಗಿಲ್ಲ. &lt;br/&gt; &lt;br/&gt; ಇತರರು ನಿಮ್ಮ ಪ್ರಸ್ತಾಪವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿದಾಗ ನಿಮ್ಮ ಸಹಾಯವನ್ನು ಕೋರಬಹುದು. &lt;br/&gt; &lt;br/&gt; ಈ ವಿನಂತಿಯು ಸಕ್ರಿಯವಾಗಿ ಉಳಿಯುತ್ತದೆ ನೀವು ಅದನ್ನು ರದ್ದುಗೊಳಿಸುವವರೆಗೆ</string>
+
+    <string name="no_offer_sended">ನೀವು ಇನ್ನೂ ಸಹಾಯ ಮಾಡಲು ಮುಂದಾಗಿಲ್ಲ.</string>
+    <string name="label_no_request_send">ನೀವು ಯಾವುದೇ ಸಹಾಯಕ್ಕಾಗಿ ವಿನಂತಿಸಿಲ್ಲ.</string>
+    <string name="cancel_this_request">ಈ ವಿನಂತಿಯನ್ನು ರದ್ದುಗೊಳಿಸಿ</string>
+    <string name="cancel_this_offer">ಈ ಕೊಡುಗೆಯನ್ನು ರದ್ದುಗೊಳಿಸಿ</string>
+    <string name="request_send_success">ವಿನಂತಿಯನ್ನು ಕಳುಹಿಸಲು ವಿನಂತಿಸಿ</string>
+    <string name="offer_send_success">ಆಫರ್ ಕಳುಹಿಸುವ ಯಶಸ್ಸು</string>
+    <string name="note">ಸೂಚನೆ:</string>
+
+
+    
+    <string name="select_help_provider">ಸಹಾಯ ಒದಗಿಸುವವರನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="select_help_requester">ಸಹಾಯ ವಿನಂತಿಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="phone_number_will_be_send_to_provider">ಈ ಸಹಾಯ-ಪೂರೈಕೆದಾರರಿಗೆ ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಕಳುಹಿಸಲಾಗುತ್ತದೆ</string>
+    <string name="phone_number_will_be_send_to_requester">ಈ ಸಹಾಯ-ವಿನಂತಿದಾರರಿಗೆ ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಕಳುಹಿಸಲಾಗುತ್ತದೆ</string>
+    <string name="send_request">ಬೇಡಿಕೆ ಕಳಿಸು</string>
+    <string name="search_for_help_provider">ಸಹಾಯ ಒದಗಿಸುವವರಿಗಾಗಿ ಹುಡುಕಿ</string>
+    <string name="search_for_help_requester">ವಿನಂತಿಸುವವರಿಗಾಗಿ ಹುಡುಕಿ</string>
+    <string name="no_help_requeter">ಆಯ್ದ ನಕ್ಷೆ-ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರಸ್ತುತ ಯಾವುದೇ ಸಹಾಯ-ವಿನಂತಿಗಳಿಲ್ಲ. ನೀವು ನಕ್ಷೆಯಲ್ಲಿ ಇತರ ಸ್ಥಳಗಳನ್ನು ಹುಡುಕಬಹುದು, ಅಥವಾ ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲು ಕೆಳಗೆ ಮುಂದುವರಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
+    <string name="no_help_provider">ಆಯ್ದ ನಕ್ಷೆ-ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರಸ್ತುತ ಯಾವುದೇ ಸಹಾಯ-ಪೂರೈಕೆದಾರರು ಇಲ್ಲ. ನೀವು ನಕ್ಷೆಯಲ್ಲಿ ಇತರ ಸ್ಥಳಗಳನ್ನು ಹುಡುಕಬಹುದು, ಅಥವಾ ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲು ಕೆಳಗೆ ಮುಂದುವರಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
+    <string name="please_select_provider_helper">ದಯವಿಟ್ಟು ಮೊದಲು ಒದಗಿಸುವವರು ಅಥವಾ ಸಹಾಯಕರನ್ನು ಆಯ್ಕೆ ಮಾಡಿ</string>
+    <string name="distance_km">%1$skms ದೂರದಲ್ಲಿದೆ</string>
+    <string name="send_offer">ಪ್ರಸ್ತಾಪವನ್ನು ಕಳುಹಿಸಿ</string>
+
+
+    <string name="label_app_version">ಅಪ್ಲಿಕೇಶನ್ ಆವೃತ್ತಿ: %1$s</string>
+    <string name="version_date">ಆವೃತ್ತಿ ದಿನಾಂಕ: %1$s</string>
+    <string name="app_install_date">ಅಪ್ಲಿಕೇಶನ್ ಸ್ಥಾಪನೆ ದಿನಾಂಕ: %1$s</string>
+
+
+    
+    <string name="can_help_with">ನಿಮಗೆ ಸಹಾಯ ಮಾಡಬಹುದು ...</string>
+    <string name="need_help_with">ಸಹಾಯದ ಅಗತ್ಯವಿದೆ ...</string>
+    <string name="today">ಇಂದು</string>
+    <string name="yesterday">ನಿನ್ನೆ</string>
+    <string name="days_ago">%1$s ದಿನಗಳ ಹಿಂದೆ</string>
+    
+
+    <string name="request_call_him">ಅವರು ನಿಮ್ಮನ್ನು ಕರೆಯುತ್ತಾರೆ, ಅಥವಾ ನೀವು ಅವರನ್ನು ಕರೆಯಬಹುದು</string>
+    <string name="toast_error_some_error">ಕೆಲವು ದೋಷ ಸಂಭವಿಸಿದೆ</string>
+    <string name="loading">ಲೋಡ್ ಆಗುತ್ತಿದೆ ...</string>
+    <string name="someone_accept_offer">ನಿಮ್ಮ ಕೊಡುಗೆಗೆ %1$s ಪ್ರತಿಕ್ರಿಯಿಸಿದೆ! ದಯವಿಟ್ಟು ಅವರೊಂದಿಗೆ ಅನುಸರಿಸಿ.</string>
+    <string name="someone_receive_your_request">ನಿಮ್ಮ ಕೋರಿಕೆಗೆ %1$s ಪ್ರತಿಕ್ರಿಯಿಸಿದೆ! ದಯವಿಟ್ಟು ಅವರೊಂದಿಗೆ ಅನುಸರಿಸಿ</string>
+
+</resources>
