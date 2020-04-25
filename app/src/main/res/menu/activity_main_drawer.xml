@@ -42,5 +42,9 @@
             android:id="@+id/nav_about"
             android:checkable="false"
             android:title="@string/title_about" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:checkable="false"
+            android:title="@string/title_feedback" />
     </group>
 </menu>

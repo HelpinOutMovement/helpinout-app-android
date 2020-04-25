@@ -198,11 +198,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             R.id.nav_about -> {
                 startActivity<AboutActivity>()
                 overridePendingTransition(R.anim.enter, R.anim.exit)
-//                selectedItem = 5
-//                checkFragmentItems()
-//                val about = nav_view.menu.findItem(R.id.nav_about)
-//                about.isChecked = true
-//                about.actionView = getMenuDotView()
+            }
+            R.id.nav_feedback -> {
+//                startActivity<WebViewActivity>()
+                openUrl(FEEDBACK_URL)
+                overridePendingTransition(R.anim.enter, R.anim.exit)
             }
         }
         closeDrawer()
@@ -238,6 +238,9 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val about = nav_view.menu.findItem(R.id.nav_about)
         about.isChecked = false
 
+        val feedback = nav_view.menu.findItem(R.id.nav_feedback)
+        feedback.isChecked = false
+
 
         nav_view.menu.findItem(R.id.nav_home).actionView = null
         nav_view.menu.findItem(R.id.nav_my_request).actionView = null
@@ -246,6 +249,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         nav_view.menu.findItem(R.id.nav_offer_help).actionView = null
         nav_view.menu.findItem(R.id.nav_profiles).actionView = null
         nav_view.menu.findItem(R.id.nav_about).actionView = null
+        nav_view.menu.findItem(R.id.nav_feedback).actionView = null
     }
 
 

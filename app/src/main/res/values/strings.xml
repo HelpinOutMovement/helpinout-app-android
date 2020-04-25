@@ -96,6 +96,7 @@
     <string name="title_profiles">Profile</string>
     <string name="language">Language</string>
     <string name="title_about">About</string>
+    <string name="title_feedback">Feedback</string>
     <string name="toast_press_again_to_exit">Please click BACK again to exit</string>
     <string name="you_are_here">You are here</string>
     <string name="change">Change</string>
