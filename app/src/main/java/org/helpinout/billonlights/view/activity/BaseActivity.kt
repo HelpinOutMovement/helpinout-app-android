@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 supportActionBar?.setTitle(R.string.toolbar_offer_help_with)
                 tvAvailability?.show()
                 edtCondition?.show()
-                weCanPay?.setText(R.string.we_change)
+                weCanPay?.setText(R.string.we_charge)
                 weCanNotPay?.setText(R.string.for_free)
             }
         }

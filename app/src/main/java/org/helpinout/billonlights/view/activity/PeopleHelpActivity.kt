@@ -107,11 +107,17 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
             singleItem.geo_location = peopleHelp.geo_location
             singleItem.address = peopleHelp.address
             var detail = ""
+
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
-                detail += activityDetail.volunters_detail ?: "" + "(" + activityDetail.volunters_quantity ?: "" + ")<br/>"
+                detail += activityDetail.volunters_detail?.take(30) + "(" + activityDetail.volunters_quantity + ")"
+
             }
-            if (!activityDetail.technical_personal_detail.isNullOrEmpty() || !activityDetail.technical_personal_quantity.isNullOrEmpty()) {
-                detail += activityDetail.technical_personal_detail ?: "" + "(" + activityDetail.technical_personal_quantity ?: "" + ")"
+
+            if (!activityDetail.technical_personal_detail.isNullOrEmpty()) {
+                if (detail.isNotEmpty()) {
+                    detail += "<br/>"
+                }
+                detail += activityDetail.technical_personal_detail?.take(30) + "(" + activityDetail.technical_personal_quantity + ")"
             }
 
             singleItem.detail = detail

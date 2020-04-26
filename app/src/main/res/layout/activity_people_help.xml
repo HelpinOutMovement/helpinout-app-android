@@ -9,33 +9,35 @@
         android:id="@+id/layout_toolbar"
         layout="@layout/toolbar" />
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/_70sdp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:adjustViewBounds="true"
-        app:srcCompat="@drawable/ic_group" />
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/_20sdp"
             android:paddingBottom="@dimen/_20sdp">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_70sdp"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_30sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_group" />
 
             <CheckBox
                 android:id="@+id/chk_volunteers"
                 style="@style/StyleCheckBox"
                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:text="@string/volunteers"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/logo" />
 
             <EditText
                 android:id="@+id/edt_volunteers"

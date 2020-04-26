@@ -7,7 +7,6 @@
     <string name="all_right_reserved"  translatable="false">© Helpinout. All rights reserved.</string>
     <!--End Splash screen -->
 
-
     <!-- Instruction screen -->
     <string name="website_name" translatable="false">www.helpinout.org</string>
     <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-providers and help- <br/>requesters around you]]></string>
@@ -24,7 +23,6 @@
     <string name="toast_error_phone_number">Please enter phone number</string>
     <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
     <!-- End Login screen -->
-
 
     <!-- SMS Verification screen -->
     <string name="label_enter_otp">Enter OTP</string>
@@ -130,7 +128,7 @@
     <string name="about">About</string>
     <string name="label_logs">Crash logs</string>
 
-    <string name="google_maps_key" translatable="false">AIzaSyB8NqmLEtpaVR_DAqZsrmY3hpdclJAbCj8</string>
+    <string name="google_maps_key" translatable="false">AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
 
 
     <!-- Ask for help  screen -->
@@ -168,7 +166,7 @@
 
     <!-- Offer help screen -->
 
-    <string name="we_change">We Charge</string>
+    <string name="we_charge">We Charge</string>
     <string name="for_free">For Free</string>
     <string name="hint_conditions">Enter constraints on timings, delivery, selection ... ANY info useful for the requestor to know.</string>
     <!-- End Offer help screen -->

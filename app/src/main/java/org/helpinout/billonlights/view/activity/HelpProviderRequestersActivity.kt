@@ -97,10 +97,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun loadSuggestionData() {
-
+        progressBar.show()
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getSuggestion(suggestionData!!, radius).observe(this, Observer {
             it.first?.let { res ->
+                progressBar.hide()
                 preferencesService.zoomLevel = mMap?.cameraPosition?.zoom ?: 10F
                 if (helpType == HELP_TYPE_REQUEST) {
 

@@ -58,7 +58,6 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             tv_no_sender.text = getString(R.string.no_offer_sent)
             if (initiator == HELP_TYPE_OFFER) {//send offer
                 supportActionBar?.title = getString(R.string.offer_send_to)
-                btn_cancel_request.setText(R.string.cancel_this_offer)
             } else {//request received from
                 supportActionBar?.title = getString(R.string.help_request_received_from)
             }

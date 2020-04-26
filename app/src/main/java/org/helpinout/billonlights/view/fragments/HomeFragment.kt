@@ -164,7 +164,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                             preferencesService.latitude = it.latitude
                             preferencesService.longitude = it.longitude
                             mMap?.clear()
-                            // mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, preferencesService.zoomLevel))
+                            mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLing, preferencesService.zoomLevel))
                             tv_toolbar_address.text = activity!!.getAddress(it.latitude, it.longitude) //(place.name + "<br/>" + place.address).fromHtml()
                             tv_address.text = activity!!.getAddress(it.latitude, it.longitude)
                         }
