@@ -10,9 +10,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
-import android.os.Bundle
 import androidx.core.app.NotificationCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.Dispatchers
@@ -22,11 +20,10 @@ import kotlinx.coroutines.launch
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
-import org.helpinout.billonlights.service.LocationService
-import org.helpinout.billonlights.service.OfferRequestDetailService
 import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
+import org.jetbrains.anko.runOnUiThread
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,13 +39,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var offerRequestListService: OfferRequestListService
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        (application as BillionLightsApplication).getAppComponent().inject(this)
         remoteMessage.data.isNotEmpty().let {
             handleNow(remoteMessage.data)
         }
     }
 
     override fun onNewToken(token: String) {
-        (application as BillionLightsApplication).getAppComponent().inject(this)
+
         token.let {
             preferencesService.firebaseId = token
         }
@@ -59,8 +57,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendNotification(data: Map<String, String>) {
-        val bundle = Bundle()
-        fetchData()
+        fetchData(data)
+
+
+    }
+
+    private fun fetchData(data: Map<String, String>) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+               val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0)
+               runOnUiThread {
+                   showNotification(data)
+               }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    showNotification(data)
+                }
+            }
+        }
+    }
+    private fun showNotification(data: Map<String, String>) {
         val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
         val action = data[ACTION]?.toInt() ?: 0
         val sendName = data[SENDER_NAME].toString()
@@ -84,7 +100,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent.putExtra(HELP_TYPE, activityType)
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        intent.putExtras(bundle)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
@@ -104,15 +119,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(0, notificationBuilder.build())
-    }
-
-    private fun fetchData() {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0)
-            } catch (e: Exception) {
-                Timber.d("")
-            }
-        }
     }
 }
