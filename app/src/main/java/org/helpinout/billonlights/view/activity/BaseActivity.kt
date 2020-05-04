@@ -8,11 +8,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.gson.Gson
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.entity.OfferHelpItem
+import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.view.fragments.BottomSheetsRequestConfirmationFragment
 import org.jetbrains.anko.startActivityForResult
 import javax.inject.Inject
 
@@ -21,6 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var toolbar: Toolbar? = null
     var mLastClickTime: Long = 0
     val noClickResultCode = 56
+    val showMapCode: Int = 43
 
     @Inject
     lateinit var preferencesService: PreferencesService
@@ -116,6 +120,19 @@ abstract class BaseActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 
+    fun askForConfirmation(activity_uuid: String, suggestionData: SuggestionRequest) {
+        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, activity_uuid, suggestionData, { uuid, data -> onYesClick(uuid, data) }, { type, uuid -> onConfirmationNoClick(type, uuid) })
+        deleteDialog.show(supportFragmentManager, null)
+    }
+
+    //this is shown when send request after the bottom dialog is shown
+    private fun onYesClick(suggestionData: SuggestionRequest, activity_uuid: String) {
+        suggestionData.activity_uuid = activity_uuid
+        val suggestionDataAsString = Gson().toJson(suggestionData)
+        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        finishWithFade()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data1: Intent?) {
         super.onActivityResult(requestCode, resultCode, data1)

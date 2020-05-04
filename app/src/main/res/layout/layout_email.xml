@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_50sdp"
+    android:layout_height="@dimen/_50sdp"
+    android:scaleType="fitXY"
+    android:padding="@dimen/_10sdp"
+    android:src="@drawable/ic_email">
+
+</ImageView>

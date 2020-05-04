@@ -29,6 +29,7 @@ class ActivityAddDetail {
     var activity_detail: List<ActivityDetailSubItem>? = null
     var mapping: List<Mapping>? = null
     var user_detail: MappingDetail? = null
+    var pay: Int = 0
 }
 
 class ActivityDetailSubItem {

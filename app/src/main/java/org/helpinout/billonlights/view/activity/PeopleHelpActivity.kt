@@ -6,22 +6,20 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.avneesh.crashreporter.CrashReporter
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_people_help.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.*
+import org.helpinout.billonlights.model.database.entity.ActivityDetail
+import org.helpinout.billonlights.model.database.entity.AddData
+import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
-import org.helpinout.billonlights.view.fragments.BottomSheetsRequestConfirmationFragment
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.startActivityForResult
 
 class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
     private var peopleHelp = AddData()
     private var activityDetail = ActivityDetail()
     private val suggestionData = SuggestionRequest()
-    private val showMapCode: Int = 43
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,78 +79,18 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         suggestionData.accuracy = preferencesService.gpsAccuracy
 
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.sendPeopleHelp(peopleHelp).observe(this, Observer {
+        viewModel.sendPeopleHelp(peopleHelp, activityDetail).observe(this, Observer {
+            dialog?.dismiss()
             if (it.first != null) {
-                saveRequestToDatabase(it.first)
+                askForConfirmation(peopleHelp.activity_uuid, suggestionData)
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
                 } else toastError(it.second)
-                dialog?.dismiss()
+
                 CrashReporter.logCustomLogs(it.second)
             }
         })
-    }
-
-    private fun saveRequestToDatabase(first: ActivityResponses?) {
-        first?.data?.let { item ->
-            val addItemList = ArrayList<AddCategoryDbItem>()
-
-            val singleItem = AddCategoryDbItem()
-            singleItem.activity_type = peopleHelp.activity_type
-            singleItem.activity_uuid = peopleHelp.activity_uuid
-            singleItem.date_time = peopleHelp.date_time
-            singleItem.activity_category = peopleHelp.activity_category
-            singleItem.activity_count = peopleHelp.activity_count
-            singleItem.geo_location = peopleHelp.geo_location
-            singleItem.address = peopleHelp.address
-            var detail = ""
-
-            if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
-                detail += activityDetail.volunters_detail?.take(30) + "(" + activityDetail.volunters_quantity + ")"
-
-            }
-
-            if (!activityDetail.technical_personal_detail.isNullOrEmpty()) {
-                if (detail.isNotEmpty()) {
-                    detail += "<br/>"
-                }
-                detail += activityDetail.technical_personal_detail?.take(30) + "(" + activityDetail.technical_personal_quantity + ")"
-            }
-
-            singleItem.detail = detail
-            singleItem.volunters_required = 0
-            singleItem.volunters_detail = activityDetail.volunters_detail
-            singleItem.volunters_quantity = activityDetail.volunters_quantity
-            singleItem.technical_personal_required = activityDetail.technical_personal_required
-            singleItem.technical_personal_detail = activityDetail.technical_personal_detail
-            singleItem.technical_personal_quantity = activityDetail.technical_personal_quantity
-            singleItem.status = 1
-
-            addItemList.add(singleItem)
-            val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-            viewModel.saveFoodItemToDatabase(addItemList).observe(this, Observer {
-                dialog?.dismiss()
-                if (it) {
-                    askForConfirmation(peopleHelp.activity_uuid)
-                }
-            })
-        } ?: kotlin.run {
-            dialog?.dismiss()
-        }
-    }
-
-    private fun askForConfirmation(activity_uuid: String) {
-        val deleteDialog = BottomSheetsRequestConfirmationFragment(helpType, activity_uuid, onConfirmationYesClick = { onYesClick() }, onConfirmationNoClick = { type, uuid -> onConfirmationNoClick(type, uuid) })
-        deleteDialog.show(supportFragmentManager, null)
-    }
-
-    private fun onYesClick() {
-        suggestionData.activity_uuid = peopleHelp.activity_uuid
-        val suggestionDataAsString = Gson().toJson(suggestionData)
-        startActivityForResult<HelpProviderRequestersActivity>(showMapCode, SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to helpType)
-        overridePendingTransition(R.anim.enter, R.anim.exit)
-        finishWithFade()
     }
 
     override fun getLayout(): Int {

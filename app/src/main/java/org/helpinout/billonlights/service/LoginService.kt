@@ -1,7 +1,6 @@
 package org.helpinout.billonlights.service
 
 import android.os.Build
-import com.avneesh.crashreporter.CrashReporter
 import com.google.firebase.iid.FirebaseInstanceId
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.AppDatabase
@@ -90,6 +89,7 @@ class LoginService(private val preferencesService: PreferencesService, private v
         bodyJson.put("country_code", preferencesService.countryCode)
         bodyJson.put("mobile_no", preferencesService.mobileNumber)
         bodyJson.put("first_name", registration.first_name)
+        bodyJson.put("profile_name", registration.profile_name)
         bodyJson.put("time_zone", getTimeZoneString())
         bodyJson.put("last_name", registration.last_name)
         bodyJson.put("mobile_no_visibility", registration.mobile_no_visibility)

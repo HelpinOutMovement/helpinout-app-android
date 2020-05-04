@@ -29,20 +29,34 @@
             android:paddingTop="@dimen/_20sdp"
             android:paddingBottom="@dimen/_20sdp">
 
+            <TextView
+                android:id="@+id/tv_note_to"
+                style="@style/StyleTextView"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:text="@string/note_to_provider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
             <EditText
-                android:id="@+id/edt_people"
+                android:id="@+id/edt_conditions"
                 style="@style/StyleEditTextFull"
                 android:layout_width="0dp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_margin="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:digits="0123456789"
-                android:hint="@string/hint_how_many_people"
-                android:inputType="number"
-                android:maxLength="5"
-                android:visibility="gone"
+                android:hint="@string/hint_conditions"
+                android:maxLines="20"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="500"
+                android:padding="@dimen/_5sdp"
+                android:singleLine="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_note_to" />
 
             <Button
                 android:id="@+id/we_can_pay"
@@ -51,7 +65,7 @@
                 android:text="@string/we_can_pay"
                 app:layout_constraintEnd_toStartOf="@+id/we_can_not_pay"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_people" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_conditions"  />
 
             <Button
                 android:id="@+id/we_can_not_pay"
@@ -60,7 +74,7 @@
                 android:text="@string/we_can_not_pay"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/we_can_pay"
-                app:layout_constraintTop_toBottomOf="@+id/edt_people" />
+                app:layout_constraintTop_toBottomOf="@+id/edt_conditions"  />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

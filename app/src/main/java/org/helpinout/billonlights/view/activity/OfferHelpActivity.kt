@@ -46,7 +46,6 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
         loadOfferHelpList()
     }
 
-    @Synchronized
     private fun loadOfferHelpList() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         val radius = intent.getFloatExtra(RADIUS, 50000F)

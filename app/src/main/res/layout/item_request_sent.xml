@@ -23,35 +23,30 @@
             android:id="@+id/mainItem"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?android:selectableItemBackground"
-            android:clickable="true"
-            android:padding="@dimen/_10sdp">
+            android:paddingTop="@dimen/_10sdp">
 
             <TextView
                 android:id="@+id/tv_name"
                 style="@style/StyleTextView"
                 android:layout_width="0dp"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:text="@{item.name}"
                 app:layout_constraintEnd_toStartOf="@+id/count_text_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Tina Jamna" />
 
-            <TextView
-                android:id="@+id/count_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_text_view_primary"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingTop="4dp"
-                android:paddingEnd="@dimen/_10sdp"
-                android:paddingBottom="2dp"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_10sdp"
+            <ImageView
+                android:id="@+id/iv_offer"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="dsds" />
+                app:layout_constraintTop_toTopOf="@+id/tv_name"
+                app:load_image="@{item.icon}"
+                tools:src="@drawable/ic_food" />
 
             <TextView
                 android:id="@+id/tv_time"
@@ -60,6 +55,8 @@
                 android:layout_marginEnd="@dimen/_15sdp"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_offer"
@@ -67,54 +64,120 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_name"
                 tools:text="14 April 2020,2:00 pm" />
 
+
             <TextView
-                android:id="@+id/tv_detail"
+                android:id="@+id/view_detail"
                 style="@style/StyleTextViewNormal"
-                android:layout_width="0dp"
-                android:layout_marginEnd="@dimen/_15sdp"
-                app:layout_constraintEnd_toStartOf="@+id/iv_offer"
+                android:layout_width="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/rounder_gray_bg"
+                android:text="@string/view_details"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_time"
-                tools:text="has offered to help you. 14 April 2020, 10:45 am Call them on +91 543053490 Time: 6pm to 9pm." />
+                app:layout_constraintTop_toBottomOf="@+id/tv_time" />
 
-            <ImageView
-                android:id="@+id/iv_offer"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_detail"
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_detail"
-                app:load_image="@{item.icon}"
-                tools:src="@drawable/ic_food" />
-            \
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_detail" />
 
             <TextView
-                android:id="@+id/tv_rate_report"
+                android:id="@+id/tv_offer_received"
                 style="@style/StyleTextView"
-                android:layout_width="0dp"
-                android:layout_marginTop="@dimen/_25sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/offers_received"
+                android:textSize="@dimen/_12sdp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                android:padding="@dimen/_8sdp"
-                android:text="@string/rate_report"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/tv_send_requests"
+                app:layout_constraintEnd_toStartOf="@+id/tv_offer_received_count"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
 
             <TextView
-                android:id="@+id/tv_send_requests"
+                android:id="@+id/tv_offer_received_count"
                 style="@style/StyleTextView"
-                android:layout_width="@dimen/_70sdp"
+                android:layout_width="0dp"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                tools:text="1" />
+
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_offer_received" />
+
+            <TextView
+                android:id="@+id/tv_request_sent"
+                style="@style/StyleTextView"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/requests_sent"
+                android:textSize="@dimen/_12sdp"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
-                android:gravity="center"
-                android:text="@string/sent_requests"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_request_send_count"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <TextView
+                android:id="@+id/tv_request_send_count"
+                style="@style/StyleTextView"
+                android:layout_width="0dp"
+                android:padding="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                tools:text="1" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:background="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_request_sent" />
+
+            <TextView
+                android:id="@+id/tv_search_for_help_providers"
+                style="@style/StyleTextView"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/search_for_help_givers"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/tv_new_matches"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+            <TextView
+                android:id="@+id/tv_new_matches"
+                style="@style/StyleTextView"
+                android:layout_width="0dp"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/new_matches"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.cardview.widget.CardView>
 </layout>

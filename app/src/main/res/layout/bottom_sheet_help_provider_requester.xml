@@ -54,13 +54,11 @@
             app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_title" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/divider1"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/_10sdp"
@@ -70,12 +68,33 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_peek" />
 
 
+    <CheckBox
+        android:id="@+id/chk_all"
+        style="@style/StyleCheckBoxRight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:text="@string/offer_help_to_every_one"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chk_all" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_180sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
         tools:itemCount="5"
         tools:listitem="@layout/bottom_sheet_item" />
 
@@ -90,7 +109,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider3"
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="@color/colorAccent"
@@ -110,7 +129,7 @@
         android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
 
     <Button

@@ -53,7 +53,7 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun sendVerificationCode(number: String) {
-        if (number == ALLOW_NUMBER1) {
+        if (number == ALLOW_NUMBER1||number==ALLOW_NUMBER2) {
             checkIfNotRegistered()
         } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
     }

@@ -52,9 +52,24 @@
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_10sdp"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/chk_name"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/distance"
             tools:text="Can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered. " />
+
+
+        <TextView
+            android:id="@+id/free_or_paid"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_message"
+            tools:text="Free" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

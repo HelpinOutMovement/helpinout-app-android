@@ -17,5 +17,6 @@ class Registration {
     var user_type: Int? = 0
     var org_name: String? = ""
     var org_type: Int? = null
+    var profile_name: String = ""
     var org_division: String? = ""
 }

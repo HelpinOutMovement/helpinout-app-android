@@ -15,14 +15,13 @@ class LanguageChooserAdapter(var languageList: ArrayList<LanguageItem>, private 
     }
 
     override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
-        val homeItem = languageList[position]
-        holder.item.item = homeItem
+        val labguageItem = languageList[position]
+        holder.item.item = labguageItem
         holder.itemView.setOnClickListener {
-            onItemClick(homeItem)
+            onItemClick(labguageItem)
         }
-
     }
-
+    
     override fun getItemCount(): Int {
         return languageList.size
     }

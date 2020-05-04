@@ -4,11 +4,12 @@ import android.content.pm.PackageInfo
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import com.avneesh.crashreporter.CrashReporter
-import com.crashlytics.android.Crashlytics
 import org.helpinout.billonlights.BuildConfig.DEBUG
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.utils.INSTRUCTION_STEP
+import org.helpinout.billonlights.utils.LANGUAGE_STEP
+import org.helpinout.billonlights.utils.LOGIN_STEP
+import org.helpinout.billonlights.utils.REGISTRATION_STEP
 import org.jetbrains.anko.startActivity
 
 class SplashActivity : BaseActivity() {

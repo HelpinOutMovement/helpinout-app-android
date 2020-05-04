@@ -13,6 +13,7 @@ import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApi
 import org.helpinout.billonlights.service.LocationService
+import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.*
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -21,6 +22,9 @@ import javax.inject.Inject
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     @Inject
     lateinit var locationService: LocationService
+
+    @Inject
+    lateinit var offerRequestListService: OfferRequestListService
 
     @Inject
     lateinit var retrofit: Retrofit
@@ -35,8 +39,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val list = MutableLiveData<List<LanguageItem>>()
         val homeItemList = ArrayList<LanguageItem>()
         homeItemList.add(LanguageItem(context.getString(R.string.english), ENGLISH, ENGLISH_CODE))
-//        homeItemList.add(LanguageItem(context.getString(R.string.hindi), HINDI, HINDI_CODE))
-//        homeItemList.add(LanguageItem(context.getString(R.string.kannad), KANNAD, KANNAD_CODE))
+        homeItemList.add(LanguageItem(context.getString(R.string.hindi), HINDI, HINDI_CODE))
+        homeItemList.add(LanguageItem(context.getString(R.string.kannad), KANNAD, KANNAD_CODE))
 //        homeItemList.add(LanguageItem(context.getString(R.string.marathi), MARATHI, MARATHI_CODE))
 //        homeItemList.add(LanguageItem(context.getString(R.string.gujrati), GUJRATI, GUJRATI_CODE))
         list.postValue(homeItemList)
@@ -117,15 +121,18 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return suggestionResponse
     }
 
-    fun addActivity(body: AddData): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun addActivity(body: AddData, address: String): MutableLiveData<Pair<ActivityResponses?, String>> {
         val addActivityResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                addActivityResponse.postValue(Pair(locationService.getNewAddActivityResult(body), ""))
+                val response = locationService.getNewAddActivityResult(body,address)
+                addActivityResponse.postValue(Pair(response, ""))
             } catch (e: Exception) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
             }
         }
         return addActivityResponse
     }
+
+
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.IO
@@ -12,8 +13,8 @@ import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.service.LocationService
-import org.helpinout.billonlights.utils.getIcon
-import org.helpinout.billonlights.utils.getName
+import org.helpinout.billonlights.service.OfferRequestDetailService
+import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.getStringException
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
@@ -26,33 +27,50 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     lateinit var locationService: LocationService
 
     @Inject
+    lateinit var offerRequestListService: OfferRequestListService
+
+    @Inject
+    lateinit var offerRequestDetailService: OfferRequestDetailService
+
+    @Inject
     lateinit var preferencesService: PreferencesService
+
+    private val compositeDisposable = CompositeDisposable()
+
+    private val offerRequestResponse = MutableLiveData<List<AddCategoryDbItem>>()
 
 
     init {
         (application as BillionLightsApplication).getAppComponent().inject(this)
+        compositeDisposable.add(offerRequestListService.requestOfferSubject.subscribe {
+            offerRequestResponse.postValue(it)
+        })
     }
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int, context: Context): MutableLiveData<List<AddCategoryDbItem>> {
-        val list = MutableLiveData<List<AddCategoryDbItem>>()
-        GlobalScope.launch(Dispatchers.IO) {
-            val listItems = locationService.getMyRequestsOrOffers(offerType, initiator)
-            listItems.forEach { item ->
-                item.name = context.getString(item.activity_category.getName())
-                item.icon = item.activity_category.getIcon()
-            }
-            list.postValue(listItems)
-        }
-        return list
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): MutableLiveData<List<AddCategoryDbItem>> {
+        offerRequestListService.getMyRequestsOrOffers(offerType, initiator)
+        return offerRequestResponse
     }
 
     fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): MutableLiveData<List<MappingDetail>> {
         val list = MutableLiveData<List<MappingDetail>>()
         GlobalScope.launch(Dispatchers.IO) {
-            val listItems = locationService.getRequestDetails(offerType, initiator, activity_uuid)
+            val listItems = offerRequestDetailService.getRequestDetails(offerType, initiator, activity_uuid)
             list.postValue(listItems)
         }
         return list
+    }
+
+    fun deleteActivity(uuid: String, activity_type: Int): MutableLiveData<Pair<DeleteDataResponses?, String>> {
+        val response = MutableLiveData<Pair<DeleteDataResponses?, String>>()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                response.postValue(Pair(offerRequestDetailService.deleteActivity(uuid, activity_type), ""))
+            } catch (e: Exception) {
+                response.postValue(Pair(null, e.getStringException()))
+            }
+        }
+        return response
     }
 
     fun sendOfferRequesterToServer(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
@@ -67,23 +85,12 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun deleteActivity(uuid: String, activity_type: Int): MutableLiveData<Pair<DeleteDataResponses?, String>> {
-        val response = MutableLiveData<Pair<DeleteDataResponses?, String>>()
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                response.postValue(Pair(locationService.deleteActivity(uuid, activity_type), ""))
-            } catch (e: Exception) {
-                response.postValue(Pair(null, e.getStringException()))
-            }
-        }
-        return response
-    }
 
     fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int): MutableLiveData<Pair<String?, String>> {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type), ""))
+                response.postValue(Pair(offerRequestDetailService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -108,7 +115,7 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.makeCallTracking(parent_uuid, activity_uuid, activityType), ""))
+                response.postValue(Pair(offerRequestDetailService.makeCallTracking(parent_uuid, activity_uuid, activityType), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -120,7 +127,7 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         val result = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val response = locationService.getUserRequestsOfferList(context, activityType)
+                val response = offerRequestListService.getUserRequestsOfferList(context, activityType)
                 result.postValue(Pair(response, ""))
             } catch (e: Exception) {
                 result.postValue(Pair(null, e.getStringException()))
@@ -128,13 +135,12 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         }
         return result
     }
-
-
-    fun sendPeopleHelp(peopleHelp: AddData): MutableLiveData<Pair<ActivityResponses?, String>> {
+    
+    fun sendPeopleHelp(peopleHelp: AddData, activityDetail: ActivityDetail): MutableLiveData<Pair<ActivityResponses?, String>> {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.getPeopleResponse(peopleHelp), ""))
+                response.postValue(Pair(locationService.getPeopleResponse(peopleHelp,activityDetail), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -157,7 +163,7 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     fun saveFoodItemToDatabase(addItemList: ArrayList<AddCategoryDbItem>): MutableLiveData<Boolean> {
         val response = MutableLiveData<Boolean>()
         doAsync {
-            response.postValue(locationService.saveFoodItemsToDb(addItemList))
+            response.postValue(offerRequestListService.saveFoodItemsToDb(addItemList))
         }
         return response
     }
@@ -165,24 +171,23 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     fun saveMapping(mappingList: ArrayList<MappingDetail>): MutableLiveData<Boolean> {
         val response = MutableLiveData<Boolean>()
         doAsync {
-            response.postValue(locationService.saveMappingToDb(mappingList))
+            response.postValue(offerRequestListService.saveMappingToDb(mappingList))
         }
         return response
     }
 
-    fun deleteActivityFromDatabase(activityUuid: String?): MutableLiveData<Boolean> {
-        val response = MutableLiveData<Boolean>()
-        doAsync {
-            response.postValue(locationService.deleteActivityFromDb(activityUuid))
-        }
-        return response
-    }
 
     fun deleteMappingFromDatabase(parent_uuid: String?, activity_uuid: String): MutableLiveData<Boolean> {
         val response = MutableLiveData<Boolean>()
         doAsync {
-            response.postValue(locationService.deleteMappingFromDb(parent_uuid, activity_uuid))
+            response.postValue(offerRequestDetailService.deleteMappingFromDb(parent_uuid, activity_uuid))
         }
         return response
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
+
 }

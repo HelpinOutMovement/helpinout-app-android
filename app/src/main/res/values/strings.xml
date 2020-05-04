@@ -4,7 +4,7 @@
     <!-- Splash screen -->
 
     <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
-    <string name="all_right_reserved"  translatable="false">© Helpinout. All rights reserved.</string>
+    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
     <!--End Splash screen -->
 
     <!-- Instruction screen -->
@@ -85,7 +85,7 @@
     <!-- End profile screen -->
 
     <!-- Home screen -->
-    <string name="identify_location">Identify your location above, then select below</string>
+    <string name="identify_location">Confirm your location above, then select below</string>
     <string name="title_home">Home</string>
     <string name="ask_for_help">Ask For Help</string>
     <string name="offer_help">Offer Help</string>
@@ -105,6 +105,8 @@
     <string name="title_go_to_setting">GOTO SETTINGS</string>
     <string name="label_location">Enable location</string>
     <string name="label_permission">Allow permission</string>
+    <string name="request_near_me_home">%1$s help giver match your request <b>!</b></string>
+    <string name="offer_near_me_home">%1$s help provider match your offer <b>!</b></string>
 
     <!-- End Home screen -->
 
@@ -141,11 +143,12 @@
     <string name="ambulance">Ambulance</string>
     <string name="medical_equipment">Medical Equipment</string>
     <string name="other_things">Other things</string>
-    <string name="toolbar_need_help_with">Need help with...</string>
+    <string name="toolbar_need_help_with">Seek help for...</string>
+    <string name="email_title"><![CDATA[Obtain detailed data of all requests received in <b>tabular format:</b>]]></string>
     <!-- End Ask for help screen -->
 
     <!-- Offer help screen -->
-    <string name="toolbar_offer_help_with">Offer help with...</string>
+    <string name="toolbar_offer_help_with">Give help with...</string>
     <string name="request_near_me">%1$s requests near me</string>
     <string name="request_total">%1$s Total</string>
 
@@ -175,11 +178,13 @@
 
 
     <!-- Offer Detail screen -->
-    <string name="rate_report">Rate / Report</string>
+    <string name="rate">Rate</string>
+    <string name="report_block">Report / Block</string>
     <string name="canceled">Cancel</string>
     <string name="request_confirmation"><![CDATA[Your Request for Help has been registered.<br/><br/> Would you like to search for Help-Providers in your location?]]></string>
     <string name="offer_confirmation"><![CDATA[Your Offer to Help has been registered.<br/><br/> Would you like to search for Help-Requesters in your location?]]></string>
-    <string name="availability_condition">Note to requesters</string>
+    <string name="note_to_requester">Note to requesters</string>
+    <string name="note_to_provider">Note to provider</string>
     <string name="toast_delete_success">Cancel success</string>
     <string name="request_send_to">Requests have been sent to</string>
     <string name="help_offers_received_from">Help offers received from</string>
@@ -188,7 +193,12 @@
     <string name="request_help_text">They will call you if they can help you</string>
     <string name="view_details">View details</string>
     <string name="offer_help_text">They will call you if they need your help</string>
-    <string name="call_them">Call them</string>
+    <string name="call_them">Call\nthem</string>
+    <string name="can_pay">Can pay</string>
+    <string name="can_not_pay">Can\'t pay</string>
+    <string name="free">Free</string>
+    <string name="not_free">Not free</string>
+    <string name="offer_help_to_every_one">Offer help to everyone in the map area</string>
     <!-- End Offer Detail screen -->
 
     <!-- Rate report screen -->
@@ -216,7 +226,13 @@
     <string name="request_send_success">Request send success</string>
     <string name="offer_send_success">Offer send success</string>
     <string name="note">Note:</string>
-
+    <string name="offers_received">Offers received</string>
+    <string name="requests_received">Requests received</string>
+    <string name="requests_sent">Requests sent</string>
+    <string name="offer_sent">Offers sent</string>
+    <string name="search_for_help_givers">Search for help givers</string>
+    <string name="search_for_help_seeker">Search for help Seekers</string>
+    <string name="new_matches">New matches</string>
     <!-- End My offers screen -->
 
 
@@ -259,5 +275,14 @@
     <string name="loading">Loading...</string>
     <string name="someone_accept_offer">%1$s has responded to your offer! Please follow up with them.</string>
     <string name="someone_receive_your_request">%1$s has responded to your request! Please follow up with them</string>
+    <string name="help_in_out_profile">HelpinOut Profile:</string>
+    <string name="someone_else">Someone else</string>
+    <string name="my_self">Myself</string>
+    <string name="who_need_helps">Who needs help?</string>
+    <string name="not_rated_yet">(Not yet rated)</string>
+    <string name="label_add_item">Add item</string>
+    <string name="label_send_mail">Send mail</string>
+    <string name="invalid_email_id">Please enter valid email id</string>
+
 
 </resources>

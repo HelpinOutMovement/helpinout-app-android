@@ -9,6 +9,8 @@ import org.helpinout.billonlights.model.retrofit.NetworkApi
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.service.LocationService
 import org.helpinout.billonlights.service.LoginService
+import org.helpinout.billonlights.service.OfferRequestDetailService
+import org.helpinout.billonlights.service.OfferRequestListService
 import javax.inject.Singleton
 
 @Module
@@ -39,6 +41,15 @@ class AppModule(private var app: Application) {
     @Provides
     @Singleton
     fun provideLocationService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase) = LocationService(preferencesService, service, db)
+
+    @Provides
+    @Singleton
+    fun provideOfferRequestService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase,app: Application) = OfferRequestListService(preferencesService, service, db,app)
+
+    @Provides
+    @Singleton
+    fun provideOfferRequestDetailService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase,app: Application) = OfferRequestDetailService(preferencesService, service, db,app)
+
 
     @Provides
     @Singleton

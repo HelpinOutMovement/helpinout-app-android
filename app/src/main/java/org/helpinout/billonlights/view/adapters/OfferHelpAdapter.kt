@@ -8,22 +8,22 @@ import org.helpinout.billonlights.model.database.entity.OfferHelpItem
 import org.helpinout.billonlights.utils.inflate
 
 
-class OfferHelpAdapter(var homeItemList: ArrayList<OfferHelpItem>, private val onItemClick: (OfferHelpItem) -> Unit) : RecyclerView.Adapter<OfferHelpAdapter.OfferHelpViewHolder>() {
+class OfferHelpAdapter(var offerItemList: ArrayList<OfferHelpItem>, private val onItemClick: (OfferHelpItem) -> Unit) : RecyclerView.Adapter<OfferHelpAdapter.OfferHelpViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfferHelpViewHolder {
         val viewLayout: ItemOfferHelpBinding = parent.inflate(R.layout.item_offer_help)
         return OfferHelpViewHolder(viewLayout)
     }
 
     override fun onBindViewHolder(holder: OfferHelpViewHolder, position: Int) {
-        val homeItem = homeItemList[position]
-        holder.item.item = homeItem
+        val offerItem = offerItemList[position]
+        holder.item.item = offerItem
         holder.item.mainItem.setOnClickListener {
-            onItemClick(homeItem)
+            onItemClick(offerItem)
         }
     }
 
     override fun getItemCount(): Int {
-        return homeItemList.size
+        return offerItemList.size
     }
 
     inner class OfferHelpViewHolder internal constructor(val item: ItemOfferHelpBinding) : RecyclerView.ViewHolder(item.root)

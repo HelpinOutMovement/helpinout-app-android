@@ -5,6 +5,20 @@
     <item
         android:id="@+id/menu_logs"
         android:title="@string/label_logs"
+        android:visible="false"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_email"
+        android:title="@string/label_send_mail"
+        app:actionLayout="@layout/layout_email"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_add_item"
+        android:title="@string/label_add_item"
+        app:actionLayout="@layout/layout_add_item"
+        app:showAsAction="always" />
 
 </menu>

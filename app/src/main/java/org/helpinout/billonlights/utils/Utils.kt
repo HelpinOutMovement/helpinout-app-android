@@ -28,7 +28,7 @@ class Utils {
         }
 
         fun getTimeZone(): String {
-            return SimpleDateFormat("XXX", Locale.getDefault()).format(System.currentTimeMillis())
+            return SimpleDateFormat("ZZZZZ", Locale.getDefault()).format(System.currentTimeMillis())
         }
 
         fun getDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {

@@ -36,6 +36,7 @@ class MappingDetail {
     var offer_condition: String? = ""
     var mapping_initiator: Int? = 0
     var detail: String? = ""
+    var pay:Int=0
 
     @Ignore
     var distance: String? = null//this is for calculate distance

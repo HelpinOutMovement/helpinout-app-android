@@ -38,7 +38,6 @@ class AskForHelpActivity : BaseActivity() {
         loadAskForHelpList()
     }
 
-    @Synchronized
     private fun loadAskForHelpList() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getAskForHelpItems(this).observe(this, Observer { list ->

@@ -56,6 +56,12 @@
                     android:inputType="textPersonName" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <org.helpinout.billonlights.view.view.HelpInOutTextView
+                android:id="@+id/tv_help_in_profile_name"
+                style="@style/StyleTextView"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/help_in_out_profile" />
+
             <CheckBox
                 android:id="@+id/chk_number_visible"
                 style="@style/StyleCheckBox"

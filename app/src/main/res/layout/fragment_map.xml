@@ -10,7 +10,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/offer_help"
+        app:layout_constraintBottom_toTopOf="@+id/tvInstruction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,20 +29,6 @@
         app:layout_constraintTop_toTopOf="@+id/map"
         tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        style="@style/StyleTextViewNormal"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:background="@color/transparent_color"
-        android:gravity="center"
-        android:padding="@dimen/_3sdp"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/_12sdp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/current_map_pin"
-        tools:visibility="visible" />
-
     <include
         android:id="@+id/map_toolbar"
         layout="@layout/layout_map_toolbar"
@@ -55,6 +41,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
+        android:id="@+id/tv_request"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:background="@drawable/rounder_corner"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text="!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/_14sdp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map_toolbar"
+        tools:text="!"
+        tools:visibility="visible" />
+
+    <org.helpinout.billonlights.view.view.HelpInOutTextView
+        android:id="@+id/tv_offer"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:background="@drawable/rounder_corner"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text="!"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_14sdp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_request"
+        tools:text="!"
+        tools:visibility="visible" />
 
     <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
         android:id="@+id/progressBar"
@@ -71,41 +93,35 @@
     <TextView
         android:id="@+id/tvInstruction"
         style="@style/StyleTextView"
-        android:layout_height="@dimen/_25sdp"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:background="@color/semi_transparent_color"
-        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="@dimen/_10sdp"
+        android:paddingStart="@dimen/_10sdp"
         android:text="@string/identify_location"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
         android:textSize="@dimen/_13sdp"
-        app:layout_constraintBottom_toTopOf="@+id/offer_help"
+        app:layout_constraintBottom_toTopOf="@+id/someone_else"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/ask_for_help"
+        android:id="@+id/my_self"
         style="@style/StyleLoginButton"
         android:layout_width="0dp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:text="@string/ask_for_help"
         app:layout_constraintBottom_toTopOf="@+id/divider"
-        app:layout_constraintEnd_toStartOf="@+id/offer_help"
+        app:layout_constraintEnd_toStartOf="@+id/someone_else"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <Button
-        android:id="@+id/offer_help"
+        android:id="@+id/someone_else"
         style="@style/StyleLoginButton"
         android:layout_width="0dp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/button_background_accent"
         android:text="@string/offer_help"
         app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ask_for_help"
+        app:layout_constraintStart_toEndOf="@+id/my_self"
         app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <View

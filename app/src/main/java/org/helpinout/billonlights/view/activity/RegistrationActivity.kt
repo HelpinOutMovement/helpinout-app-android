@@ -2,6 +2,7 @@ package org.helpinout.billonlights.view.activity
 
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
 import androidx.lifecycle.Observer
@@ -10,6 +11,7 @@ import kotlinx.android.synthetic.main.activity_register.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.Registration
 import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.view.view.HelpInTextWatcher
 import org.helpinout.billonlights.view.view.SpinnerSelector
 import org.helpinout.billonlights.viewmodel.LoginRegistrationViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
@@ -29,12 +31,39 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 til_org_name.show()
                 spinner_org_type.show()
                 til_unit_division.show()
+                tv_help_in_profile_name.text = getProfileName()
             } else {
                 til_org_name.hide()
                 spinner_org_type.hide()
                 til_unit_division.hide()
+
+                tv_help_in_profile_name.text = getProfileName()
             }
         }
+        tv_help_in_profile_name.text = getString(R.string.help_in_out_profile, "")
+
+        first_name.addTextChangedListener(object : HelpInTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                if (!chk_as_organization.isChecked) {
+                    tv_help_in_profile_name.text = getProfileName()
+                }
+            }
+        })
+
+        last_name.addTextChangedListener(object : HelpInTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                if (!chk_as_organization.isChecked) {
+                    val name = first_name.text.toString().take(1) + ". " + s
+                    tv_help_in_profile_name.text = getProfileName()
+                }
+            }
+        })
+
+        edt_org_name.addTextChangedListener(object : HelpInTextWatcher() {
+            override fun afterTextChanged(s: Editable?) {
+                tv_help_in_profile_name.text = getProfileName()
+            }
+        })
         spinner_org_type.onItemSelectedListener = object : SpinnerSelector() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 0) {
@@ -42,6 +71,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
+
         btn_login.setOnClickListener(this)
 
         isUpdate = intent.getBooleanExtra(UPDATE_PROFILE, false)
@@ -60,9 +90,21 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun getProfileName(): String {
+        val name = if (chk_as_organization.isChecked) {
+            edt_org_name.text.toString()
+        } else {
+            if (last_name.text.toString().isEmpty()) {
+                first_name.text.toString().take(1)
+            } else first_name.text.toString().take(1) + ". " + last_name.text
+        }
+        return getString(R.string.help_in_out_profile) + " <b>" + name + "</b>"
+    }
+
     private fun fillValues() {
         first_name.setText(registration.first_name)
         last_name.setText(registration.last_name)
+        tv_help_in_profile_name.text = getProfileName()
         chk_number_visible.isChecked = registration.mobile_no_visibility == 1
         chk_as_organization.isChecked = !registration.org_name.isNullOrEmpty()
         if (!registration.org_name.isNullOrEmpty()) {

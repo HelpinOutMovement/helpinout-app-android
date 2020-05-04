@@ -2,6 +2,7 @@ package org.helpinout.billonlights.view.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Build
@@ -10,6 +11,7 @@ import android.os.Handler
 import android.provider.Settings
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -18,6 +20,7 @@ import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.layout_ask_for_email.view.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.BuildConfig
@@ -27,16 +30,17 @@ import org.helpinout.billonlights.view.fragments.FragmentMyRequests
 import org.helpinout.billonlights.view.fragments.HomeFragment
 import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.startActivityForResult
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private var mailMenu: MenuItem? = null
     private var homeFragment: HomeFragment? = null
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
     private var updateLanguage = 349
     var radius: Float = 0.0F
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +73,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     val window: Window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                    mailMenu?.isVisible = false
                 }
             }
             2 -> {
@@ -78,6 +83,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     val window: Window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     window.statusBarColor = getColor(R.color.colorAccentDark)
+                    mailMenu?.isVisible = true
                 }
             }
         }
@@ -90,8 +96,38 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (BuildConfig.DEBUG) menuInflater.inflate(R.menu.main_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
+
+        val menu_add_item = menu.findItem(R.id.menu_add_item)
+        menu_add_item.actionView.setOnClickListener {
+            onNavigationItemSelected(nav_view.menu.getItem(0))
+        }
+
+        mailMenu = menu.findItem(R.id.menu_email)
+
+        mailMenu?.actionView?.setOnClickListener {
+            showEmailPopup()
+        }
+        val logsMenu = menu.findItem(R.id.menu_logs)
+        if (BuildConfig.DEBUG) logsMenu.isVisible = true
         return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun showEmailPopup() {
+        val alertLayout: View = layoutInflater.inflate(R.layout.layout_ask_for_email, null)
+        val alert: AlertDialog.Builder = AlertDialog.Builder(this)
+        alert.setView(alertLayout)
+        val dialog: AlertDialog = alert.create()
+
+        alertLayout.submit.setOnClickListener {
+            if (!alertLayout.edt_email.text.toString().isEmailValid()) {
+                toastError(R.string.invalid_email_id)
+            } else dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -101,6 +137,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 overridePendingTransition(R.anim.enter, R.anim.exit)
                 return true
             }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -127,7 +164,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.navigation_home, R.id.nav_home-> {
+            R.id.navigation_home, R.id.nav_home -> {
                 if (selectedItem != 0) {
                     selectedItem = 0
                     layout_toolbar.hide()
@@ -157,6 +194,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                         window.statusBarColor = getColor(R.color.colorPrimaryDark)
                     }
+                    mailMenu?.isVisible = false
                     my_request.isChecked = true
                     bottom_nav_view.menu.getItem(1).isChecked = true
                     my_request.actionView = getMenuDotView()
@@ -170,6 +208,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     selectedItem = 2
                     layout_toolbar.show()
                     checkFragmentItems()
+                    mailMenu?.isVisible = true
                     supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
                     val my_offers = nav_view.menu.findItem(R.id.nav_my_offers)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

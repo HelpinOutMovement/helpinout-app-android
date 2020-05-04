@@ -60,9 +60,11 @@
             android:id="@+id/tv_cal_them"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:gravity="center"
             android:text="@string/call_them"
             android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/iv_call"
             app:layout_constraintTop_toBottomOf="@+id/iv_call"
@@ -76,9 +78,42 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_8sdp"
             android:numStars="5"
+            tools:visibility="invisible"
             android:progressTint="@color/rating_color"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
             tools:rating="4" />
+
+
+        <TextView
+            android:id="@+id/tv_not_rated"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/_25sdp"
+            android:text="@string/not_rated_yet"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:paddingEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar" />
+
+        <TextView
+            android:id="@+id/tv_rate"
+            style="@style/StyleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:background="?android:selectableItemBackground"
+            android:clickable="true"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:text="@string/rate"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
+            app:layout_constraintStart_toEndOf="@+id/rating_bar"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar" />
+
 
         <TextView
             android:id="@+id/tv_detail"
@@ -96,26 +131,27 @@
         <TextView
             android:id="@+id/tv_view_detail"
             style="@style/StyleTextViewNormal"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/rounder_gray_bg"
             android:text="@string/view_details"
-            app:layout_constraintEnd_toStartOf="@+id/tv_cal_them"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
 
 
         <TextView
-            android:id="@+id/tv_rate_report"
+            android:id="@+id/tv_report_block"
             style="@style/StyleTextView"
             android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="?android:selectableItemBackground"
             android:clickable="true"
-            android:paddingTop="@dimen/_8sdp"
+            android:padding="@dimen/_8sdp"
             android:paddingEnd="@dimen/_8sdp"
-            android:paddingBottom="@dimen/_8sdp"
-            android:text="@string/rate_report"
+            android:text="@string/report_block"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_view_detail" />
@@ -132,7 +168,7 @@
             android:text="@string/canceled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_rate_report" />
+            app:layout_constraintTop_toTopOf="@+id/tv_report_block" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

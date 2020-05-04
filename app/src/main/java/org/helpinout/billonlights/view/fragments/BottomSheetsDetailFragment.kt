@@ -12,7 +12,7 @@ import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.fromHtml
 import org.helpinout.billonlights.utils.show
 
-class BottomSheetsDetailFragment(private val offerType: Int, private val name: String, private val detail: String, private val description: String) : BottomSheetDialogFragment() {
+class BottomSheetsDetailFragment(private val offerType: Int, private val name: String, private val detail: String, private val description: String, private val pay: Int) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (offerType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -27,8 +27,10 @@ class BottomSheetsDetailFragment(private val offerType: Int, private val name: S
         if (offerType == HELP_TYPE_REQUEST) {
             tv_time.show()
             tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description).fromHtml()
+            free_or_paid.text= getString(if (pay==1) R.string.not_free else R.string.free)
         } else {
             tv_items.text = (getString(R.string.need_help_with) + "<br/>" + description).fromHtml()
+            free_or_paid.text= getString(if (pay==1) R.string.can_pay else R.string.can_not_pay)
         }
 
         tv_name.text = name

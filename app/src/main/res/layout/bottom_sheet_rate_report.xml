@@ -14,7 +14,7 @@
         style="@style/StyleTextView"
         android:layout_width="0dp"
         android:layout_marginEnd="@dimen/_10sdp"
-        android:text="@string/rate_report"
+        android:text="@string/report_block"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"

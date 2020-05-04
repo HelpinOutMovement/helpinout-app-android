@@ -349,8 +349,8 @@ fun String.getValidPhoneNumber(): String {
     return this
 }
 
-fun String.isEmailValid(email: String): Boolean {
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+fun String.isEmailValid(): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches();
 }
 
 

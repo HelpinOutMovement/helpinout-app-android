@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.avneesh.crashreporter.CrashReporter
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -19,8 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import com.google.maps.android.SphericalUtil
@@ -61,7 +60,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         checkLocationPermission()
         val data = intent.getStringExtra(SUGGESTION_DATA)!!
 
-
         location = Location("")
         suggestionData = Gson().fromJson(data, SuggestionRequest::class.java)
 
@@ -69,8 +67,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
         location.latitude = suggestionData?.latitude ?: preferencesService.latitude
         location.longitude = suggestionData?.longitude ?: preferencesService.longitude
-
-
 
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment?.getMapAsync(this)
@@ -91,6 +87,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         button_continue.setOnClickListener(this)
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
+        chk_all.setOnClickListener(this)
         bottom_sheet.hide()
         iv_item.setImageResource(suggestionData!!.activity_category.getIcon())
         mRecyclerView
@@ -138,6 +135,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                     button_continue.setText(R.string.send_offer)
                 }
 
+                chk_all.visibleIf(helpType == HELP_TYPE_OFFER && bottomItemList.isNotEmpty())
+                divider2.visibleIf(helpType == HELP_TYPE_OFFER && bottomItemList.isNotEmpty())
 
                 tv_no_help_provider.visibleIf(bottomItemList.isEmpty())
                 recycler_view.inVisibleIf(bottomItemList.isEmpty())
@@ -161,10 +160,15 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.setHasFixedSize(true)
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 10, -10))
-        bottomAdapter = BottomSheetHelpAdapter(bottomItemList)
+        bottomAdapter = BottomSheetHelpAdapter(bottomItemList, onCheckedChange = { onCheckedChange() })
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
+    }
+
+    private fun onCheckedChange() {
+        val isAllChecked = bottomAdapter?.isAllItemChecked() ?: false
+        chk_all.isChecked = isAllChecked
     }
 
     override fun onPermissionAllow() {
@@ -207,7 +211,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         if (mMap != null) {
             try {
                 updateLocation()
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Timber.d("")
             }
         }
@@ -299,6 +303,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
 
+            }
+            chk_all -> {
+                bottomAdapter?.toggleCheckBox(chk_all.isChecked)
             }
         }
     }
@@ -472,6 +479,9 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             if (it) {
                 startActivity<RequestDetailActivity>(OFFER_TYPE to helpType, INITIATOR to helpType, HELP_TYPE to helpType, ACTIVITY_UUID to (suggestionData?.activity_uuid ?: ""))
                 overridePendingTransition(R.anim.enter, R.anim.exit)
+                val intent1 = Intent(DATA_REFRESH)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
+
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()

@@ -1,6 +1,5 @@
 package org.helpinout.billonlights.service
 
-import android.content.Context
 import com.avneesh.crashreporter.CrashReporter
 import com.google.firebase.iid.FirebaseInstanceId
 import org.helpinout.billonlights.model.dagger.PreferencesService
@@ -11,14 +10,16 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
 import org.json.JSONArray
 import org.json.JSONObject
-import timber.log.Timber
 
 class LocationService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase) {
 
-    suspend fun getNewAddActivityResult(body: AddData): ActivityResponses {
-        return service.makeCall {
+
+    suspend fun getNewAddActivityResult(body: AddData, address: String): ActivityResponses {
+        val response = service.makeCall {
             it.networkApi.getActivityNewAddResponseAsync(createAddActivityRequest(body))
         }
+        if (response.status == 1 && response.data != null) saveRequestToDatabase(body, response, address)
+        return response
     }
 
     private fun createAddActivityRequest(body: AddData): String {
@@ -56,6 +57,43 @@ class LocationService(private val preferencesService: PreferencesService, privat
             CrashReporter.logException(e)
         }
         return mainData.toString()
+    }
+
+    private fun saveRequestToDatabase(addData: AddData, first: ActivityResponses?, address: String) {
+        first?.data?.let { item ->
+            val addItemList = ArrayList<AddCategoryDbItem>()
+            var itemDetail = ""
+            item.activity_detail?.forEachIndexed { index, detail ->
+                if (!detail.detail.isNullOrEmpty()) {
+                    itemDetail += detail.detail
+                }
+                if (detail.quantity != null) {
+                    itemDetail += "(" + detail.quantity + ")"
+                }
+                if (item.activity_detail!!.size - 1 != index) {
+                    itemDetail += "<br/>"
+                }
+            }
+            val categoryItem = AddCategoryDbItem()
+            categoryItem.activity_type = addData.activity_type
+            categoryItem.detail = itemDetail
+            categoryItem.activity_uuid = addData.activity_uuid
+            categoryItem.date_time = addData.date_time
+            categoryItem.activity_category = addData.activity_category
+            categoryItem.activity_count = addData.activity_count
+            categoryItem.geo_location = addData.geo_location
+            categoryItem.address = address
+            categoryItem.status = 1
+
+            addItemList.add(categoryItem)
+            saveFoodItemToDatabase(addItemList)
+        }
+    }
+
+    private fun saveFoodItemToDatabase(addItemList: ArrayList<AddCategoryDbItem>): Boolean {
+        val items = addItemList.toTypedArray()
+        val count = db.getAddItemDao().insertMultipleRecords(*items)
+        return count.isNotEmpty()
     }
 
     suspend fun sendOfferRequests(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
@@ -345,76 +383,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
-        return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
-        }
-    }
-
-    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
-        val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
-            val bodyJson = JSONObject()
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-                bodyJson.put("activity_uuid", parent_uuid)
-                bodyJson.put("activity_type", activityType)
-
-                val jsonArray = JSONArray()
-                val json = JSONObject()
-                json.put("activity_uuid", activity_uuid)
-                jsonArray.put(json)
-
-                if (activityType == HELP_TYPE_REQUEST) {
-                    bodyJson.put("offerer", jsonArray)
-                } else {
-                    bodyJson.put("requester", jsonArray)
-                }
-                mainData.put("data", bodyJson)
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
-        }
-        return mainData.toString()
-    }
-
-    suspend fun deleteActivity(uuid: String, activityType: Int): DeleteDataResponses {
-        return service.makeCall {
-            it.networkApi.getActivityDeleteResponseAsync(createActivityDeleteRequest(uuid, activityType))
-        }
-    }
-
-    private fun createActivityDeleteRequest(uuid: String, activityType: Int): String {
-        val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
-            val bodyJson = JSONObject()
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-                bodyJson.put("activity_uuid", uuid)
-                bodyJson.put("activity_type", activityType)
-                mainData.put("data", bodyJson)
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
-        }
-        return mainData.toString()
-    }
 
     suspend fun makeRating(parent_uuid: String?, activity_uuid: String, activityType: Int, rating: String, recommendOther: Int, comments: String): String {
         return service.makeCall {
@@ -468,292 +436,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
-        return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
-        }
-    }
 
-    suspend fun getUserRequestsOfferList(context: Context, activityType: Int): ActivityResponses {
-        val response = service.makeCall {
-            it.networkApi.getUserRequestOfferListResponseAsync(createOfferRequest(activityType))
-        }
-        try {
-            val offers = response.data?.offers
-            val requests = response.data?.requests
-            if (!offers.isNullOrEmpty()) {
-                insertItemToDatabase(context, offers)
-            }
-            if (!requests.isNullOrEmpty()) {
-                insertItemToDatabase(context, requests)
-            }
-        } catch (e: Exception) {
-
-        }
+    suspend fun getPeopleResponse(peopleHelp: AddData, activityDetail: ActivityDetail): ActivityResponses {
+        val response = service.makeCall { it.networkApi.getActivityNewAddResponseAsync(createPeopleRequest(peopleHelp)) }
+        savePeopleRequestToDatabase(peopleHelp, activityDetail, response)
         return response
-    }
-
-    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>) {
-        val addDataList = ArrayList<AddCategoryDbItem>()
-        offers.forEach { offer ->
-            try {
-                val item = AddCategoryDbItem()
-                item.activity_type = offer.activity_type
-                item.activity_uuid = offer.activity_uuid
-
-                var itemDetail = ""
-                offer.activity_detail?.forEachIndexed { index, it ->
-
-                    if (offer.activity_category == CATEGORY_PEOPLE) {
-                        //for people
-                        item.volunters_required = it.volunters_required
-                        item.volunters_detail = it.volunters_detail
-                        item.volunters_quantity = it.volunters_quantity
-                        item.technical_personal_required = it.technical_personal_required
-                        item.technical_personal_detail = it.technical_personal_detail
-                        item.technical_personal_quantity = it.technical_personal_quantity
-
-                        if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                            itemDetail += it.volunters_detail?.take(30) + "(" + it.volunters_quantity + ")"
-
-                        }
-                        if (!it.technical_personal_detail.isNullOrEmpty()) {
-                            if (itemDetail.isNotEmpty()) {
-                                itemDetail += "<br/>"
-                            }
-                            itemDetail += it.technical_personal_detail?.take(30) + "(" + it.technical_personal_quantity + ")"
-                        }
-
-                    } else if (offer.activity_category == CATEGORY_AMBULANCE) {
-                        item.qty = it.quantity
-                        itemDetail = ""
-                    } else {
-                        if (!it.detail.isNullOrEmpty()) {
-                            itemDetail += it.detail?.take(30)
-                        }
-                        if (!it.quantity.isNullOrEmpty()) {
-                            itemDetail += "(" + it.quantity + ")"
-                        }
-
-                        if (offer.activity_detail!!.size - 1 != index) {
-                            itemDetail += "<br/>"
-                        }
-
-                    }
-                }
-
-                offer.mapping?.forEach { mapping ->
-                    if (mapping.offer_detail != null) {
-                        mapping.offer_detail?.user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.offer_detail?.user_detail?.activity_type = offer.activity_type
-                        mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                        mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
-                        mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
-                        mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
-                        mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
-                        mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
-                        setOfferDetail(mapping)
-
-                    } else if (mapping.request_detail != null) {
-                        mapping.request_detail?.user_detail?.parent_uuid = offer.activity_uuid
-                        mapping.request_detail?.user_detail?.activity_type = offer.activity_type
-                        mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
-                        mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
-                        mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
-                        mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
-                        mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
-                        mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
-                        setRequestDetail(mapping)
-                    }
-                }
-                val mappingList = ArrayList<MappingDetail>()
-                offer.mapping?.forEach {
-                    if (it.offer_detail != null) {
-                        mappingList.add(it.offer_detail!!.user_detail!!)
-                    } else {
-                        mappingList.add(it.request_detail!!.user_detail!!)
-                    }
-                }
-                if (mappingList.isNotEmpty()) saveMappingToDb(mappingList)
-
-                item.detail = itemDetail
-                item.activity_uuid = offer.activity_uuid
-                item.date_time = offer.date_time
-                item.activity_category = offer.activity_category
-                item.activity_count = offer.activity_count
-                item.geo_location = offer.geo_location
-                item.address = context.getAddress(preferencesService.latitude, preferencesService.longitude)
-                item.status = 1
-                addDataList.add(item)
-            } catch (e: Exception) {
-                Timber.d("")
-            }
-        }
-        addDataList.reverse()
-        saveFoodItemsToDb(addDataList)
-    }
-
-    private fun setRequestDetail(mapping: Mapping) {
-        try {
-            var detail = ""
-
-            if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
-                    }
-                    detail += it.quantity
-                }
-            } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
-                    }
-
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
-                        detail += it.technical_personal_detail?.take(30)
-                    }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
-                    }
-                }
-
-            } else {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
-                    }
-                    if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
-                    }
-                }
-            }
-            mapping.request_detail?.user_detail?.detail = detail
-        } catch (e: Exception) {
-            Timber.d("")
-        }
-    }
-
-    private fun setOfferDetail(mapping: Mapping) {
-        try {
-            var detail = ""
-
-            if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
-                    }
-                    detail += it.quantity
-                }
-            } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
-                    }
-
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
-                        detail += it.technical_personal_detail?.take(30)
-                    }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
-                    }
-                }
-
-            } else {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
-                    }
-                    if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
-                    }
-                }
-            }
-            mapping.offer_detail?.user_detail?.detail = detail
-        } catch (e: Exception) {
-            Timber.d("")
-        }
-    }
-
-    private fun createOfferRequest(activityType: Int): String {
-        val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
-            val bodyJson = JSONObject()
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-                bodyJson.put("activity_type", activityType)
-                mainData.put("data", bodyJson)
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
-        }
-        return mainData.toString()
-    }
-
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): List<AddCategoryDbItem> {
-        val finalRequest = ArrayList<AddCategoryDbItem>()
-        val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
-        val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType, initiator)
-        requestList.forEach { item ->
-            val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
-            if (mapping.isNotEmpty()) {
-                item.isMappingExist = true
-            }
-            finalRequest.add(item)
-            item.totalOffers = mapping.size
-        }
-        return finalRequest
-    }
-
-
-    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): List<MappingDetail> {
-        val response = db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
-        response.forEach { detail ->
-            try {
-                val destinationLatLong = detail.geo_location?.split(",")
-                if (!destinationLatLong.isNullOrEmpty()) {
-                    val lat1 = preferencesService.latitude
-                    val long1 = preferencesService.longitude
-                    val lat2 = destinationLatLong[0].toDouble()
-                    val long2 = destinationLatLong[1].toDouble()
-                    detail.distance = Utils.getDistance(lat1, long1, lat2, long2)
-                }
-            } catch (e: Exception) {
-            }
-        }
-        return response
-    }
-
-    suspend fun getPeopleResponse(peopleHelp: AddData): ActivityResponses {
-        return service.makeCall { it.networkApi.getActivityNewAddResponseAsync(createPeopleRequest(peopleHelp)) }
     }
 
     private fun createPeopleRequest(peopleHelp: AddData): String {
@@ -799,6 +486,46 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
+    private fun savePeopleRequestToDatabase(peopleHelp: AddData, activityDetail: ActivityDetail, first: ActivityResponses?) {
+        first?.data?.let { item ->
+            val addItemList = ArrayList<AddCategoryDbItem>()
+
+            val singleItem = AddCategoryDbItem()
+            singleItem.activity_type = peopleHelp.activity_type
+            singleItem.activity_uuid = peopleHelp.activity_uuid
+            singleItem.date_time = peopleHelp.date_time
+            singleItem.activity_category = peopleHelp.activity_category
+            singleItem.activity_count = peopleHelp.activity_count
+            singleItem.geo_location = peopleHelp.geo_location
+            singleItem.address = peopleHelp.address
+            var detail = ""
+
+            if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
+                detail += activityDetail.volunters_detail?.take(30) + "(" + activityDetail.volunters_quantity + ")"
+
+            }
+
+            if (!activityDetail.technical_personal_detail.isNullOrEmpty()) {
+                if (detail.isNotEmpty()) {
+                    detail += "<br/>"
+                }
+                detail += activityDetail.technical_personal_detail?.take(30) + "(" + activityDetail.technical_personal_quantity + ")"
+            }
+
+            singleItem.detail = detail
+            singleItem.volunters_required = 0
+            singleItem.volunters_detail = activityDetail.volunters_detail
+            singleItem.volunters_quantity = activityDetail.volunters_quantity
+            singleItem.technical_personal_required = activityDetail.technical_personal_required
+            singleItem.technical_personal_detail = activityDetail.technical_personal_detail
+            singleItem.technical_personal_quantity = activityDetail.technical_personal_quantity
+            singleItem.status = 1
+
+            addItemList.add(singleItem)
+            saveFoodItemToDatabase(addItemList)
+        }
+    }
+
     suspend fun getAmbulanceHelpResponse(ambulanceHelp: AddData): ServerResponse {
         return service.makeCall { it.networkApi.getActivityAmbulancesResponseAsync(createAmbulanceRequest(ambulanceHelp)) }
     }
@@ -839,37 +566,5 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    fun saveFoodItemsToDb(addItemList: ArrayList<AddCategoryDbItem>): Boolean {
-        val items = addItemList.toTypedArray()
-        val count = db.getAddItemDao().insertMultipleRecords(*items)
-        return count.isNotEmpty()
-    }
-
-    fun deleteActivityFromDb(activityUuid: String?): Boolean {
-        activityUuid?.let {
-            db.getAddItemDao().deleteActivity(it)
-            return true
-        }
-        return false
-    }
-
-    fun saveMappingToDb(mappingList: ArrayList<MappingDetail>): Boolean {
-        return try {
-            val typeArray = mappingList.toTypedArray()
-            val count = db.getMappingDao().insertMappingRecord(*typeArray)
-            count.isNotEmpty()
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    fun deleteMappingFromDb(parent_uuid: String?, activity_uuid: String): Boolean {
-        return try {
-            db.getMappingDao().deleteMapping(activity_uuid, parent_uuid!!)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
 
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/_10sdp"
+    android:paddingTop="@dimen/_20sdp"
+    android:paddingEnd="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_20sdp">
+
+    <TextView
+        android:id="@+id/item_name"
+        style="@style/StyleTextView"
+        android:layout_width="0dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Food" />
+
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_name"
+        tools:text="14 April 2020,2:00 pm" />
+
+
+    <TextView
+        android:id="@+id/tv_detail"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time"
+        tools:text="Can help with" />
+
+
+    <TextView
+        android:id="@+id/free_or_paid"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_cancel_this_request"
+        tools:text="Free" />
+
+    <Button
+        android:id="@+id/btn_cancel_this_request"
+        style="@style/StyleLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_25sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:text="@string/cancel_this_request"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MenuItem
-import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +29,7 @@ import org.jetbrains.anko.startActivity
 import timber.log.Timber
 
 
-class RequestDetailActivity : BaseActivity(), View.OnClickListener {
+class RequestDetailActivity : BaseActivity() {
 
     private var activity_uuid: String = ""
     private var initiator: Int = 0
@@ -46,11 +45,9 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         initiator = intent.getIntExtra(INITIATOR, HELP_TYPE_REQUEST)
         activity_uuid = intent.getStringExtra(ACTIVITY_UUID) ?: ""
         isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
-        layout_bottom.show()
         if (offerType == HELP_TYPE_REQUEST) {
             if (initiator == HELP_TYPE_REQUEST) {//send request
                 supportActionBar?.title = getString(R.string.request_send_to)
-
             } else {//offer received
                 supportActionBar?.title = getString(R.string.help_offers_received_from)
             }
@@ -62,14 +59,13 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
                 supportActionBar?.title = getString(R.string.help_request_received_from)
             }
         }
-        btn_cancel_request.setOnClickListener(this)
         mRecyclerView
     }
 
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(itemList, onRateReportClick = { item -> onRateReportClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail, description -> onDetailClick(name, detail, description) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail, description, pay -> onDetailClick(name, detail, description, pay) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
@@ -99,7 +95,7 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun onRateReportClick(item: MappingDetail) {
+    private fun onRateClick(item: MappingDetail) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
@@ -123,6 +119,10 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             val rateReport = BottomSheetRateReportFragmentForMapping(item, onSubmitClick = { _, rating, recommendToOther, comments -> onSubmitClick(item, rating, recommendToOther, comments) })
             rateReport.show(supportFragmentManager, null)
         }
+    }
+
+    private fun onReportBlockClick(item: MappingDetail) {
+        toast("Not implemented")
     }
 
     private fun onSubmitClick(item: MappingDetail, rating: String, recommendToOther: Int, comments: String) {
@@ -162,7 +162,15 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
             viewModel.deleteActivity(activity_uuid, offerType).observe(this, Observer {
                 dialog.dismiss()
                 it.first?.let { delete ->
-                    deleteActivityFromDatabase(delete.data?.activity_uuid)
+
+                    toastSuccess(R.string.toast_delete_success)
+                    val intent1 = Intent(DATA_REFRESH)
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
+
+                    val returnIntent = Intent()
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finishWithFade()
+
                 } ?: kotlin.run {
                     if (!isNetworkAvailable()) {
                         toastError(R.string.toast_error_internet_issue)
@@ -195,12 +203,12 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun onDetailClick(name: String, detail: String, description: String) {
+    private fun onDetailClick(name: String, detail: String, description: String, pay: Int) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail, description)
+        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail, description, pay)
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -219,31 +227,12 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         })
     }
 
-    private fun deleteActivityFromDatabase(activityUuid: String?) {
-        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
-        dialog.show()
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.deleteActivityFromDatabase(activityUuid).observe(this, Observer {
-            dialog.dismiss()
-            if (it) {
-                toastSuccess(R.string.toast_delete_success)
-                val intent1 = Intent(DATA_REFRESH)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
-
-                val returnIntent = Intent()
-                setResult(Activity.RESULT_OK, returnIntent)
-                finishWithFade()
-            }
-        })
-    }
-
     override fun onBackPressed() {
         if (isFromNotification) {
             goToHome()
         }
         super.onBackPressed()
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
@@ -261,12 +250,6 @@ class RequestDetailActivity : BaseActivity(), View.OnClickListener {
         startActivity(intent)
         overridePendingTransition(R.anim.enter, R.anim.exit)
         finishWithSlideAnimation()
-    }
-
-    override fun onClick(v: View?) {
-        if (v == btn_cancel_request) {
-            onDeleteYesClick(null, activity_uuid)
-        }
     }
 
     override fun getLayout(): Int {

@@ -3,16 +3,19 @@ package org.helpinout.billonlights.view.adapters
 import android.os.Build
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_request_detail.view.tv_detail
-import kotlinx.android.synthetic.main.item_request_detail.view.tv_rate_report
 import kotlinx.android.synthetic.main.item_request_sent.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.ItemRequestSentBinding
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.displayTime
+import org.helpinout.billonlights.utils.inflate
 
 
-class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>, private val onRateReportClick: (AddCategoryDbItem) -> Unit, private val onSendRequestClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onOffersClick: (Int, Int, Int, AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
+class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>,
+    private val onSearchForHelpProviderClick: (AddCategoryDbItem) -> Unit,
+    private val onViewDetailClick: (Int, AddCategoryDbItem) -> Unit, private val onNewMatchesClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onRequestSentClick: (Int, Int,Int, String) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestSentViewHolder {
         val viewLayout: ItemRequestSentBinding = parent.inflate(R.layout.item_request_sent)
         return RequestSentViewHolder(viewLayout, offerType)
@@ -21,29 +24,38 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
     override fun onBindViewHolder(holder: RequestSentViewHolder, position: Int) {
         val item = requestSentList[position]
         holder.item.item = item
-        holder.itemView.count_text_view.goneIf(item.totalOffers == 0)
         holder.itemView.tv_time.text = item.date_time.displayTime()
-        holder.itemView.tv_detail.text = item.detail?.fromHtml()
 
+        holder.itemView.tv_offer_received_count.text = item.offersReceived?.toString() ?: "0"
+        holder.itemView.tv_request_send_count.text = item.requestSent?.toString() ?: "0"
+        val ctx = holder.itemView.context
         if (item.activity_type == HELP_TYPE_REQUEST) {
-            holder.itemView.tv_rate_report.setText(R.string.search_for_help_provider)
-            holder.itemView.count_text_view.text = holder.itemView.context.getString(R.string.total_offers, item.totalOffers)
+            holder.itemView.tv_offer_received.text = ctx.getString(R.string.offers_received)
+            holder.itemView.tv_request_sent.text = ctx.getString(R.string.requests_sent)
+            holder.itemView.tv_search_for_help_providers.text= ctx.getString(R.string.search_for_help_givers)
         } else {
-            holder.itemView.count_text_view.setBackgroundResource(R.drawable.rounded_text_view_accent)
-            holder.itemView.tv_rate_report.setText(R.string.search_for_help_requester)
-            holder.itemView.count_text_view.text = holder.itemView.context.getString(R.string.total_requests, item.totalOffers)
-            holder.itemView.tv_send_requests.text = holder.itemView.tv_send_requests.context.getString(R.string.sent_offers)
-        }
-        holder.itemView.count_text_view.setOnClickListener {
-            onOffersClick(offerType, initiator, helpType, item)
+            holder.itemView.tv_offer_received.text = ctx.getString(R.string.requests_received)
+            holder.itemView.tv_request_sent.text = ctx.getString(R.string.offer_sent)
+            holder.itemView.tv_search_for_help_providers.text= ctx.getString(R.string.search_for_help_seeker)
         }
 
-        holder.itemView.tv_rate_report.setOnClickListener {
-            onRateReportClick(item)
+        holder.itemView.tv_offer_received.setOnClickListener {
+            val initiat = if (initiator == 1) 2 else 1
+            onRequestSentClick(offerType,initiat,helpType,item.activity_uuid)
+        }
+        holder.itemView.tv_request_sent.setOnClickListener {
+            onRequestSentClick(offerType,initiator,helpType,item.activity_uuid)
+        }
+        holder.itemView.tv_new_matches.setOnClickListener {
+            onNewMatchesClick(offerType, initiator, helpType, item)
         }
 
-        holder.itemView.tv_send_requests.setOnClickListener {
-            onSendRequestClick(offerType, initiator, helpType, item)
+        holder.itemView.tv_search_for_help_providers.setOnClickListener {
+            onSearchForHelpProviderClick(item)
+        }
+
+        holder.itemView.view_detail.setOnClickListener {
+            onViewDetailClick(offerType, item)
         }
     }
 

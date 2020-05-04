@@ -19,7 +19,7 @@ class PreferencesService {
     var latitude by doubleProperty(default = 0.0)
     var longitude by doubleProperty(default = 0.0)
     var defaultLanguage by stringProperty()
-    var zoomLevel by floatProperty(default = 10.7F)
+    var zoomLevel by floatProperty(default = 12.05F)
 
     var gpsAccuracy by stringProperty()
     var firebaseId by stringProperty(default = "fghgfghfgdgghghhggghghghghhgggggg")

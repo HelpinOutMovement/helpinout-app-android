@@ -36,7 +36,7 @@ const val KANNAD = 3
 const val MARATHI = 4
 const val GUJRATI = 5
 const val ALLOW_NUMBER1 = "+917303767448"
-//const val ALLOW_NUMBER2 = "+918097090069"
+const val ALLOW_NUMBER2 = "+918800579215"
 
 const val ENGLISH_CODE = "en"
 const val HINDI_CODE = "hi"

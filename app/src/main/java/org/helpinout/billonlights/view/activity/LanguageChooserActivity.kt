@@ -41,7 +41,6 @@ class LanguageChooserActivity : BaseActivity() {
         loadLanguageList()
     }
 
-    @Synchronized
     private fun loadLanguageList() {
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.getLanguageItems(this).observe(this, Observer { list ->

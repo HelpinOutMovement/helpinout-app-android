@@ -11,7 +11,7 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 
 
-class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onRateReportClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String, String) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
+class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onReportBlockClick: (MappingDetail) -> Unit, private val onRateClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (String, String, String,Int) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestDetailViewHolder {
         val viewLayout: ItemRequestDetailBinding = parent.inflate(R.layout.item_request_detail)
         return RequestDetailViewHolder(viewLayout)
@@ -23,10 +23,11 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
 
         holder.itemView.tv_time.text = timeAgo(item.date_time ?: "", holder.itemView.context) + "  |  " + holder.itemView.context.getString(R.string.distance_km, item.distance)
         holder.itemView.tv_name.text = item.first_name + " " + item.last_name
-        holder.itemView.rating_bar.goneIf(item.rating_count == 0)
+        holder.itemView.rating_bar.inVisibleIf(item.rating_count == 0)
+        holder.itemView.tv_not_rated.visibleIf(item.rating_count == 0)
         holder.itemView.rating_bar.rating = item.rating_avg ?: 0.0F
         holder.itemView.tv_view_detail.setOnClickListener {
-            onDetailClick(item.first_name + " " + item.last_name, item.offer_condition ?: "", item.detail ?: "")
+            onDetailClick(item.first_name + " " + item.last_name, item.offer_condition ?: "", item.detail ?: "",item.pay)
         }
 
         if (item.activity_type == HELP_TYPE_REQUEST) {
@@ -52,8 +53,11 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
             }
         }
 
-        holder.itemView.tv_rate_report.setOnClickListener {
-            onRateReportClick(item)
+        holder.itemView.tv_rate.setOnClickListener {
+            onRateClick(item)
+        }
+        holder.itemView.tv_report_block.setOnClickListener {
+            onReportBlockClick(item)
         }
         holder.itemView.tv_delete.setOnClickListener {
             onDeleteClick(item)
