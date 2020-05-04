@@ -15,12 +15,19 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.service.LocationService
+import org.helpinout.billonlights.service.OfferRequestDetailService
+import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -32,7 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var preferencesService: PreferencesService
 
     @Inject
-    lateinit var locationService: LocationService
+    lateinit var offerRequestListService: OfferRequestListService
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.isNotEmpty().let {
@@ -53,9 +60,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(data: Map<String, String>) {
         val bundle = Bundle()
-        val intent1 = Intent(DATA_REFRESH)
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
-
+        fetchData()
         val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
         val action = data[ACTION]?.toInt() ?: 0
         val sendName = data[SENDER_NAME].toString()
@@ -99,5 +104,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(0, notificationBuilder.build())
+    }
+
+    private fun fetchData() {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0)
+            } catch (e: Exception) {
+                Timber.d("")
+            }
+        }
     }
 }
