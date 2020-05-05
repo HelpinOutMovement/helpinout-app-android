@@ -230,15 +230,15 @@
     <string name="requests_received">Requests received</string>
     <string name="requests_sent">Requests sent</string>
     <string name="offer_sent">Offers sent</string>
-    <string name="search_for_help_givers">Search for help givers</string>
+    <string name="search_for_help_givers">Search for help Givers</string>
     <string name="search_for_help_seeker">Search for help Seekers</string>
     <string name="new_matches">New matches</string>
     <!-- End My offers screen -->
 
 
     <!-- Offerer/Requester chooser screen -->
-    <string name="select_help_provider">Select Help Providers</string>
-    <string name="select_help_requester">Select Help Requesters</string>
+    <string name="select_help_provider">Select Help Givers</string>
+    <string name="select_help_requester">Select Help Seekers</string>
     <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
     <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
     <string name="send_request">Send Request</string>
@@ -283,6 +283,7 @@
     <string name="label_add_item">Add item</string>
     <string name="label_send_mail">Send mail</string>
     <string name="invalid_email_id">Please enter valid email id</string>
+    <string name="should_othe_help_them">Should others help them?</string>
 
 
 </resources>

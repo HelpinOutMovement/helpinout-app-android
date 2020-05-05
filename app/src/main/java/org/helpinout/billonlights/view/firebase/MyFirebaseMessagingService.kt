@@ -24,7 +24,6 @@ import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
 import org.jetbrains.anko.runOnUiThread
-import timber.log.Timber
 import javax.inject.Inject
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -38,8 +37,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var offerRequestListService: OfferRequestListService
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+
+    override fun onCreate() {
         (application as BillionLightsApplication).getAppComponent().inject(this)
+        super.onCreate()
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data.isNotEmpty().let {
             handleNow(remoteMessage.data)
         }

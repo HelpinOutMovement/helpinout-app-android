@@ -57,7 +57,7 @@
                 android:maxLines="2"
                 android:paddingStart="@dimen/_10sdp"
                 android:paddingEnd="@dimen/_10sdp"
-                android:textColor="@color/light_gray"
+                android:textColor="@color/gray"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toStartOf="@+id/iv_offer"
                 app:layout_constraintStart_toStartOf="parent"

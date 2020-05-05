@@ -139,7 +139,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 divider2.visibleIf(helpType == HELP_TYPE_OFFER && bottomItemList.isNotEmpty())
 
                 tv_no_help_provider.visibleIf(bottomItemList.isEmpty())
-                recycler_view.inVisibleIf(bottomItemList.isEmpty())
+                recycler_view.goneIf(bottomItemList.isEmpty())
 
                 mMap?.let {
                     mMap!!.clear()

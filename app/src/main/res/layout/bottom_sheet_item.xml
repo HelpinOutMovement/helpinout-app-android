@@ -12,6 +12,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:paddingBottom="@dimen/_5sdp"
         android:layout_height="wrap_content">
 
         <CheckBox
@@ -68,7 +69,7 @@
             android:textStyle="bold"
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_message"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_message"
             tools:text="Free" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

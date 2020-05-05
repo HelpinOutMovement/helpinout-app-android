@@ -8,7 +8,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_rate_report.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.MappingDetail
+import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.hide
 
 
 class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private val onSubmitClick: (MappingDetail, String, Int, String) -> Unit) : BottomSheetDialogFragment() {
@@ -24,6 +26,13 @@ class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private v
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (item.activity_type == HELP_TYPE_OFFER) {
+            tv_message.text = getString(R.string.should_othe_help_them)
+            tv_comment.hide()
+            edt_comment.hide()
+        }
+
         iv_expend_collapse.setOnClickListener {
             dismiss()
         }

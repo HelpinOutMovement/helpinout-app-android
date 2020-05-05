@@ -25,7 +25,8 @@ class BottomSheetsDetailFragment(private val offerType: Int, private val name: S
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (offerType == HELP_TYPE_REQUEST) {
-            tv_time.show()
+            note.show()
+            divider1.show()
             tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description).fromHtml()
             free_or_paid.text= getString(if (pay==1) R.string.not_free else R.string.free)
         } else {

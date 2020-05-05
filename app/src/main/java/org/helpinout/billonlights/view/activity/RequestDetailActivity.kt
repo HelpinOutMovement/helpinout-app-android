@@ -44,6 +44,7 @@ class RequestDetailActivity : BaseActivity() {
         offerType = intent.getIntExtra(OFFER_TYPE, HELP_TYPE_REQUEST)
         initiator = intent.getIntExtra(INITIATOR, HELP_TYPE_REQUEST)
         activity_uuid = intent.getStringExtra(ACTIVITY_UUID) ?: ""
+        isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
         if (offerType == HELP_TYPE_REQUEST) {
             if (initiator == HELP_TYPE_REQUEST) {//send request
                 supportActionBar?.title = getString(R.string.request_send_to)

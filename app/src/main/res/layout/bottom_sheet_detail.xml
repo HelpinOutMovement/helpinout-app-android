@@ -42,8 +42,19 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:text="Can help with" />
 
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_items" />
+
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/note"
         style="@style/StyleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -51,9 +62,10 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:text="@string/note"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_items" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_condition"
@@ -63,7 +75,7 @@
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_time"
+        app:layout_constraintTop_toBottomOf="@+id/note"
         tools:text="We can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered." />
 
     <TextView
