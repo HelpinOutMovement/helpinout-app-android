@@ -27,6 +27,7 @@ import org.json.JSONObject
 class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
     private val maxLimit = 4
+    private var selfHelp: Int = 0
     private val addData = AddData()
     private val suggestionData = SuggestionRequest()
 
@@ -36,7 +37,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         addData.activity_type = helpType
         addData.date_time = currentDateTime()
         addData.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude.toString()
-
+        selfHelp = intent.getIntExtra(SELF_ELSE, 0)
         val categoryType = intent.getIntExtra(CATEGORY_TYPE, 0)
         addData.activity_category = categoryType
         suggestionData.activity_category = categoryType
@@ -100,6 +101,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         suggestionData.latitude = preferencesService.latitude
         suggestionData.longitude = preferencesService.longitude
         suggestionData.accuracy = preferencesService.gpsAccuracy
+        addData.selfHelp= selfHelp
         val address = getAddress(preferencesService.latitude, preferencesService.longitude)
         dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog?.show()

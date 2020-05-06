@@ -22,12 +22,12 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
         holder.item.item = item
 
         holder.itemView.tv_time.text = timeAgo(item.date_time ?: "", holder.itemView.context) + "  |  " + holder.itemView.context.getString(R.string.distance_km, item.distance)
-        holder.itemView.tv_name.text = item.first_name + " " + item.last_name
+        holder.itemView.tv_name.text = item.profile_name
         holder.itemView.rating_bar.inVisibleIf(item.rating_count == 0)
         holder.itemView.tv_rate.visibleIf(item.rating_count == 0)
         holder.itemView.rating_bar.rating = item.rating_avg ?: 0.0F
         holder.itemView.tv_view_detail.setOnClickListener {
-            onDetailClick(item.first_name + " " + item.last_name, item.offer_condition ?: "", item.detail ?: "", item.pay)
+            onDetailClick(item.profile_name?:"", item.offer_condition ?: "", item.detail ?: "", item.pay)
         }
 
         if (item.activity_type == HELP_TYPE_REQUEST) {

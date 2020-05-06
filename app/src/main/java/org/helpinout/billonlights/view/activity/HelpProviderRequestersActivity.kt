@@ -250,7 +250,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 val geoLocation = detail.geo_location!!.split(",")
                 val latitude = geoLocation[0].toDouble()
                 val longitude = geoLocation[1].toDouble()
-                val name = detail.user_detail!!.first_name + " " + detail.user_detail!!.last_name
+                val name = detail.user_detail!!.profile_name
                 createMarker(latitude, longitude, name, name, icon)
             } catch (e: Exception) {
                 Timber.d("")
@@ -319,7 +319,6 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             if (it.first != null) {
                 if (it.first!!.data != null) {
                     it.first!!.data!!.mapping?.forEach { mapping ->
-
                         if (mapping.offer_detail != null) {
                             mapping.offer_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
                             mapping.offer_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
@@ -329,6 +328,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                             mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
                             mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            mapping.offer_detail?.user_detail?.pay= mapping.offer_detail!!.pay
                             setOfferDetail(mapping)
                         } else if (mapping.request_detail != null) {
                             mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
@@ -339,6 +339,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                             mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
                             mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            mapping.request_detail?.user_detail?.pay= mapping.request_detail!!.pay
                             setRequestDetail(mapping)
                         }
                     }
@@ -380,7 +381,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
+                        detail += " (" + it.volunters_quantity + ")"
                     }
 
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -390,7 +391,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
+                        detail += " (" + it.technical_personal_quantity + ")"
                     }
                 }
 
@@ -400,7 +401,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.detail?.take(30)
                     }
                     if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
+                        detail += " (" + it.quantity + ")"
                     }
                     if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
                         detail += "<br/>"
@@ -431,7 +432,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
+                        detail += " (" + it.volunters_quantity + ")"
                     }
 
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -441,7 +442,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
+                        detail += " (" + it.technical_personal_quantity + ")"
                     }
                 }
 
@@ -451,7 +452,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                         detail += it.detail?.take(30)
                     }
                     if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
+                        detail += " (" + it.quantity + ")"
                     }
                     if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
                         detail += "<br/>"

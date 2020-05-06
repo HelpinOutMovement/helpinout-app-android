@@ -195,7 +195,7 @@
     <string name="offer_help_text">They will call you if they need your help</string>
     <string name="call_them">Call\nthem</string>
     <string name="can_pay">Can pay</string>
-    <string name="can_not_pay">Can\'t pay</string>
+    <string name="can_not_pay">Cannot pay</string>
     <string name="free">Free</string>
     <string name="not_free">Not free</string>
     <string name="offer_help_to_every_one">Offer help to everyone in the map area</string>

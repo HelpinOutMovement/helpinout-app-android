@@ -106,14 +106,14 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         item.technical_personal_quantity = it.technical_personal_quantity
 
                         if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                            itemDetail += it.volunters_detail?.take(30) + "(" + it.volunters_quantity + ")"
+                            itemDetail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
 
                         }
                         if (!it.technical_personal_detail.isNullOrEmpty()) {
                             if (itemDetail.isNotEmpty()) {
                                 itemDetail += "<br/>"
                             }
-                            itemDetail += it.technical_personal_detail?.take(30) + "(" + it.technical_personal_quantity + ")"
+                            itemDetail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
                         }
 
                     } else if (offer.activity_category == CATEGORY_AMBULANCE) {
@@ -124,7 +124,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             itemDetail += it.detail?.take(30)
                         }
                         if (!it.quantity.isNullOrEmpty()) {
-                            itemDetail += "(" + it.quantity + ")"
+                            itemDetail += " (" + it.quantity + ")"
                         }
 
                         if (offer.activity_detail!!.size - 1 != index) {
@@ -144,6 +144,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                         mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                        mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
                         setOfferDetail(mapping)
 
                     } else if (mapping.request_detail != null) {
@@ -155,6 +156,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                         mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                        mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
                         setRequestDetail(mapping)
                     }
                 }
@@ -176,6 +178,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 item.geo_location = offer.geo_location
                 item.address = context.getAddress(preferencesService.latitude, preferencesService.longitude)
                 item.status = 1
+                item.pay = offer.pay
                 addDataList.add(item)
             } catch (e: Exception) {
                 Timber.d("")
@@ -209,7 +212,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
+                        detail += " (" + it.volunters_quantity + ")"
                     }
 
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -219,7 +222,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
+                        detail += " (" + it.technical_personal_quantity + ")"
                     }
                 }
 
@@ -229,7 +232,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.detail?.take(30)
                     }
                     if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
+                        detail += " (" + it.quantity + ")"
                     }
                     if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
                         detail += "<br/>"
@@ -260,7 +263,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.volunters_quantity + ")"
+                        detail += " (" + it.volunters_quantity + ")"
                     }
 
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -270,7 +273,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += "(" + it.technical_personal_quantity + ")"
+                        detail += " (" + it.technical_personal_quantity + ")"
                     }
                 }
 
@@ -280,7 +283,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         detail += it.detail?.take(30)
                     }
                     if (!it.quantity.isNullOrEmpty()) {
-                        detail += "(" + it.quantity + ")"
+                        detail += " (" + it.quantity + ")"
                     }
                     if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
                         detail += "<br/>"

@@ -97,8 +97,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return list
     }
 
-    fun sendUserLocationToServer(radius: Float): MutableLiveData<Pair<ActivityResponses?, String>> {
-        val currentLocationResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
+    fun sendUserLocationToServer(radius: Float): MutableLiveData<Pair<LocationSuggestionResponses?, String>> {
+        val currentLocationResponse = MutableLiveData<Pair<LocationSuggestionResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 currentLocationResponse.postValue(Pair(locationService.getUserCurrentLocationResult(radius), ""))

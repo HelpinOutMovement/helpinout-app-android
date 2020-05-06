@@ -40,6 +40,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 bodyJson.put("address", body.address)
+                bodyJson.put("self_help", body.selfHelp)
+
                 bodyJson.put("activity_category", body.activity_category)
                 bodyJson.put("activity_count", body.activity_count)
                 bodyJson.put("activity_detail", body.activity_detail_string)
@@ -68,7 +70,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                     itemDetail += detail.detail
                 }
                 if (detail.quantity != null) {
-                    itemDetail += "(" + detail.quantity + ")"
+                    itemDetail += " (" + detail.quantity + ")"
                 }
                 if (item.activity_detail!!.size - 1 != index) {
                     itemDetail += "<br/>"
@@ -84,6 +86,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             categoryItem.geo_location = addData.geo_location
             categoryItem.address = address
             categoryItem.status = 1
+            categoryItem.pay= addData.pay
 
             addItemList.add(categoryItem)
             saveFoodItemToDatabase(addItemList)
@@ -178,7 +181,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                                         }
                                         if (!it.volunters_quantity.isNullOrEmpty()) {
-                                            detail += "(" + it.volunters_quantity + ")"
+                                            detail += " (" + it.volunters_quantity + ")"
 
                                         }
                                         if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -190,7 +193,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                                                 detail += it.technical_personal_detail?.take(30)
                                             }
                                             if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                                                detail += "(" + it.technical_personal_quantity + ")"
+                                                detail += " (" + it.technical_personal_quantity + ")"
                                             }
                                         }
 
@@ -202,7 +205,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                                             detail += it.detail?.take(30)
                                         }
                                         if (!it.quantity.isNullOrEmpty()) {
-                                            detail += "(" + it.quantity + ")"
+                                            detail += " (" + it.quantity + ")"
                                         }
 
 
@@ -252,7 +255,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                                         }
                                         if (!it.volunters_quantity.isNullOrEmpty()) {
-                                            detail += "(" + it.volunters_quantity + ")"
+                                            detail += " (" + it.volunters_quantity + ")"
 
                                         }
                                         if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -264,7 +267,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                                                 detail += it.technical_personal_detail?.take(30)
                                             }
                                             if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                                                detail += "(" + it.technical_personal_quantity + ")"
+                                                detail += " (" + it.technical_personal_quantity + ")"
                                             }
                                         }
 
@@ -276,7 +279,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                                             detail += it.detail?.take(30)
                                         }
                                         if (!it.quantity.isNullOrEmpty()) {
-                                            detail += "(" + it.quantity + ")"
+                                            detail += " (" + it.quantity + ")"
                                         }
                                         if (detailItem.activity_detail!!.size - 1 != index) {
                                             detail += "<br/>"
@@ -353,7 +356,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
-    suspend fun getUserCurrentLocationResult(radius: Float): ActivityResponses {
+    suspend fun getUserCurrentLocationResult(radius: Float): LocationSuggestionResponses {
         return service.makeCall { it.networkApi.getUserLocationResponseAsync(createLocationRequest(radius)) }
     }
 
@@ -470,7 +473,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 activity_detailjson.put("technical_personal_quantity", peopleHelp.activity_detail[0].technical_personal_quantity)
 
                 bodyJson.put("activity_detail", activity_detailjson)
-
+                bodyJson.put("self_help", peopleHelp.selfHelp)
                 bodyJson.put("address", peopleHelp.address)
                 bodyJson.put("pay", peopleHelp.pay)
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
@@ -498,10 +501,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
             singleItem.activity_count = peopleHelp.activity_count
             singleItem.geo_location = peopleHelp.geo_location
             singleItem.address = peopleHelp.address
+            singleItem.pay= peopleHelp.pay
             var detail = ""
 
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
-                detail += activityDetail.volunters_detail?.take(30) + "(" + activityDetail.volunters_quantity + ")"
+                detail += activityDetail.volunters_detail?.take(30) + " (" + activityDetail.volunters_quantity + ")"
 
             }
 
@@ -509,7 +513,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 if (detail.isNotEmpty()) {
                     detail += "<br/>"
                 }
-                detail += activityDetail.technical_personal_detail?.take(30) + "(" + activityDetail.technical_personal_quantity + ")"
+                detail += activityDetail.technical_personal_detail?.take(30) + " (" + activityDetail.technical_personal_quantity + ")"
             }
 
             singleItem.detail = detail
@@ -550,7 +554,9 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 val activity_detailjson = JSONObject()
                 activity_detailjson.put("qty", ambulance.qty)
                 bodyJson.put("activity_detail", activity_detailjson)
-
+                if (ambulance.activity_type == HELP_TYPE_OFFER) bodyJson.put("offer_note", ambulance.conditions)
+                else bodyJson.put("request_note", ambulance.conditions)
+                bodyJson.put("self_help", ambulance.selfHelp)
                 bodyJson.put("qty", ambulance.qty)
                 bodyJson.put("geo_location", ambulance.geo_location)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)

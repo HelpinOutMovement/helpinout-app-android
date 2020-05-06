@@ -98,6 +98,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 first_name.text.toString().take(1)
             } else first_name.text.toString().take(1) + ". " + last_name.text
         }
+        registration.profile_name = name
         return getString(R.string.help_in_out_profile) + " <b>" + name + "</b>"
     }
 

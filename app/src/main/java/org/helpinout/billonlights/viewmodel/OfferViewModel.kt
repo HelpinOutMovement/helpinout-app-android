@@ -17,6 +17,7 @@ import org.helpinout.billonlights.service.OfferRequestDetailService
 import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.getStringException
 import org.jetbrains.anko.doAsync
+import timber.log.Timber
 import javax.inject.Inject
 
 

@@ -20,6 +20,7 @@ class MappingDetail {
     var mobile_no: String = ""
     var first_name: String = ""
     var last_name: String? = ""
+    var profile_name: String? = ""
     var mobile_no_visibility: Int = 0
     var user_type: Int? = 0
     var org_name: String? = ""

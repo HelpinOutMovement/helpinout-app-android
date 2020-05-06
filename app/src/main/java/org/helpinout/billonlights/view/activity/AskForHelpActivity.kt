@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.activity_help.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.OfferHelpItem
+import org.helpinout.billonlights.utils.SELF_ELSE
 import org.helpinout.billonlights.view.adapters.AskForHelpAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
@@ -30,8 +31,8 @@ class AskForHelpActivity : BaseActivity() {
         recycler_view.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this@AskForHelpActivity, 2)
         recycler_view.layoutManager = layoutManager
-
-        adapter = AskForHelpAdapter(itemList, onItemClick = { item -> onItemClick(item) })
+        val selfElse = intent.getIntExtra(SELF_ELSE, 0)
+        adapter = AskForHelpAdapter(selfElse, itemList, onItemClick = { item, i -> onItemClick(item, i) })
         val itemDecorator = ItemOffsetDecoration(this@AskForHelpActivity, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter

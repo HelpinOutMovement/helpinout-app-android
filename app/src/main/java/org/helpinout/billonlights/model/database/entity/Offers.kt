@@ -14,6 +14,7 @@ class AddData {
     var offerer: String? = ""
     var requester: String? = ""
     var conditions: String? = ""
+    var selfHelp:Int=0
     var qty: String? = ""
     var activity_detail = ArrayList<ActivityDetail>()
     var activity_detail_string = JSONArray()

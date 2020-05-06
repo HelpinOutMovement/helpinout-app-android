@@ -24,7 +24,6 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.layout_ask_for_help.view.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
@@ -124,6 +123,11 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 val latlng = LatLng(loc.latitude, loc.longitude)
                 mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 12.05F))
                 detectRadius()
+                try {
+                    getRequesterAndHelper()
+                }catch (e:Exception){
+
+                }
                 stopLocationUpdate()
             }
         }
@@ -144,8 +148,8 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 val visibleRegion = it.projection.visibleRegion
                 val farRight: LatLng = visibleRegion.farRight
                 val farLeft: LatLng = visibleRegion.farLeft
-                (activity as HomeActivity).radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
-                getRequesterAndHelper()
+                // (activity as HomeActivity).radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
+                //getRequesterAndHelper()
             }
         }
     }
@@ -177,33 +181,22 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     }
 
     private fun getRequesterAndHelper() {
-        progressBar.show()
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewModel.sendUserLocationToServer((activity as HomeActivity).radius).observe(this, Observer { it ->
+        progressBar?.show()
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)//activity as HomeActivity).radius
+        viewModel.sendUserLocationToServer(6349.542f).observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
-                    val offerSize = it.offers?.size ?: 0
-                    val requesterSize = it.requests?.size ?: 0
 
-//                    if ((offerSize == 0 || requesterSize == 0) && retry != retryCount) {
-//                        retry++
-//                        makeRetryAfterZoomOut()
-//                        return@Observer
-//                    }
-                    progressBar.hide()
+                    progressBar?.hide()
 
-                    requestNearMe = getString(R.string.request_near_me_home, it.offers?.size?:0)
-                    offerNearMe = getString(R.string.offer_near_me_home, it.requests?.size?:0)
+                    requestNearMe = getString(R.string.request_near_me_home, it.my_offers_match)
+                    offerNearMe = getString(R.string.offer_near_me_home, it.my_requests_match)
 
-                    tv_offer.visibleIf(!it.offers.isNullOrEmpty())
-                    tv_request.visibleIf(!it.requests.isNullOrEmpty())
-
-
-//                    preferencesService.zoomLevel = mMap?.cameraPosition?.zoom ?: 10F
-
+                    tv_offer.visibleIf(it.my_offers_match != 0)
+                    tv_request.visibleIf(it.my_requests_match != 0)
                 }
             } ?: kotlin.run {
-                progressBar.hide()
+                progressBar?.hide()
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
                 } else toastError(it.second)
@@ -292,12 +285,12 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
         alertLayout.my_self.setOnClickListener {
             dialog.dismiss()
-            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST)
+            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST,SELF_ELSE to 1)
             activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
         }
         alertLayout.someone_else.setOnClickListener {
             dialog.dismiss()
-            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST)
+            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST,SELF_ELSE to 2)
             activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
         }
 

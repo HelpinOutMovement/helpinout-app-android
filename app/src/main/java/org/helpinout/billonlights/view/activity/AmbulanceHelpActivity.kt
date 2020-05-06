@@ -19,6 +19,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
     private val ambulanceHelp = AddData()
     private var dialog: ProgressDialog? = null
+    private var selfHelp: Int = 0
     private val suggestionData = SuggestionRequest()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         suggestionData.activity_category = 7
         ambulanceHelp.activity_uuid = getUuid()
         ambulanceHelp.date_time = currentDateTime()
+        selfHelp = intent.getIntExtra(SELF_ELSE, 0)
         ambulanceHelp.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude
         initTitle()
         if (helpType== HELP_TYPE_OFFER){
@@ -53,6 +55,8 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
     private fun sendDataToServer() {
         dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog?.show()
+        ambulanceHelp.selfHelp = selfHelp
+        ambulanceHelp.conditions = edt_conditions.text.toString()
         ambulanceHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.sendAmbulanceHelp(ambulanceHelp).observe(this, Observer {
@@ -63,7 +67,6 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
                 }
-
                 CrashReporter.logCustomLogs(it.second)
             }
         })
@@ -81,6 +84,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         item.address = ambulanceHelp.address
         item.qty = ambulanceHelp.qty ?: ""
         item.status = 1
+        item.pay= ambulanceHelp.pay
 
 
         suggestionData.activity_type = helpType

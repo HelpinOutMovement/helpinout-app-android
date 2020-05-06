@@ -22,7 +22,7 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
         val homeItem = appDetailItems[position]
         holder.item.item = homeItem.user_detail
         val context = holder.itemView.context
-        holder.itemView.tv_name.text = homeItem.user_detail?.first_name + " " + homeItem.user_detail?.last_name
+        holder.itemView.tv_name.text = homeItem.user_detail?.profile_name
         holder.itemView.distance.text = timeAgo(homeItem.date_time ?: "", holder.itemView.context) + "  |  " + context.getString(R.string.distance_km, homeItem.user_detail!!.distance)
 
         holder.itemView.tv_name.isChecked = homeItem.isSelected

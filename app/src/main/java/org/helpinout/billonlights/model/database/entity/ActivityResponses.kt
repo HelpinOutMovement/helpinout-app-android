@@ -1,5 +1,16 @@
 package org.helpinout.billonlights.model.database.entity
 
+
+class LocationSuggestionResponses {
+    var status: Int = 0
+    var message: String = ""
+    var data: LocationData? = null
+}
+
+class LocationData {
+    var my_requests_match: Int = 0
+    var my_offers_match: Int = 0
+}
 class ActivityResponses {
     var status: Int = 0
     var message: String = ""

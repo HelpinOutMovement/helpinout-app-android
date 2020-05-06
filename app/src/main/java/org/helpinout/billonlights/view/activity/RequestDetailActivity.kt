@@ -85,7 +85,7 @@ class RequestDetailActivity : BaseActivity() {
             progress_bar.hide()
             list?.let {
                 itemList.clear()
-                itemList.addAll(list)
+                itemList.addAll(list.reversed())
             }
             recycler_view.goneIf(itemList.isEmpty())
             tv_no_sender.visibleIf(itemList.isEmpty())

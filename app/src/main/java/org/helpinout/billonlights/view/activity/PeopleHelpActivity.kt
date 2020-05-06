@@ -18,6 +18,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     private var dialog: ProgressDialog? = null
     private var peopleHelp = AddData()
+    private var selfHelp: Int = 0
     private var activityDetail = ActivityDetail()
     private val suggestionData = SuggestionRequest()
 
@@ -29,6 +30,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         peopleHelp.activity_category = 2
         suggestionData.activity_category = 2
         peopleHelp.date_time = currentDateTime()
+        selfHelp = intent.getIntExtra(SELF_ELSE, 0)
         peopleHelp.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude.toString()
 
         peopleHelp.activity_detail.add(activityDetail)
@@ -71,8 +73,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         activityDetail.technical_personal_detail = edt_technical_personnel.text.toString()
         activityDetail.technical_personal_quantity = edt_qty2.text.toString()
         peopleHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
-
-
+        peopleHelp.selfHelp= selfHelp
         suggestionData.activity_type = helpType
         suggestionData.latitude = preferencesService.latitude
         suggestionData.longitude = preferencesService.longitude

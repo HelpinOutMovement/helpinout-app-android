@@ -17,6 +17,7 @@ const val REQUEST_APP_SETTINGS = 101
 const val DOUBLE_CLICK_TIME = 1000
 const val AUTOCOMPLETE_REQUEST_CODE = 42
 const val HELP_TYPE = "HelpType"
+const val SELF_ELSE="self_else"
 const val SUGGESTION_DATA = "SuggestionData"
 const val UPDATE_PROFILE = "UpdateProfile"
 const val UPDATE_LANGAUGE = "UpdateLanguage"

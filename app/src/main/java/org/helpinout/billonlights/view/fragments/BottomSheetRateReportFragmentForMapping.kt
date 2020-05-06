@@ -40,7 +40,7 @@ class BottomSheetRateReportFragmentForMapping(val item: MappingDetail, private v
             onSubmitClick(item, rating_bar.rating.toString(), if (rb_yes.isChecked) 1 else 0, edt_comment.text.toString())
             dismiss()
         }
-        tv_name.text = item.first_name + " " + item.last_name
+        tv_name.text = item.profile_name
     }
 
 }
