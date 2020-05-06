@@ -85,7 +85,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         item.qty = ambulanceHelp.qty ?: ""
         item.status = 1
         item.pay= ambulanceHelp.pay
-
+        //item.detail= "<b>"+getString(R.string.note)+ "</b><br/>" + ambulanceHelp.conditions
 
         suggestionData.activity_type = helpType
         suggestionData.latitude = preferencesService.latitude

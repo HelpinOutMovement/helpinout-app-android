@@ -130,7 +130,6 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         if (offer.activity_detail!!.size - 1 != index) {
                             itemDetail += "<br/>"
                         }
-
                     }
                 }
 
@@ -142,7 +141,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
                         mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
                         mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
-                        mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                        mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
                         setOfferDetail(mapping)
@@ -154,7 +153,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
                         mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
                         mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
-                        mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                        mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
                         setRequestDetail(mapping)

@@ -33,7 +33,8 @@ class ActivityAddDetail {
     var activity_category: Int = 0
     var activity_count: Int = 0
     var geo_location: String? = ""
-    var offer_condition: String? = ""
+    var offer_note: String? = ""
+    var request_note: String? = ""
     var isSelected: Boolean = false// for checked and unchecked
     var detail: String? = null
     var quantity: Int? = null

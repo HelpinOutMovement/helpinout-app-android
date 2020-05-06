@@ -46,7 +46,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("activity_count", body.activity_count)
                 bodyJson.put("activity_detail", body.activity_detail_string)
 
-                if (body.activity_type == HELP_TYPE_OFFER) bodyJson.put("offer_condition", body.conditions)
+                if (body.activity_type == HELP_TYPE_OFFER) bodyJson.put("offer_note", body.conditions)
 
                 bodyJson.put("offerer", body.offerer)
                 bodyJson.put("requester", body.requester)

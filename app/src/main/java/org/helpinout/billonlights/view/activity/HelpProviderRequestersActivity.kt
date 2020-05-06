@@ -326,7 +326,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
                             mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
                             mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
-                            mapping.offer_detail?.user_detail?.offer_condition = mapping.offer_detail?.offer_condition
+                            mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
                             mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                             mapping.offer_detail?.user_detail?.pay= mapping.offer_detail!!.pay
                             setOfferDetail(mapping)
@@ -337,7 +337,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
                             mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
                             mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
-                            mapping.request_detail?.user_detail?.offer_condition = mapping.request_detail?.offer_condition
+                            mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
                             mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                             mapping.request_detail?.user_detail?.pay= mapping.request_detail!!.pay
                             setRequestDetail(mapping)
@@ -369,10 +369,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
             if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
                 mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
-                    }
-                    detail += it.quantity
+                    mapping.offer_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
                 }
             } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
 
@@ -420,10 +417,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
             if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
                 mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
-                    }
-                    detail += it.quantity
+                    mapping.offer_detail?.user_detail?.offer_note = mapping.request_detail?.offer_note
                 }
             } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
 

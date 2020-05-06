@@ -65,7 +65,7 @@ class RequestDetailActivity : BaseActivity() {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { name, detail, description, pay -> onDetailClick(name, detail, description, pay) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = {i, name, detail, description, pay -> onDetailClick(i,name, detail, description, pay) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
@@ -85,7 +85,7 @@ class RequestDetailActivity : BaseActivity() {
             progress_bar.hide()
             list?.let {
                 itemList.clear()
-                itemList.addAll(list.reversed())
+                itemList.addAll(list)
             }
             recycler_view.goneIf(itemList.isEmpty())
             tv_no_sender.visibleIf(itemList.isEmpty())
@@ -201,12 +201,12 @@ class RequestDetailActivity : BaseActivity() {
         })
     }
 
-    private fun onDetailClick(name: String, detail: String, description: String, pay: Int) {
+    private fun onDetailClick(type:Int,name: String, detail: String, description: String, pay: Int) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(offerType, name, detail, description, pay)
+        val deleteDialog = BottomSheetsDetailFragment(type,offerType, name, detail, description, pay)
         deleteDialog.show(supportFragmentManager, null)
     }
 

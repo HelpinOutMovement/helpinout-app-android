@@ -34,7 +34,7 @@ class MappingDetail {
     var geo_location: String? = ""
     var parent_uuid: String? = ""
     var activity_uuid: String? = ""
-    var offer_condition: String? = ""
+    var offer_note: String? = ""
     var mapping_initiator: Int? = 0
     var detail: String? = ""
     var pay:Int=0

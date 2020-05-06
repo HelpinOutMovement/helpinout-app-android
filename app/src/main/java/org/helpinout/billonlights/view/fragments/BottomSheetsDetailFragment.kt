@@ -8,11 +8,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_delete_confirmation.iv_expend_collapse
 import kotlinx.android.synthetic.main.bottom_sheet_detail.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
-import org.helpinout.billonlights.utils.fromHtml
-import org.helpinout.billonlights.utils.show
+import org.helpinout.billonlights.utils.*
 
-class BottomSheetsDetailFragment(private val offerType: Int, private val name: String, private val detail: String, private val description: String, private val pay: Int) : BottomSheetDialogFragment() {
+class BottomSheetsDetailFragment(private val type:Int,private val offerType: Int, private val name: String, private val detail: String, private val description: String, private val pay: Int) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (offerType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -34,6 +32,14 @@ class BottomSheetsDetailFragment(private val offerType: Int, private val name: S
             free_or_paid.text= getString(if (pay==1) R.string.can_pay else R.string.can_not_pay)
         }
 
+        if (type== CATEGORY_PEOPLE){
+            note.hide()
+            divider1.hide()
+        }
+        if(type== CATEGORY_AMBULANCE){
+            note.show()
+            divider1.show()
+        }
         tv_name.text = name
 
         tv_condition.text = detail
