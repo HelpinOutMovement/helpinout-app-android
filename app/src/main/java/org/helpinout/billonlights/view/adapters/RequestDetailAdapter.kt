@@ -64,7 +64,7 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
             onRateClick(item)
         }
         holder.itemView.tv_report_block.setOnClickListener {
-            onReportBlockClick(item)
+            onRateClick(item)
         }
         holder.itemView.tv_delete.setOnClickListener {
             onDeleteClick(item)

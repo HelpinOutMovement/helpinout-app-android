@@ -106,15 +106,26 @@ class FragmentMyRequests : BaseFragment() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getNewMatchesResponse(activity_type).observe(this, Observer {
             if (it.first != null) {
-                it.first!!.data?.requests?.forEach { request ->
-                    val item = itemList.find {
-                        it.activity_uuid == request.activity_uuid
+                if (activity_type== HELP_TYPE_OFFER){
+                    it.first!!.data?.offers?.forEach { request ->
+                        val item = itemList.find {
+                            it.activity_uuid == request.activity_uuid
+                        }
+                        if (item != null) {
+                            item.newMatchesCount = request.new_matches
+                        }
                     }
-                    if (item != null) {
-                        item.newMatchesCount = request.new_matches
+                }else{
+                    it.first!!.data?.requests?.forEach { request ->
+                        val item = itemList.find {
+                            it.activity_uuid == request.activity_uuid
+                        }
+                        if (item != null) {
+                            item.newMatchesCount = request.new_matches
+                        }
                     }
                 }
-                adapter?.notifyDataSetChanged()
+                adapter.notifyDataSetChanged()
             }
         })
     }
@@ -156,7 +167,6 @@ class FragmentMyRequests : BaseFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        toast("Not implemented")
     }
 
 

@@ -100,11 +100,11 @@ class LocationService(private val preferencesService: PreferencesService, privat
     }
 
 
-    suspend fun sendOfferRequests(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
-        return service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(isSendToAll, activity_type, activity_uuid, list)) }
+    suspend fun sendOfferRequests(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
+        return service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(radius,lat,longitude,isSendToAll, activity_type, activity_uuid, list)) }
     }
 
-    private fun createOffererRequester(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
+    private fun createOffererRequester(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -121,6 +121,9 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
                 if (isSendToAll == 1) {
                     bodyJson.put("all_requester", 1)
+                    bodyJson.put("radius", radius)
+                    bodyJson.put("geo_location", "$lat,$longitude")
+
                 } else {
                     if (activity_type == HELP_TYPE_REQUEST) {
                         val jsonArray = JSONArray()

@@ -120,7 +120,7 @@ class RequestDetailActivity : BaseActivity() {
     }
 
     private fun onReportBlockClick(item: MappingDetail) {
-        toast("Not implemented")
+
     }
 
     private fun onSubmitClick(item: MappingDetail, rating: String, recommendToOther: Int, comments: String) {

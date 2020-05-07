@@ -15,6 +15,7 @@ class NewMatchResponses {
 
 class MatchesData {
     var requests: List<Request>? = null
+    var offers: List<Request>? = null
 }
 
 class Request {

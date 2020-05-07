@@ -318,7 +318,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
 
         val isSendToAll = if (chk_all.isChecked) 1 else 0// this is for check all
 
-        viewModel.sendOfferRequesterToServer(isSendToAll,suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
+        viewModel.sendOfferRequesterToServer(radius,suggestionData!!.latitude,suggestionData!!.longitude,isSendToAll,suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
             if (it.first != null) {
                 if (it.first!!.data != null) {
                     it.first!!.data!!.mapping?.forEach { mapping ->

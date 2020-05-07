@@ -73,11 +73,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun sendOfferRequesterToServer(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun sendOfferRequesterToServer(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.sendOfferRequests(isSendToAll, activity_type, activity_uuid, list), ""))
+                response.postValue(Pair(locationService.sendOfferRequests(radius,lat,longitude,isSendToAll, activity_type, activity_uuid, list), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }

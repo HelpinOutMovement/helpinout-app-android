@@ -45,7 +45,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private var mMap: GoogleMap? = null
     private var location: Location? = null
     private var retry = 0
-    private var retryCount = 3
     private var toggleAddress = true
     private var toggleRequest = false
     private var toggleOffer = false
@@ -145,11 +144,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 preferencesService.latitude = midLatLng.latitude
                 preferencesService.longitude = midLatLng.longitude
                 showPinOnCurrentLocation(midLatLng!!.latitude, midLatLng.longitude)
-                val visibleRegion = it.projection.visibleRegion
-                val farRight: LatLng = visibleRegion.farRight
-                val farLeft: LatLng = visibleRegion.farLeft
-                // (activity as HomeActivity).radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
-                //getRequesterAndHelper()
             }
         }
     }
@@ -186,9 +180,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
         viewModel.sendUserLocationToServer(6349.542f).observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
-
                     progressBar?.hide()
-
                     requestNearMe = getString(R.string.request_near_me_home, it.my_offers_match)
                     offerNearMe = getString(R.string.offer_near_me_home, it.my_requests_match)
 
@@ -202,12 +194,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 } else toastError(it.second)
             }
         })
-    }
-
-    private fun makeRetryAfterZoomOut() {
-        val latlng = LatLng(preferencesService.latitude, preferencesService.longitude)
-        preferencesService.zoomLevel -= retry * 1F
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, preferencesService.zoomLevel))
     }
 
     private fun changeMyLocationButton() {
