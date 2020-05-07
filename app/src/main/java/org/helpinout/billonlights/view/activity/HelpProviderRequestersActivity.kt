@@ -167,8 +167,8 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     }
 
     private fun onCheckedChange() {
-        val isAllChecked = bottomAdapter?.isAllItemChecked() ?: false
-        chk_all.isChecked = isAllChecked
+        //val isAllChecked = bottomAdapter?.isAllItemChecked() ?: false
+        //chk_all.isChecked = isAllChecked
     }
 
     override fun onPermissionAllow() {
@@ -315,7 +315,10 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         dialog?.show()
         val list = bottomAdapter?.getCheckedItemsList() ?: listOf()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.sendOfferRequesterToServer(suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
+
+        val isSendToAll = if (chk_all.isChecked) 1 else 0// this is for check all
+
+        viewModel.sendOfferRequesterToServer(isSendToAll,suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
             if (it.first != null) {
                 if (it.first!!.data != null) {
                     it.first!!.data!!.mapping?.forEach { mapping ->
@@ -362,6 +365,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             }
         })
     }
+
 
     private fun setRequestDetail(mapping: Mapping) {
         try {

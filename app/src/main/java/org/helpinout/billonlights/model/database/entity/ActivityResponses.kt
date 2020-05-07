@@ -36,6 +36,7 @@ class ActivityAddDetail {
     var offer_note: String? = ""
     var request_note: String? = ""
     var isSelected: Boolean = false// for checked and unchecked
+    var isEnable: Boolean = true
     var detail: String? = null
     var quantity: Int? = null
     var activity_detail: List<ActivityDetailSubItem>? = null

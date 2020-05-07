@@ -134,5 +134,17 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         return addActivityResponse
     }
 
+    fun sendEmailToServer(email: String): MutableLiveData<Pair<ServerResponse?, String>> {
+        val emailResponse = MutableLiveData<Pair<ServerResponse?, String>>()
+         GlobalScope.launch(Dispatchers.IO) {
+            try {
+                emailResponse.postValue(Pair( offerRequestListService.sendEmailToServer(email),""))
+            }catch (e:Exception){
+                emailResponse.postValue(Pair(null,e.getStringException()))
+            }
+         }
+        return emailResponse
+    }
+
 
 }

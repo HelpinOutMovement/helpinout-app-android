@@ -31,5 +31,6 @@ class AddCategoryDbItem {
     var mobile_no: String? = ""
     var address: String = ""
     var qty: String? = ""
+    var newMatchesCount: Int? = 0
     var pay: Int = 0
 }

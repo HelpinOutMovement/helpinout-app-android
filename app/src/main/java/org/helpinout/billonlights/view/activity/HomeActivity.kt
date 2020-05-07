@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.*
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -28,8 +30,11 @@ import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.fragments.FragmentMyRequests
 import org.helpinout.billonlights.view.fragments.HomeFragment
+import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.helpinout.billonlights.viewmodel.OfferViewModel
+import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -114,6 +119,10 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
     private fun showEmailPopup() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         val alertLayout: View = layoutInflater.inflate(R.layout.layout_ask_for_email, null)
         val alert: AlertDialog.Builder = AlertDialog.Builder(this)
         alert.setView(alertLayout)
@@ -122,12 +131,30 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         alertLayout.submit.setOnClickListener {
             if (!alertLayout.edt_email.text.toString().isEmailValid()) {
                 toastError(R.string.invalid_email_id)
-            } else dialog.dismiss()
+            } else {
+                sendEmailToServer(alertLayout.edt_email.text.toString())
+                dialog.dismiss()
+            }
         }
 
         dialog.show()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+    }
+
+    private fun sendEmailToServer(email: String) {
+        val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+        dialog.setCancelable(false)
+        dialog.show()
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel.sendEmailToServer(email).observe(this, Observer {
+            if (it.first != null && it.first!!.status == 1) {
+                toast(R.string.email_send_success)
+            } else {
+                toastError(it.second)
+            }
+            dialog.dismiss()
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -477,5 +504,9 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     override fun getLayout(): Int {
         return R.layout.activity_home
+    }
+
+    fun hideMailIcon(isVisible:Boolean) {
+       // mailMenu?.isVisible= isVisible
     }
 }

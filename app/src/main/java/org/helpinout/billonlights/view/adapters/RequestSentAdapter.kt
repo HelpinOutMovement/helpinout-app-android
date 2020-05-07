@@ -7,10 +7,7 @@ import kotlinx.android.synthetic.main.item_request_sent.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.ItemRequestSentBinding
 import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
-import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
-import org.helpinout.billonlights.utils.displayTime
-import org.helpinout.billonlights.utils.inflate
+import org.helpinout.billonlights.utils.*
 
 
 class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>,
@@ -28,6 +25,9 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
 
         holder.itemView.tv_offer_received_count.text = item.offersReceived?.toString() ?: "0"
         holder.itemView.tv_request_send_count.text = item.requestSent?.toString() ?: "0"
+
+        holder.itemView.tv_new_matches.visibleIf(item.newMatchesCount != null && item.newMatchesCount!! > 0)
+
         val ctx = holder.itemView.context
         if (item.activity_type == HELP_TYPE_REQUEST) {
             holder.itemView.tv_offer_received.text = ctx.getString(R.string.offers_received)

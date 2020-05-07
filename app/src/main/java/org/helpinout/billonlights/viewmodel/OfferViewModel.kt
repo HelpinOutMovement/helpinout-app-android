@@ -17,7 +17,6 @@ import org.helpinout.billonlights.service.OfferRequestDetailService
 import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.getStringException
 import org.jetbrains.anko.doAsync
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -74,17 +73,18 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun sendOfferRequesterToServer(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun sendOfferRequesterToServer(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.sendOfferRequests(activity_type, activity_uuid, list), ""))
+                response.postValue(Pair(locationService.sendOfferRequests(isSendToAll, activity_type, activity_uuid, list), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
         }
         return response
     }
+
 
 
     fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int): MutableLiveData<Pair<String?, String>> {
@@ -124,11 +124,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun getUserRequestOfferList(context: Context, activityType: Int): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun getUserRequestOfferList(context: Context, activityType: Int, activity_uuid: String = ""): MutableLiveData<Pair<ActivityResponses?, String>> {
         val result = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val response = offerRequestListService.getUserRequestsOfferList(context, activityType)
+                val response = offerRequestListService.getUserRequestsOfferList(context, activityType, activity_uuid)
                 result.postValue(Pair(response, ""))
             } catch (e: Exception) {
                 result.postValue(Pair(null, e.getStringException()))
@@ -136,7 +136,20 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         }
         return result
     }
-    
+
+    fun getNewMatchesResponse(activityType: Int): MutableLiveData<Pair<NewMatchResponses?, String>> {
+        val result = MutableLiveData<Pair<NewMatchResponses?, String>>()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val response = offerRequestListService.getNewMatches(activityType)
+                result.postValue(Pair(response, ""))
+            } catch (e: Exception) {
+                result.postValue(Pair(null, e.getStringException()))
+            }
+        }
+        return result
+    }
+
     fun sendPeopleHelp(peopleHelp: AddData, activityDetail: ActivityDetail): MutableLiveData<Pair<ActivityResponses?, String>> {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {

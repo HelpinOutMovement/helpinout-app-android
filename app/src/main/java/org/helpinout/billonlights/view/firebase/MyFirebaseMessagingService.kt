@@ -62,14 +62,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun sendNotification(data: Map<String, String>) {
         fetchData(data)
-
-
     }
 
     private fun fetchData(data: Map<String, String>) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-               val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0)
+                val activity_uuid = data[ACTIVITY_UUID].toString()
+               val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0,activity_uuid)
                runOnUiThread {
                    showNotification(data)
                }

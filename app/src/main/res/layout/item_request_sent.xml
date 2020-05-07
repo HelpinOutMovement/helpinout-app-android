@@ -169,6 +169,7 @@
                 style="@style/StyleTextView"
                 android:layout_width="0dp"
                 android:padding="@dimen/_10sdp"
+                android:visibility="gone"
                 android:text="@string/new_matches"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_12sdp"

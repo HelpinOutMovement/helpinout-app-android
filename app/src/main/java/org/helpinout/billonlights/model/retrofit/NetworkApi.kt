@@ -32,6 +32,9 @@ interface NetworkApi {
     @POST("activity/add")
     fun getActivityAmbulancesResponseAsync(@Body body: String): Deferred<ServerResponse>
 
+    @POST("user/emailoffermapping")
+    fun getEmailResponseAsync(@Body body: String): Deferred<ServerResponse>
+
 
     @POST("activity/delete")
     fun getActivityDeleteResponseAsync(@Body body: String): Deferred<DeleteDataResponses>
@@ -54,4 +57,7 @@ interface NetworkApi {
 
     @POST("user/locationrequestersummary")
     fun getRequestSummaryResponseAsync(@Body body: String): Deferred<OfferHelpResponses>
+
+    @POST("activity/newmatches")
+    fun getNewMatchesAsync(@Body body: String): Deferred<NewMatchResponses>
 }

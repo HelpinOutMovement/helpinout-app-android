@@ -99,11 +99,12 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return count.isNotEmpty()
     }
 
-    suspend fun sendOfferRequests(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
-        return service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(activity_type, activity_uuid, list)) }
+
+    suspend fun sendOfferRequests(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
+        return service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(isSendToAll, activity_type, activity_uuid, list)) }
     }
 
-    private fun createOffererRequester(activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
+    private fun createOffererRequester(isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -117,22 +118,27 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 }
                 bodyJson.put("activity_type", activity_type)
                 bodyJson.put("activity_uuid", activity_uuid)
-                if (activity_type == HELP_TYPE_REQUEST) {
-                    val jsonArray = JSONArray()
-                    list.forEach {
-                        val user = JSONObject()
-                        user.put("activity_uuid", it.activity_uuid)
-                        jsonArray.put(user)
-                    }
-                    bodyJson.put("offerer", jsonArray)
+
+                if (isSendToAll == 1) {
+                    bodyJson.put("all_requester", 1)
                 } else {
-                    val jsonArray = JSONArray()
-                    list.forEach {
-                        val user = JSONObject()
-                        user.put("activity_uuid", it.activity_uuid)
-                        jsonArray.put(user)
+                    if (activity_type == HELP_TYPE_REQUEST) {
+                        val jsonArray = JSONArray()
+                        list.forEach {
+                            val user = JSONObject()
+                            user.put("activity_uuid", it.activity_uuid)
+                            jsonArray.put(user)
+                        }
+                        bodyJson.put("offerer", jsonArray)
+                    } else {
+                        val jsonArray = JSONArray()
+                        list.forEach {
+                            val user = JSONObject()
+                            user.put("activity_uuid", it.activity_uuid)
+                            jsonArray.put(user)
+                        }
+                        bodyJson.put("requester", jsonArray)
                     }
-                    bodyJson.put("requester", jsonArray)
                 }
                 mainData.put("data", bodyJson)
             } catch (e: Exception) {

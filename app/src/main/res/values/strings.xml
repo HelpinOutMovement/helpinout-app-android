@@ -107,7 +107,9 @@
     <string name="label_permission">Allow permission</string>
     <string name="request_near_me_home">%1$s help giver match your request <b>!</b></string>
     <string name="offer_near_me_home">%1$s help provider match your offer <b>!</b></string>
-
+    <string name="label_send_mail">Send mail</string>
+    <string name="invalid_email_id">Please enter valid email id</string>
+    <string name="email_send_success">Email send success</string>
     <!-- End Home screen -->
 
     <!-- Choose Language screen -->
@@ -281,8 +283,7 @@
     <string name="who_need_helps">Who needs help?</string>
     <string name="not_rated_yet">(Not yet rated)</string>
     <string name="label_add_item">Add item</string>
-    <string name="label_send_mail">Send mail</string>
-    <string name="invalid_email_id">Please enter valid email id</string>
+
     <string name="should_othe_help_them">Should others help them?</string>
 
 

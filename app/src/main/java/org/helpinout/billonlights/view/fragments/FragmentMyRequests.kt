@@ -21,6 +21,7 @@ import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.HelpProviderRequestersActivity
+import org.helpinout.billonlights.view.activity.HomeActivity
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
 import org.helpinout.billonlights.view.adapters.RequestSentAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
@@ -54,6 +55,7 @@ class FragmentMyRequests : BaseFragment() {
         mRecyclerView
     }
 
+
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
@@ -72,9 +74,11 @@ class FragmentMyRequests : BaseFragment() {
         loadRequestList()
     }
 
+
     private fun loadRequestList() {
         val offerType = arguments?.getInt(OFFER_TYPE, 0) ?: 0
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
+        val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getMyRequestsOrOffers(offerType, initiator).observe(this, Observer { list ->
             try {
@@ -83,11 +87,34 @@ class FragmentMyRequests : BaseFragment() {
                     itemList.clear()
                     itemList.addAll(list.reversed())
                 }
+                if (helpType == HELP_TYPE_OFFER) {
+                    (activity as HomeActivity).hideMailIcon(itemList.isNotEmpty())
+                }
                 recycler_view.goneIf(itemList.isEmpty())
                 tv_no_data_available.visibleIf(itemList.isEmpty())
                 adapter.notifyDataSetChanged()
+
+                if (itemList.isNotEmpty()) getNewMatchesDetail(helpType)
+
             } catch (e: Exception) {
 
+            }
+        })
+    }
+
+    private fun getNewMatchesDetail(activity_type: Int) {
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
+        viewModel.getNewMatchesResponse(activity_type).observe(this, Observer {
+            if (it.first != null) {
+                it.first!!.data?.requests?.forEach { request ->
+                    val item = itemList.find {
+                        it.activity_uuid == request.activity_uuid
+                    }
+                    if (item != null) {
+                        item.newMatchesCount = request.new_matches
+                    }
+                }
+                adapter?.notifyDataSetChanged()
             }
         })
     }

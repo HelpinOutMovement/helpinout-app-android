@@ -43,9 +43,9 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         }
     }
 
-    suspend fun getUserRequestsOfferList(context: Context, activityType: Int): ActivityResponses {
+    suspend fun getUserRequestsOfferList(context: Context, activityType: Int, activity_uuid: String = ""): ActivityResponses {
         val response = service.makeCall {
-            it.networkApi.getUserRequestOfferListResponseAsync(createOfferRequest(activityType))
+            it.networkApi.getUserRequestOfferListResponseAsync(createOfferRequest(activityType, activity_uuid))
         }
         try {
             val offers = response.data?.offers
@@ -62,7 +62,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         return response
     }
 
-    private fun createOfferRequest(activityType: Int): String {
+    private fun createOfferRequest(activityType: Int, activity_uuid: String = ""): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -73,6 +73,9 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             try {
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
+                }
+                if (activity_uuid.isNotEmpty()) {
+                    bodyJson.put("activity_uuid", activity_uuid)
                 }
                 bodyJson.put("activity_type", activityType)
                 mainData.put("data", bodyJson)
@@ -303,5 +306,63 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         } catch (e: Exception) {
             false
         }
+    }
+
+    suspend fun getNewMatches(activityType: Int):NewMatchResponses{
+        return service.makeCall {
+            it.networkApi.getNewMatchesAsync(createNewMatchesRequest(activityType))
+        }
+    }
+
+    private fun createNewMatchesRequest(activityType: Int): String {
+        val mainData = JSONObject()
+        try {
+            mainData.put("app_id", preferencesService.appId)
+            mainData.put("imei_no", preferencesService.imeiNumber)
+            mainData.put("app_version", preferencesService.appVersion)
+            mainData.put("date_time", Utils.currentDateTime())
+            val bodyJson = JSONObject()
+            try {
+                FirebaseInstanceId.getInstance().token?.let {
+                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
+                }
+                bodyJson.put("activity_type", activityType)
+                mainData.put("data", bodyJson)
+            } catch (e: Exception) {
+                CrashReporter.logException(e)
+            }
+        } catch (e: Exception) {
+            CrashReporter.logException(e)
+        }
+        return mainData.toString()
+    }
+
+    suspend fun sendEmailToServer(email: String): ServerResponse {
+        return service.makeCall {
+            it.networkApi.getEmailResponseAsync(createCreateMailRequest(email))
+        }
+    }
+
+    private fun createCreateMailRequest(email: String): String {
+        val mainData = JSONObject()
+        try {
+            mainData.put("app_id", preferencesService.appId)
+            mainData.put("imei_no", preferencesService.imeiNumber)
+            mainData.put("app_version", preferencesService.appVersion)
+            mainData.put("date_time", Utils.currentDateTime())
+            val bodyJson = JSONObject()
+            try {
+                FirebaseInstanceId.getInstance().token?.let {
+                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
+                }
+                bodyJson.put("email_address", email)
+                mainData.put("data", bodyJson)
+            } catch (e: Exception) {
+                CrashReporter.logException(e)
+            }
+        } catch (e: Exception) {
+            CrashReporter.logException(e)
+        }
+        return mainData.toString()
     }
 }
