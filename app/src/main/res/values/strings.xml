@@ -105,8 +105,8 @@
     <string name="title_go_to_setting">GOTO SETTINGS</string>
     <string name="label_location">Enable location</string>
     <string name="label_permission">Allow permission</string>
-    <string name="request_near_me_home">%1$s help giver match your request <b>!</b></string>
-    <string name="offer_near_me_home">%1$s help provider match your offer <b>!</b></string>
+    <string name="request_near_me_home">%1$s help givers match your requests <b>!</b></string>
+    <string name="offer_near_me_home">%1$s help seekers match your offers <b>!</b></string>
     <string name="label_send_mail">Send mail</string>
     <string name="invalid_email_id">Please enter valid email id</string>
     <string name="email_send_success">Email send success</string>
