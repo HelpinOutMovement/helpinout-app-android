@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.view.View
 import android.widget.LinearLayout
@@ -74,6 +75,10 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         when (view) {
             add_more -> {
                 layout_items.addView(getFoodLayout(layout_items))

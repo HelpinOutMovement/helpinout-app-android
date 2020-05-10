@@ -44,7 +44,6 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
     private var mapFragment: SupportMapFragment? = null
     private var mMap: GoogleMap? = null
     private var location: Location? = null
-    private var retry = 0
     private var toggleAddress = true
     private var toggleRequest = false
     private var toggleOffer = false

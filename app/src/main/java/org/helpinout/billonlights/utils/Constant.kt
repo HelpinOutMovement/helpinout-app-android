@@ -1,6 +1,8 @@
 package org.helpinout.billonlights.utils
 
 const val CALENDER_FORMAT = "yyyy-MM-dd hh:mm:ss"
+const val TIME_AGO_FORMAT = "yyyy-MM-dd HH:mm:ss"
+
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
 const val APP_INSTALL_FORMAT = "dd-MM-yyyy hh:mm a"
 const val TERMS_OF_SERVICE = "https://helpinout.org/docs/terms_of_service.html"
@@ -24,6 +26,7 @@ const val UPDATE_LANGAUGE = "UpdateLanguage"
 const val OFFER_TYPE = "OfferType"
 const val INITIATOR = "initiator"
 const val DATA_REFRESH = "DataRefresh"
+const val BEDGE_REFRESH="BedgeRefresh"
 const val RADIUS = "Radius"
 const val LANGUAGE_STEP = 0
 const val INSTRUCTION_STEP = 1
@@ -31,6 +34,7 @@ const val LOGIN_STEP = 2
 const val REGISTRATION_STEP = 3
 const val HOME_STEP = 4
 const val DEFAULT_ZOOM_LEVEL = 10.5f
+
 const val ENGLISH = 1
 const val HINDI = 2
 const val KANNAD = 3
@@ -61,6 +65,8 @@ const val SELECTED_INDEX = "SelectedIndex"
 const val HELP_TYPE_REQUEST = 1
 const val HELP_TYPE_OFFER = 2
 
+const val SEEN_YES = 1
+const val SEEN_NO = 0
 
 //notification constants
 const val TITLE = "title"

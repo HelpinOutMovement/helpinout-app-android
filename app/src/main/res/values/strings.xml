@@ -9,7 +9,7 @@
 
     <!-- Instruction screen -->
     <string name="website_name" translatable="false">www.helpinout.org</string>
-    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-providers and help- <br/>requesters around you]]></string>
+    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-givers and help-seekers<br/>around you]]></string>
     <string name="btn_continue">Continue</string>
 
     <!-- End Instruction screen -->
@@ -206,7 +206,7 @@
     <!-- Rate report screen -->
     <string name="comment">Comments</string>
     <string name="submit">Submit</string>
-    <string name="help_from_them">Should others take help from them?</string>
+    <string name="help_from_them">Should others help them?</string>
     <string name="rating_success">Rating success</string>
     <!-- End Rate report screen -->
 
@@ -285,6 +285,8 @@
     <string name="label_add_item">Add item</string>
 
     <string name="should_othe_help_them">Should others help them?</string>
+    <string name="seeking_help_for_someone_else">seeking help for someone else</string>
+    <string name="new_text">New</string>
 
 
 </resources>

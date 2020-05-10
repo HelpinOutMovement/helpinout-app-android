@@ -27,13 +27,22 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         holder.itemView.tv_request_send_count.text = item.requestSent?.toString() ?: "0"
 
         holder.itemView.tv_new_matches.visibleIf(item.newMatchesCount != null && item.newMatchesCount!! > 0)
-
         val ctx = holder.itemView.context
+
+        if (item.show_notification == 1 && holder.itemView.tv_offer_received_count.text.toString() != "0") {
+            holder.itemView.tv_offer_received_count.setTextColor(ctx.getColor(R.color.colorPrimary))
+        } else {
+            holder.itemView.tv_offer_received_count.setTextColor(ctx.getColor(R.color.colorAccent))
+        }
+
+
         if (item.activity_type == HELP_TYPE_REQUEST) {
             holder.itemView.tv_offer_received.text = ctx.getString(R.string.offers_received)
+
             holder.itemView.tv_request_sent.text = ctx.getString(R.string.requests_sent)
             holder.itemView.tv_search_for_help_providers.text= ctx.getString(R.string.search_for_help_givers)
         } else {
+
             holder.itemView.tv_offer_received.text = ctx.getString(R.string.requests_received)
             holder.itemView.tv_request_sent.text = ctx.getString(R.string.offer_sent)
             holder.itemView.tv_search_for_help_providers.text= ctx.getString(R.string.search_for_help_seeker)

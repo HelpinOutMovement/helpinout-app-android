@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.BillionLightsApplication
 import org.helpinout.billonlights.model.dagger.PreferencesService
+import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.service.OfferRequestListService
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.activity.RequestDetailActivity
@@ -36,6 +38,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var offerRequestListService: OfferRequestListService
+
+    @Inject
+    lateinit var db: AppDatabase
 
 
     override fun onCreate() {
@@ -67,9 +72,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun fetchData(data: Map<String, String>) {
         GlobalScope.launch(Dispatchers.IO) {
             try {
+                val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
                 val activity_uuid = data[ACTIVITY_UUID].toString()
-               val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, 0,activity_uuid)
-               runOnUiThread {
+                val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, activityType, activity_uuid)
+                runOnUiThread {
                    showNotification(data)
                }
             } catch (e: Exception) {
@@ -84,6 +90,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val action = data[ACTION]?.toInt() ?: 0
         val sendName = data[SENDER_NAME].toString()
         val activity_uuid = data[ACTIVITY_UUID].toString()
+        val intent1 = Intent(BEDGE_REFRESH)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
         var message = "New offer or request"
         if (activityType == 1) {
             if (action == 2) {//request accepted
@@ -123,4 +131,5 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         notificationManager.notify(0, notificationBuilder.build())
     }
+
 }

@@ -40,7 +40,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)
                 bodyJson.put("address", body.address)
-                bodyJson.put("self_help", body.selfHelp)
+                bodyJson.put("self_else", body.selfHelp)
 
                 bodyJson.put("activity_category", body.activity_category)
                 bodyJson.put("activity_count", body.activity_count)
@@ -86,6 +86,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             categoryItem.geo_location = addData.geo_location
             categoryItem.address = address
             categoryItem.status = 1
+            categoryItem.self_else= addData.selfHelp
             categoryItem.pay= addData.pay
 
             addItemList.add(categoryItem)
@@ -482,7 +483,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 activity_detailjson.put("technical_personal_quantity", peopleHelp.activity_detail[0].technical_personal_quantity)
 
                 bodyJson.put("activity_detail", activity_detailjson)
-                bodyJson.put("self_help", peopleHelp.selfHelp)
+                bodyJson.put("self_else", peopleHelp.selfHelp)
                 bodyJson.put("address", peopleHelp.address)
                 bodyJson.put("pay", peopleHelp.pay)
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
@@ -565,7 +566,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 bodyJson.put("activity_detail", activity_detailjson)
                 if (ambulance.activity_type == HELP_TYPE_OFFER) bodyJson.put("offer_note", ambulance.conditions)
                 else bodyJson.put("request_note", ambulance.conditions)
-                bodyJson.put("self_help", ambulance.selfHelp)
+                bodyJson.put("self_else", ambulance.selfHelp)
                 bodyJson.put("qty", ambulance.qty)
                 bodyJson.put("geo_location", ambulance.geo_location)
                 bodyJson.put("geo_accuracy", preferencesService.gpsAccuracy)

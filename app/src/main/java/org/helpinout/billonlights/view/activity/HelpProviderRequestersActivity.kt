@@ -327,10 +327,12 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
                             mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
                             mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
-                            mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
+                            mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
                             mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                             mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
                             mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
+                            mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail?.self_else?:0
                             mapping.offer_detail?.user_detail?.pay= mapping.offer_detail!!.pay
                             setOfferDetail(mapping)
                         } else if (mapping.request_detail != null) {
@@ -338,10 +340,12 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
                             mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
                             mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
-                            mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
+                            mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
                             mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                             mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
                             mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                            mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
+                            mapping.request_detail?.user_detail?.self_else = mapping.request_detail?.self_else?:0
                             mapping.request_detail?.user_detail?.pay= mapping.request_detail!!.pay
                             setRequestDetail(mapping)
                         }

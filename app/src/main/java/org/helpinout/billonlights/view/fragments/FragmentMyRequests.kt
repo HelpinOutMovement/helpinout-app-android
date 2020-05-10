@@ -209,6 +209,7 @@ class FragmentMyRequests : BaseFragment() {
         activity?.let {
             val filter = IntentFilter()
             filter.addAction(DATA_REFRESH)
+            filter.addAction(BEDGE_REFRESH)
             LocalBroadcastManager.getInstance(it).registerReceiver(uploadStatusReceiver, filter)
         }
     }
@@ -225,6 +226,9 @@ class FragmentMyRequests : BaseFragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == DATA_REFRESH) {
                 checkOfferList()
+            }
+            if (intent?.action==BEDGE_REFRESH){
+                loadRequestList()
             }
         }
     }

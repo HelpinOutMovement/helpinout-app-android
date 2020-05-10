@@ -10,6 +10,7 @@ import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 import org.helpinout.billonlights.utils.fromHtml
 import org.helpinout.billonlights.utils.inflate
+import org.helpinout.billonlights.utils.visibleIf
 
 
 class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDetail>, private val onCheckedChange: () -> Unit) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
@@ -34,6 +35,7 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
         if (homeItem.activity_type == HELP_TYPE_REQUEST) {
             if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.need_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
             holder.itemView.free_or_paid.text = context.getString(if (homeItem.pay == 1) R.string.can_pay else R.string.can_not_pay)
+            holder.itemView.tv_self_help.visibleIf(homeItem.self_else == 2)
         } else {
             if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.can_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
 

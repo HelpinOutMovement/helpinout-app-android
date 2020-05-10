@@ -24,6 +24,7 @@ class AddDataData {
     var mapping: List<Mapping>? = null// for help provider activity do not delete
     var activity_uuid: String = ""
     var activity_type: Int? = 0
+    var date_time: String = ""
 }
 
 class ActivityAddDetail {
@@ -42,6 +43,7 @@ class ActivityAddDetail {
     var activity_detail: List<ActivityDetailSubItem>? = null
     var mapping: List<Mapping>? = null
     var user_detail: MappingDetail? = null
+    var self_else:Int=0
     var pay: Int = 0
 }
 

@@ -32,5 +32,7 @@ class AddCategoryDbItem {
     var address: String = ""
     var qty: String? = ""
     var newMatchesCount: Int? = 0
+    var self_else: Int? = 0
+    var show_notification: Int = 0
     var pay: Int = 0
 }

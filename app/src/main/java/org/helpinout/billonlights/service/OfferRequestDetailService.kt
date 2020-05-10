@@ -9,6 +9,8 @@ import org.helpinout.billonlights.model.database.entity.DeleteDataResponses
 import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.SEEN_NO
+import org.helpinout.billonlights.utils.SEEN_YES
 import org.helpinout.billonlights.utils.Utils
 import org.json.JSONArray
 import org.json.JSONObject
@@ -30,6 +32,8 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
             } catch (e: Exception) {
             }
         }
+        db.getNotificationDao().updateActivity(offerType,activity_uuid, SEEN_YES)
+
         return response
     }
 
@@ -130,4 +134,13 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
             false
         }
     }
+
+//    fun updateNotification(activity_type: Int, parent_uuid: String): Boolean {
+//        return try {
+//            db.getNotificationDao().updateActivity(activity_type, parent_uuid)
+//            true
+//        } catch (e: Exception) {
+//            false
+//        }
+//    }
 }

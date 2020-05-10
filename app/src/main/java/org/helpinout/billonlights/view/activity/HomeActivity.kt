@@ -1,7 +1,10 @@
 package org.helpinout.billonlights.view.activity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
@@ -18,7 +21,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avneesh.crashreporter.ui.CrashReporterActivity
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
@@ -97,8 +102,26 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
         setLanguage()
+        loadRequestList(HELP_TYPE_REQUEST, 1)
+        loadRequestList(HELP_TYPE_OFFER, 2)
+        val filter = IntentFilter()
+        filter.addAction(BEDGE_REFRESH)
+        LocalBroadcastManager.getInstance(this).registerReceiver(bedgeRefreshReceiver, filter)
     }
 
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(bedgeRefreshReceiver)
+        super.onDestroy()
+    }
+
+    private val bedgeRefreshReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == BEDGE_REFRESH) {
+                loadRequestList(HELP_TYPE_REQUEST, 1)
+                loadRequestList(HELP_TYPE_OFFER, 2)
+            }
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
@@ -471,6 +494,21 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         viewModel.getUserRequestOfferList(this, 0)
     }
 
+    private fun loadRequestList(offerType: Int, initiator: Int) {
+        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
+        viewModel.getMyRequestsOrOffers(offerType, initiator).observe(this, Observer { list ->
+            try {
+                val count = list.filter { it.show_notification == 1 }.size
+                if (count > 0) {
+                    addBadge(offerType)
+                } else {
+                    removeBadge(offerType)
+                }
+            } catch (e: Exception) {
+
+            }
+        })
+    }
     fun menuClick() {
         if (!drawer_layout.isDrawerOpen(Gravity.START)) {
             drawer_layout.openDrawer(Gravity.START)
@@ -506,7 +544,24 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         return R.layout.activity_home
     }
 
+    fun addBadge(offerType: Int) {
+        val itemView: BottomNavigationItemView = bottom_nav_view.findViewById(if (offerType == HELP_TYPE_REQUEST) R.id.navigation_my_request else R.id.navigation_my_offers)
+        val badge: View = layoutInflater.inflate(R.layout.view_badge, bottom_nav_view, false)
+        if (offerType == HELP_TYPE_OFFER) {
+            badge.setBackgroundResource(R.drawable.badge_shape_accent)
+        }
+        itemView.addView(badge)
+    }
+
+    fun removeBadge(offerType: Int) {
+        val bedgeId = if (offerType == HELP_TYPE_REQUEST) R.id.navigation_my_request else R.id.navigation_my_offers
+        bottom_nav_view.removeBadge(bedgeId)
+//        val itemView: BottomNavigationItemView = bottom_nav_view.findViewById(bedgeId)
+        // itemView.removeAllViewsInLayout()
+    }
+
     fun hideMailIcon(isVisible:Boolean) {
        // mailMenu?.isVisible= isVisible
     }
+
 }

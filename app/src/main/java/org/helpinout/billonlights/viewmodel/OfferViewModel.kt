@@ -37,18 +37,22 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
 
     private val compositeDisposable = CompositeDisposable()
 
-    private val offerRequestResponse = MutableLiveData<List<AddCategoryDbItem>>()
 
 
     init {
         (application as BillionLightsApplication).getAppComponent().inject(this)
-        compositeDisposable.add(offerRequestListService.requestOfferSubject.subscribe {
-            offerRequestResponse.postValue(it)
-        })
     }
 
     fun getMyRequestsOrOffers(offerType: Int, initiator: Int): MutableLiveData<List<AddCategoryDbItem>> {
-        offerRequestListService.getMyRequestsOrOffers(offerType, initiator)
+        val offerRequestResponse = MutableLiveData<List<AddCategoryDbItem>>()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                offerRequestResponse.postValue(offerRequestListService.getMyRequestsOrOffers(offerType, initiator))
+            } catch (e: Exception) {
+
+            }
+        }
+
         return offerRequestResponse
     }
 

@@ -2,6 +2,7 @@ package org.helpinout.billonlights.view.activity
 
 import android.app.ProgressDialog
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -40,6 +41,10 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+            return
+        }
+        mLastClickTime = SystemClock.elapsedRealtime()
         when (v) {
             we_can_pay -> {
                 ambulanceHelp.pay = 1

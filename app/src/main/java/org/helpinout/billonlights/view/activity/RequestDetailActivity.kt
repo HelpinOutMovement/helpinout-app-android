@@ -62,10 +62,12 @@ class RequestDetailActivity : BaseActivity() {
         mRecyclerView
     }
 
+
+
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = {i, name, detail, description, pay -> onDetailClick(i,name, detail, description, pay) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = {i, name, detail, description, pay ,selfHelp-> onDetailClick(i,name, detail, description, pay,selfHelp) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
@@ -74,7 +76,7 @@ class RequestDetailActivity : BaseActivity() {
 
     private fun checkOfferList() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getUserRequestOfferList(this, 0).observe(this, Observer {
+        viewModel.getUserRequestOfferList(this, offerType).observe(this, Observer {
             loadRequestDetails()
         })
     }
@@ -201,12 +203,12 @@ class RequestDetailActivity : BaseActivity() {
         })
     }
 
-    private fun onDetailClick(type:Int,name: String, detail: String, description: String, pay: Int) {
+    private fun onDetailClick(type:Int,name: String, detail: String, description: String, pay: Int,self_else:Int) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(type,offerType, name, detail, description, pay)
+        val deleteDialog = BottomSheetsDetailFragment(type,offerType, name, detail, description, pay,self_else)
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -226,17 +228,13 @@ class RequestDetailActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (isFromNotification) {
             goToHome()
-        }
         super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-            if (isFromNotification) {
                 goToHome()
-            }
         }
         return super.onOptionsItemSelected(item)
     }

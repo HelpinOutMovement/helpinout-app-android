@@ -4,11 +4,6 @@ import android.app.Application
 import android.content.Context
 import com.avneesh.crashreporter.CrashReporter
 import com.google.firebase.iid.FirebaseInstanceId
-import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.launch
 import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.model.database.entity.*
@@ -19,28 +14,39 @@ import timber.log.Timber
 
 class OfferRequestListService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase, private val app: Application) {
 
-    val requestOfferSubject: PublishSubject<List<AddCategoryDbItem>> = PublishSubject.create()
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int) {
-        GlobalScope.launch(Dispatchers.IO) {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): ArrayList<AddCategoryDbItem> {
 
             val finalRequest = ArrayList<AddCategoryDbItem>()
             val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
 
             val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType)
 
+        val notificationList = db.getNotificationDao().getNotificationItems(offerType)
+
             requestList.forEach { item ->
                 val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
                 finalRequest.add(item)
                 item.offersReceived = mapping.filter { it.mapping_initiator != initiator }.size
+
+
+//                Timber.d("" + offerType + " " + initiator)
+
+                val notificationItem = notificationList.find { it.parent_uuid == item.activity_uuid && it.mapping_initiator != initiator && it.activity_type == offerType }
+
+                notificationItem?.let {
+                    item.show_notification = 1
+                }
+
                 item.requestSent = mapping.filter { it.mapping_initiator == initiator }.size
             }
             finalRequest.forEach { item ->
                 item.name = app.getString(item.activity_category.getName())
                 item.icon = item.activity_category.getIcon()
             }
-            requestOfferSubject.onNext(finalRequest)
-        }
+        return finalRequest
+//            requestOfferSubject.onNext(finalRequest)
+
     }
 
     suspend fun getUserRequestsOfferList(context: Context, activityType: Int, activity_uuid: String = ""): ActivityResponses {
@@ -51,10 +57,12 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             val offers = response.data?.offers
             val requests = response.data?.requests
             if (!offers.isNullOrEmpty()) {
-                insertItemToDatabase(context, offers)
+                insertItemToDatabase(context, offers, preferencesService.offerFirstTime)
+                preferencesService.offerFirstTime = false
             }
             if (!requests.isNullOrEmpty()) {
-                insertItemToDatabase(context, requests)
+                insertItemToDatabase(context, requests, preferencesService.requestFirstTime)
+                preferencesService.requestFirstTime = false
             }
         } catch (e: Exception) {
 
@@ -88,8 +96,9 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         return mainData.toString()
     }
 
-    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>) {
+    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>, isFirstTime: Boolean) {
         val addDataList = ArrayList<AddCategoryDbItem>()
+        val notificationDb = db.getNotificationDao()
         offers.forEach { offer ->
             try {
                 val item = AddCategoryDbItem()
@@ -137,16 +146,33 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 }
 
                 offer.mapping?.forEach { mapping ->
+
+
                     if (mapping.offer_detail != null) {
                         mapping.offer_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.offer_detail?.user_detail?.activity_type = offer.activity_type
                         mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
                         mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
-                        mapping.offer_detail?.user_detail?.date_time = mapping.offer_detail?.date_time
+                        mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
                         mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
                         mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
+                        mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail!!.self_else
+                        if (isFirstTime) {
+                            val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
+                            notificationItem.activity_uuid = mapping.offer_detail?.activity_uuid ?: ""
+                            notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
+                            notificationDb.insertItems(notificationItem)
+                        } else {
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "")
+                            if (singleItem == null) {
+                                val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
+                                notificationItem.activity_uuid = mapping.offer_detail?.activity_uuid ?: ""
+                                notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
+                                notificationDb.insertItems(notificationItem)
+                            }
+                        }
                         setOfferDetail(mapping)
 
                     } else if (mapping.request_detail != null) {
@@ -154,11 +180,28 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.request_detail?.user_detail?.activity_type = offer.activity_type
                         mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
                         mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
-                        mapping.request_detail?.user_detail?.date_time = mapping.request_detail?.date_time
+                        mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
                         mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
                         mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
+                        mapping.request_detail?.user_detail?.self_else = mapping.request_detail!!.self_else
+
+                        if (isFirstTime) {
+                            val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
+                            notificationItem.activity_uuid = mapping.request_detail?.activity_uuid ?: ""
+                            notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
+                            notificationDb.insertItems(notificationItem)
+                        } else {
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "")
+                            if (singleItem == null) {
+                                val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
+                                notificationItem.activity_uuid = mapping.request_detail?.activity_uuid ?: ""
+                                notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
+                                notificationDb.insertItems(notificationItem)
+                            }
+                        }
+
                         setRequestDetail(mapping)
                     }
                 }
@@ -180,6 +223,8 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 item.geo_location = offer.geo_location
                 item.address = context.getAddress(preferencesService.latitude, preferencesService.longitude)
                 item.status = 1
+                item.self_else = offer.self_else
+
                 item.pay = offer.pay
                 addDataList.add(item)
             } catch (e: Exception) {
@@ -193,6 +238,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
     internal fun saveFoodItemsToDb(addItemList: ArrayList<AddCategoryDbItem>): Boolean {
         val items = addItemList.toTypedArray()
         val count = db.getAddItemDao().insertMultipleRecords(*items)
+
         return count.isNotEmpty()
     }
 

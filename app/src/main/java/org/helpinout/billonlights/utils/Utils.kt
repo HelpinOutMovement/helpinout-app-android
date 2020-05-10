@@ -55,28 +55,38 @@ class Utils {
         }
 
         fun timeAgo(serverTime: String, context: Context): String {
-            val sourceDateFormat = SimpleDateFormat(SERVER_DATE_FORMAT)
-            val time = sourceDateFormat.parse(serverTime).time
-            val now = System.currentTimeMillis()
-            val diff: Long = now - time
+            try {
+                val sourceDateFormat = SimpleDateFormat(SERVER_DATE_FORMAT)
+                val time = sourceDateFormat.parse(serverTime).time
+                val now = System.currentTimeMillis()
+                val diff: Long = now - time
 
-//            return when {
-//                diff < MINUTE_MILLIS -> "moments ago"
-//                diff < 2 * MINUTE_MILLIS -> "a minute ago"
-//                diff < 60 * MINUTE_MILLIS -> "${diff / MINUTE_MILLIS} minutes ago"
-//                diff < 2 * HOUR_MILLIS -> "an hour ago"
-//                diff < 24 * HOUR_MILLIS -> "${diff / HOUR_MILLIS} hours ago"
-//                diff < 48 * HOUR_MILLIS -> "yesterday"
-//                else -> "${diff / DAY_MILLIS} days ago"
-//            }
+                return if (diff < 24 * HOUR_MILLIS) {
+                    context.getString(R.string.today)
+                } else if (diff < 48 * HOUR_MILLIS) {
+                    context.getString(R.string.yesterday)
+                } else {
+                    val days = diff / DAY_MILLIS
+                    context.getString(R.string.days_ago, days)
+                }
+            } catch (e: Exception) {
+                try {
+                    val sourceDateFormat = SimpleDateFormat(TIME_AGO_FORMAT)
+                    val time = sourceDateFormat.parse(serverTime).time
+                    val now = System.currentTimeMillis()
+                    val diff: Long = now - time
+                    return if (diff < 24 * HOUR_MILLIS) {
+                        context.getString(R.string.today)
+                    } else if (diff < 48 * HOUR_MILLIS) {
+                        context.getString(R.string.yesterday)
+                    } else {
+                        val days = diff / DAY_MILLIS
+                        context.getString(R.string.days_ago, days)
+                    }
 
-            return if (diff < 24 * HOUR_MILLIS) {
-                context.getString(R.string.today)
-            } else if (diff < 48 * HOUR_MILLIS) {
-                context.getString(R.string.yesterday)
-            } else {
-                val days = diff / DAY_MILLIS
-                context.getString(R.string.days_ago, days)
+                } catch (e: Exception) {
+                    return serverTime
+                }
             }
         }
     }
