@@ -299,7 +299,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             R.id.nav_form -> {
-                val url = "https://core.helpinout.org/custom/rra?lat=" + preferencesService.latitude + "&lng=" + preferencesService.longitude + "&org=" + preferencesService.orgName
+                val url = "https://core.helpinout.org/custom/rra/data?lat=" + preferencesService.latitude + "&lng=" + preferencesService.longitude + "&org=" + preferencesService.orgName
                 startActivity<WebViewActivity>(WEB_URL to url, TITLE to getString(R.string.title_form))
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }

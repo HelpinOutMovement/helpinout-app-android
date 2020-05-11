@@ -1,15 +1,9 @@
 <resources>
-    <string name="app_name">HelpinOut</string>
-
-    <!-- Splash screen -->
-
+    <string name="app_name" translatable="false">HelpinOut</string>
     <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
     <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
-    <!--End Splash screen -->
-
-    <!-- Instruction screen -->
     <string name="website_name" translatable="false">www.helpinout.org</string>
-    <string name="instruction_text" translatable="false"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-givers and help-seekers<br/>around you]]></string>
+    <string name="instruction_text"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-givers and help-seekers<br/>around you]]></string>
     <string name="btn_continue">Continue</string>
 
     <!-- End Instruction screen -->
@@ -18,20 +12,20 @@
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_login">Login / Signup</string>
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
-    <string name="terms_Of_service">Terms of Service</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="toast_error_phone_number">Please enter phone number</string>
-    <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
+    <string name="terms_Of_service" translatable="false">Terms of Service</string>
+    <string name="privacy_policy" translatable="false">Privacy Policy</string>
+    <string name="toast_error_phone_number" translatable="false">Please enter phone number</string>
+    <string name="toast_error_invalid_phone_number" translatable="false">Please enter valid phone number</string>
     <!-- End Login screen -->
 
     <!-- SMS Verification screen -->
     <string name="label_enter_otp">Enter OTP</string>
     <string name="button_verify">Verify</string>
-    <string name="retry_msg">Resend OTP</string>
-    <string name="toast_error_please_enter_otp">Please enter OTP</string>
-    <string name="you_can_try_max_try">You can try maximum %1$s otp</string>
+    <string name="retry_msg" translatable="false">Resend OTP</string>
+    <string name="toast_error_please_enter_otp" translatable="false">Please enter OTP</string>
+    <string name="you_can_try_max_try" translatable="false">You can try maximum %1$s otp</string>
+
     <string name="otp_send_success">OTP send success</string>
-    <string name="otp_description">Check for OTP message and verify</string>
     <string name="otp_send_to">OTP code sent to %1$s</string>
     <string name="change_phone_number">Change phone number</string>
     <!-- End SMS Verification  screen -->
@@ -48,13 +42,13 @@
     <string name="label_unit_division">Unit / Division / Function / Location</string>
     <string name="label_start">Start</string>
 
-    <string name="toast_error_please_enter_first_name">Please enter your first name</string>
-    <string name="toast_error_please_enter_last_name">Please enter your last name</string>
-    <string name="toast_error_please_enter_organization_name">Please enter organization name</string>
+    <string name="toast_error_please_enter_first_name" translatable="false">Please enter your first name</string>
+    <string name="toast_error_please_enter_last_name" translatable="false">Please enter your last name</string>
+    <string name="toast_error_please_enter_organization_name" translatable="false">Please enter organization name</string>
 
-    <string name="toast_error_please_enter_unit_division">Please enter Unit / Division / Function / Location</string>
-    <string name="toast_error_please_choose_org_type">Please choose organization type</string>
-    <string name="toast_success_registration_success">Registration success</string>
+    <string name="toast_error_please_enter_unit_division" translatable="false">Please enter Unit / Division / Function / Location</string>
+    <string name="toast_error_please_choose_org_type" translatable="false">Please choose organization type</string>
+    <string name="toast_success_registration_success" translatable="false">Registration success</string>
 
     <string-array name="org_types">
         <item>Organization type</item>
@@ -79,8 +73,8 @@
     <!-- End Registration screen -->
 
     <!-- Profile screen -->
-    <string name="update_profile">Update profile</string>
-    <string name="toast_success_update_success">Profile update success</string>
+    <string name="update_profile" translatable="false">Update profile</string>
+    <string name="toast_success_update_success" translatable="false">Profile update success</string>
 
     <!-- End profile screen -->
 
@@ -131,7 +125,7 @@
     <string name="label_yes">Yes</string>
     <string name="label_no">No</string>
     <string name="about">About</string>
-    <string name="label_logs">Crash logs</string>
+    <string name="label_logs" translatable="false">Crash logs</string>
 
     <string name="google_maps_key" translatable="false">AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
 
@@ -167,7 +161,6 @@
     <string name="we_can_not_pay">We Cannot Pay</string>
     <string name="volunteers">Volunteers</string>
     <string name="technical_personnel">Technical Personnel</string>
-    <string name="hint_how_many_people">How many people ?</string>
     <!-- End Need help screen -->
 
     <!-- Offer help screen -->
@@ -214,11 +207,7 @@
 
     <!-- My Offers screen -->
 
-    <string name="sent_requests">Sent Requests</string>
-    <string name="sent_offers">Sent Offers</string>
     <string name="delete_confirmation">Are you sure you want to cancel ?</string>
-    <string name="total_offers">%1$s Offers</string>
-    <string name="total_requests">%1$s Requests</string>
 
     <string name="no_request_sent"><![CDATA[Your request was registered, but no direct request has been sent to anyone yet.<br/><br/> Others may offer to help you when they see your request on the map]]></string>
     <string name="no_offer_sent"><![CDATA[Your offer was registered, but no direct offer has been sent to anyone yet.<br/><br/> Others may request your help when they see your offer on the map<br/><br/> This request will remain active until you cancel it]]></string>
@@ -243,14 +232,12 @@
     <!-- Offerer/Requester chooser screen -->
     <string name="select_help_provider">Select Help Givers</string>
     <string name="select_help_requester">Select Help Seekers</string>
-    <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-providers</string>
-    <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-requesters</string>
+    <string name="phone_number_will_be_send_to_provider">Your phone number will be sent to these help-givers</string>
+    <string name="phone_number_will_be_send_to_requester">Your phone number will be sent to these help-seekers</string>
     <string name="send_request">Send Request</string>
-    <string name="search_for_help_provider">Search for Help Provider</string>
-    <string name="search_for_help_requester">Search for Requesters</string>
-    <string name="no_help_requeter">Currently there are no help-requesters in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
-    <string name="no_help_provider">Currently there are no help-providers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
-    <string name="please_select_provider_helper">Please select provider or helper first</string>
+    <string name="no_help_requeter">Currently there are no help-seekers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="no_help_provider">Currently there are no help-givers in the selected map-area. You can search other locations on the map, or click Continue below to register your request.</string>
+    <string name="please_select_provider_helper">Please select givers or seekers first</string>
     <string name="distance_km">%1$skms away</string>
     <string name="send_offer">Send offer</string>
 
@@ -283,7 +270,6 @@
     <string name="someone_else">Someone else</string>
     <string name="my_self">Myself</string>
     <string name="who_need_helps">Who needs help?</string>
-    <string name="not_rated_yet">(Not yet rated)</string>
     <string name="label_add_item">Add item</string>
 
     <string name="should_othe_help_them">Should others help them?</string>

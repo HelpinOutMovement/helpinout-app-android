@@ -51,7 +51,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
                 sendDataToServer()
             }
             we_can_not_pay -> {
-                ambulanceHelp.pay = 2
+                ambulanceHelp.pay = 0
                 sendDataToServer()
             }
         }
