@@ -23,7 +23,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avneesh.crashreporter.ui.CrashReporterActivity
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_home.*
@@ -40,6 +39,7 @@ import org.helpinout.billonlights.viewmodel.OfferViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import timber.log.Timber
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -505,7 +505,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     removeBadge(offerType)
                 }
             } catch (e: Exception) {
-
+                Timber.d("")
             }
         })
     }
@@ -544,20 +544,22 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         return R.layout.activity_home
     }
 
-    fun addBadge(offerType: Int) {
-        val itemView: BottomNavigationItemView = bottom_nav_view.findViewById(if (offerType == HELP_TYPE_REQUEST) R.id.navigation_my_request else R.id.navigation_my_offers)
-        val badge: View = layoutInflater.inflate(R.layout.view_badge, bottom_nav_view, false)
-        if (offerType == HELP_TYPE_OFFER) {
-            badge.setBackgroundResource(R.drawable.badge_shape_accent)
+    private fun addBadge(offerType: Int) {
+        try {
+            val bedgeId = if (offerType == HELP_TYPE_REQUEST) R.id.navigation_my_request else R.id.navigation_my_offers
+            var badge = bottom_nav_view.getBadge(bedgeId)
+            if (badge == null) {
+                badge = bottom_nav_view.getOrCreateBadge(bedgeId)
+                badge.badgeGravity = Gravity.RIGHT or Gravity.TOP
+            }
+        } catch (e: Exception) {
+            Timber.d("")
         }
-        itemView.addView(badge)
     }
 
     fun removeBadge(offerType: Int) {
         val bedgeId = if (offerType == HELP_TYPE_REQUEST) R.id.navigation_my_request else R.id.navigation_my_offers
-        bottom_nav_view.removeBadge(bedgeId)
-//        val itemView: BottomNavigationItemView = bottom_nav_view.findViewById(bedgeId)
-        // itemView.removeAllViewsInLayout()
+         bottom_nav_view.removeBadge(bedgeId)
     }
 
     fun hideMailIcon(isVisible:Boolean) {

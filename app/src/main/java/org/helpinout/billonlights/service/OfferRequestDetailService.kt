@@ -9,7 +9,6 @@ import org.helpinout.billonlights.model.database.entity.DeleteDataResponses
 import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
-import org.helpinout.billonlights.utils.SEEN_NO
 import org.helpinout.billonlights.utils.SEEN_YES
 import org.helpinout.billonlights.utils.Utils
 import org.json.JSONArray
