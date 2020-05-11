@@ -59,8 +59,8 @@
   <string name="title_go_to_setting">ಸೆಟ್ಟಿಂಗ್ಸ್ಗೆ ಹೋಗಿ</string>
   <string name="label_location">ಸ್ಥಳವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
   <string name="label_permission">ಅನುಮತಿಯನ್ನು ಅನುಮತಿಸಿ</string>
-  <string name="request_near_me_home">% 1$s ಸಹಾಯ ನೀಡುವವರು ನಿಮ್ಮ ವಿನಂತಿಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುತ್ತಾರೆ!</string>
-  <string name="offer_near_me_home">% 1$s ಸಹಾಯ ಹುಡುಕುವವರು ನಿಮ್ಮ ಕೊಡುಗೆಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುತ್ತಾರೆ!</string>
+  <string name="request_near_me_home">%1$s ಸಹಾಯ ನೀಡುವವರು ನಿಮ್ಮ ವಿನಂತಿಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುತ್ತಾರೆ!</string>
+  <string name="offer_near_me_home">%1$s ಸಹಾಯ ಹುಡುಕುವವರು ನಿಮ್ಮ ಕೊಡುಗೆಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುತ್ತಾರೆ!</string>
   <string name="label_send_mail">ಮೇಲ್ ಕಳುಹಿಸಿ</string>
   <string name="invalid_email_id">ದಯವಿಟ್ಟು ಸರಿಯಾದ ಇಮೇಲ್ ಐಡಿ ನಮೂದಿಸಿ</string>
   <string name="email_send_success">ಇಮೇಲ್ ಕಳುಹಿಸಿ ಯಶಸ್ಸು</string>
