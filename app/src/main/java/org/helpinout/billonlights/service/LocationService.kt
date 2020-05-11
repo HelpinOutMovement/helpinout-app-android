@@ -84,6 +84,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             categoryItem.activity_category = addData.activity_category
             categoryItem.activity_count = addData.activity_count
             categoryItem.geo_location = addData.geo_location
+            categoryItem.conditions = addData.conditions
             categoryItem.address = address
             categoryItem.status = 1
             categoryItem.self_else= addData.selfHelp
@@ -511,6 +512,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             singleItem.activity_count = peopleHelp.activity_count
             singleItem.geo_location = peopleHelp.geo_location
             singleItem.address = peopleHelp.address
+            singleItem.conditions= peopleHelp.conditions
             singleItem.pay= peopleHelp.pay
             var detail = ""
 

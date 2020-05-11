@@ -35,7 +35,6 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
             holder.itemView.tv_offer_received_count.setTextColor(ctx.getColor(R.color.colorAccent))
         }
 
-
         if (item.activity_type == HELP_TYPE_REQUEST) {
             holder.itemView.tv_offer_received.text = ctx.getString(R.string.offers_received)
 

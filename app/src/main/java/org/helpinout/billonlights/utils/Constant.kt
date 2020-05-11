@@ -34,7 +34,7 @@ const val LOGIN_STEP = 2
 const val REGISTRATION_STEP = 3
 const val HOME_STEP = 4
 const val DEFAULT_ZOOM_LEVEL = 10.5f
-
+const val WEB_URL="WebUrl"
 const val ENGLISH = 1
 const val HINDI = 2
 const val KANNAD = 3

@@ -148,11 +148,11 @@ class RequestDetailActivity : BaseActivity() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.activity_type!!, item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2 -> onDeleteYesClick(uuid1, uuid2) })
+        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.mapping_initiator!!,item.activity_type!!, item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2,mapping_initiator -> onDeleteYesClick(uuid1, uuid2,mapping_initiator) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
-    private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String) {
+    private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String,mapping_initiator:Int) {
 
         val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog.show()
@@ -178,7 +178,7 @@ class RequestDetailActivity : BaseActivity() {
                 }
             })
         } else {
-            viewModel.deleteMapping(parent_uuid, activity_uuid, offerType).observe(this, Observer {
+            viewModel.deleteMapping(parent_uuid, activity_uuid, offerType,mapping_initiator).observe(this, Observer {
                 dialog.dismiss()
                 it.first?.let {
                     deleteMappingFromDatabase(parent_uuid, activity_uuid)

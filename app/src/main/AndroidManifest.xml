@@ -103,7 +103,8 @@
         <activity
             android:name=".view.activity.AboutActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.WebViewActivity" android:label="@string/title_feedback"
+
+        <activity android:name=".view.activity.WebViewActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

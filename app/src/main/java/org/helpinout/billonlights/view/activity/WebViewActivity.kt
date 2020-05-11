@@ -13,15 +13,11 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_webview.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.FEEDBACK_URL
-import org.helpinout.billonlights.utils.hide
-import org.helpinout.billonlights.utils.show
-import org.helpinout.billonlights.utils.toastError
+import org.helpinout.billonlights.utils.*
 import java.net.URLEncoder
 
 
 class WebViewActivity : BaseActivity() {
-
 
     var uploadMessage: ValueCallback<Array<Uri>>? = null
     var mUploadMessage: ValueCallback<Uri>? = null
@@ -31,10 +27,13 @@ class WebViewActivity : BaseActivity() {
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val postData = "imei_no=" + URLEncoder.encode(preferencesService.imeiNumber, "UTF-8") + "&app_version=" + URLEncoder.encode(preferencesService.appVersion, "UTF-8") + "&app_id=" + URLEncoder.encode(preferencesService.appId, "UTF-8")
+
+        supportActionBar?.title = intent.getStringExtra(TITLE)
+
+        val url = intent.getStringExtra(WEB_URL)!!
         webView.webViewClient = AppWebViewClients(progress)
         webView.webChromeClient = MyWebChromeClient()
-        webView.loadUrl(FEEDBACK_URL)
+        webView.loadUrl(url)
         val webSettings = webView.settings
         webSettings.javaScriptEnabled = true
         webSettings.domStorageEnabled = true

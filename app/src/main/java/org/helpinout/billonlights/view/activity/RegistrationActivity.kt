@@ -1,21 +1,25 @@
 package org.helpinout.billonlights.view.activity
 
+import android.R.attr.country
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_register.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.Registration
 import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.view.adapters.CustomStringAdapter
 import org.helpinout.billonlights.view.view.HelpInTextWatcher
 import org.helpinout.billonlights.view.view.SpinnerSelector
 import org.helpinout.billonlights.viewmodel.LoginRegistrationViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
+
 
 class RegistrationActivity : BaseActivity(), View.OnClickListener {
 
@@ -64,6 +68,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 tv_help_in_profile_name.text = getProfileName()
             }
         })
+
         spinner_org_type.onItemSelectedListener = object : SpinnerSelector() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position != 0) {
@@ -71,6 +76,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
+        spinner_org_type.adapter = CustomStringAdapter(this, values = resources.getStringArray(R.array.org_types))
 
         btn_login.setOnClickListener(this)
 
@@ -145,7 +151,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
         val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog.setCancelable(false)
         dialog.show()
-
+        preferencesService.orgName= registration.org_name?:""
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
         viewModel.getRegistrationResult(registration).observe(this, Observer {
             dialog.dismiss()
@@ -171,6 +177,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
         dialog.show()
 
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
+        preferencesService.orgName= registration.org_name?:""
         viewModel.getUpdateProfileResult(registration).observe(this, Observer {
             dialog.dismiss()
             if (it.first != null) {

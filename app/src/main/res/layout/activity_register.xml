@@ -96,7 +96,6 @@
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:background="@drawable/spinner_background"
-                android:entries="@array/org_types"
                 android:visibility="gone"
                 tools:visibility="visible" />
 

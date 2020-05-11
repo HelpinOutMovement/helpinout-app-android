@@ -91,11 +91,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
-    fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int): MutableLiveData<Pair<String?, String>> {
+    fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int,mapping_initiator: Int): MutableLiveData<Pair<String?, String>> {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(offerRequestDetailService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type), ""))
+                response.postValue(Pair(offerRequestDetailService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type,mapping_initiator), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }

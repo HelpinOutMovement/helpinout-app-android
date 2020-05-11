@@ -29,9 +29,6 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 finalRequest.add(item)
                 item.offersReceived = mapping.filter { it.mapping_initiator != initiator }.size
 
-
-//                Timber.d("" + offerType + " " + initiator)
-
                 val notificationItem = notificationList.find { it.parent_uuid == item.activity_uuid && it.mapping_initiator != initiator && it.activity_type == offerType }
 
                 notificationItem?.let {
@@ -45,7 +42,6 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 item.icon = item.activity_category.getIcon()
             }
         return finalRequest
-//            requestOfferSubject.onNext(finalRequest)
 
     }
 
@@ -57,11 +53,11 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             val offers = response.data?.offers
             val requests = response.data?.requests
             if (!offers.isNullOrEmpty()) {
-                insertItemToDatabase(context, offers, preferencesService.offerFirstTime)
+                insertItemToDatabase(context, offers, preferencesService.offerFirstTime, true)
                 preferencesService.offerFirstTime = false
             }
             if (!requests.isNullOrEmpty()) {
-                insertItemToDatabase(context, requests, preferencesService.requestFirstTime)
+                insertItemToDatabase(context, requests, preferencesService.requestFirstTime, false)
                 preferencesService.requestFirstTime = false
             }
         } catch (e: Exception) {
@@ -96,7 +92,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         return mainData.toString()
     }
 
-    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>, isFirstTime: Boolean) {
+    private fun insertItemToDatabase(context: Context, offers: List<ActivityAddDetail>, isFirstTime: Boolean, isOffer: Boolean) {
         val addDataList = ArrayList<AddCategoryDbItem>()
         val notificationDb = db.getNotificationDao()
         offers.forEach { offer ->
@@ -193,7 +189,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
                             notificationDb.insertItems(notificationItem)
                         } else {
-                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "")
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.request_detail?.activity_uuid ?: "")
                             if (singleItem == null) {
                                 val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
                                 notificationItem.activity_uuid = mapping.request_detail?.activity_uuid ?: ""
@@ -224,6 +220,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 item.address = context.getAddress(preferencesService.latitude, preferencesService.longitude)
                 item.status = 1
                 item.self_else = offer.self_else
+                item.conditions = if (isOffer) offer.offer_note else offer.request_note
 
                 item.pay = offer.pay
                 addDataList.add(item)

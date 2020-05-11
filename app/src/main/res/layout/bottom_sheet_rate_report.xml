@@ -49,7 +49,7 @@
     <TextView
         android:id="@+id/tv_message"
         style="@style/StyleTextViewNormal"
-        android:text="@string/help_from_them"
+        android:text="@string/help_from_them_request"
         app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
 
 

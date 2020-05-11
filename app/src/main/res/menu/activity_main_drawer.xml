@@ -34,6 +34,11 @@
             android:id="@+id/nav_feedback"
             android:checkable="false"
             android:title="@string/title_feedback" />
+
+        <item
+            android:id="@+id/nav_form"
+            android:checkable="false"
+            android:title="@string/title_form" />
     </group>
 
     <group

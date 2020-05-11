@@ -48,6 +48,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     private var homeFragment: HomeFragment? = null
     private var doubleBackToExitPressedOnce = false
     private var selectedItem = -1
+    private var selectedPosition = -1
     private var updateLanguage = 349
     var radius: Float = 0.0F
 
@@ -69,6 +70,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         bottom_nav_view.setOnNavigationItemSelectedListener(this)
         when (intent.getIntExtra(SELECTED_INDEX, 0)) {
             0 -> {
+                selectedPosition = 0
                 bottom_nav_view.selectedItemId = R.id.navigation_home
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val window: Window = window
@@ -77,6 +79,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 }
             }
             1 -> {
+                mailMenu?.isVisible = false
+                selectedPosition = 1
                 bottom_nav_view.selectedItemId = R.id.navigation_my_request
                 supportActionBar?.setTitle(R.string.title_my_request)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -87,6 +91,8 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 }
             }
             2 -> {
+                mailMenu?.isVisible = true
+                selectedPosition = 2
                 bottom_nav_view.selectedItemId = R.id.navigation_my_offers
                 supportActionBar?.setTitle(R.string.title_my_offers)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -136,6 +142,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         mailMenu?.actionView?.setOnClickListener {
             showEmailPopup()
         }
+        mailMenu?.isVisible= selectedPosition==2
         val logsMenu = menu.findItem(R.id.menu_logs)
         if (BuildConfig.DEBUG) logsMenu.isVisible = true
         return super.onCreateOptionsMenu(menu)
@@ -217,6 +224,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             R.id.navigation_home, R.id.nav_home -> {
                 if (selectedItem != 0) {
                     selectedItem = 0
+                    selectedPosition=0
                     layout_toolbar.hide()
                     checkFragmentItems()
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -234,6 +242,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
             }
             R.id.navigation_my_request, R.id.nav_my_request -> {
                 if (selectedItem != 1) {
+                    selectedPosition=1
                     selectedItem = 1
                     layout_toolbar.show()
                     checkFragmentItems()
@@ -259,6 +268,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     layout_toolbar.show()
                     checkFragmentItems()
                     mailMenu?.isVisible = true
+                    selectedPosition=2
                     supportActionBar?.setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)))
                     val my_offers = nav_view.menu.findItem(R.id.nav_my_offers)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -285,7 +295,12 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             R.id.nav_feedback -> {
-                startActivity<WebViewActivity>()
+                startActivity<WebViewActivity>(WEB_URL to FEEDBACK_URL, TITLE to getString(R.string.title_feedback))
+                overridePendingTransition(R.anim.enter, R.anim.exit)
+            }
+            R.id.nav_form -> {
+                val url = "https://core.helpinout.org/custom/rra?lat=" + preferencesService.latitude + "&lng=" + preferencesService.longitude + "&org=" + preferencesService.orgName
+                startActivity<WebViewActivity>(WEB_URL to url, TITLE to getString(R.string.title_form))
                 overridePendingTransition(R.anim.enter, R.anim.exit)
             }
             R.id.nav_english -> {

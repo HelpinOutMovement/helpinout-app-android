@@ -56,6 +56,19 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_time"
         tools:text="Can help with" />
 
+    <TextView
+        android:id="@+id/tv_notes"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_detail"
+        tools:text="Notes" />
 
     <TextView
         android:id="@+id/free_or_paid"
@@ -75,6 +88,6 @@
         android:layout_marginEnd="@dimen/_5sdp"
         android:text="@string/cancel_this_request"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_notes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

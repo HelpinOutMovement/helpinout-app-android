@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.bottom_sheet_request_offer_detail.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
-import org.helpinout.billonlights.utils.displayTime
-import org.helpinout.billonlights.utils.fromHtml
-import org.helpinout.billonlights.utils.show
+import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
+import org.helpinout.billonlights.utils.*
 
-class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private val itemName: String, private val description: String, private val pay: Int, private val time: String, private val uuid:String,private val onCancelRequestClick: (String,Int) -> Unit) : BottomSheetDialogFragment() {
+class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private val item: AddCategoryDbItem, private val onCancelRequestClick: (String, Int) -> Unit) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (offerType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -25,24 +23,30 @@ class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (offerType == HELP_TYPE_REQUEST) {
-            tv_time.show()
-            free_or_paid.text = getString(if (pay == 1) R.string.can_pay else R.string.can_not_pay)
+            if (item.activity_category == CATEGORY_AMBULANCE) {
+                tv_notes.show()
+                tv_notes.text = getString(R.string.note, " " + item.conditions)
+            } else tv_notes.hide()
 
+            tv_time.show()
+            free_or_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
         } else {
-            free_or_paid.text = getString(if (pay == 1) R.string.not_free else R.string.free)
+            tv_notes.text = getString(R.string.note)+ " "+ item.conditions
+            tv_notes.show()
+            free_or_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)
             btn_cancel_this_request.text = getString(R.string.cancel_this_offer)
         }
-        tv_time.text = time.displayTime()
+        tv_time.text = item.date_time.displayTime()
         iv_cancel.setOnClickListener {
             dismiss()
         }
         btn_cancel_this_request.setOnClickListener {
             dismiss()
-            onCancelRequestClick(uuid,offerType)
+            onCancelRequestClick(item.activity_uuid, offerType)
         }
-        item_name.text = itemName
+        item_name.text = item.name
 
-        tv_detail.text = description.fromHtml()
+        tv_detail.text = item.detail?.fromHtml()
 
     }
 }

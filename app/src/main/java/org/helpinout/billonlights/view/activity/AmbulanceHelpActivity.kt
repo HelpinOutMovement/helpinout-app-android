@@ -88,6 +88,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         item.geo_location = ambulanceHelp.geo_location
         item.address = ambulanceHelp.address
         item.qty = ambulanceHelp.qty ?: ""
+        item.conditions= ambulanceHelp.conditions
         item.status = 1
         item.pay= ambulanceHelp.pay
         //item.detail= "<b>"+getString(R.string.note)+ "</b><br/>" + ambulanceHelp.conditions

@@ -78,19 +78,19 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
         return mainData.toString()
     }
 
-    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
+    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
         return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
+            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,mapping_initiator))
         }
     }
 
     suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType))
+            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,0))
         }
     }
 
-    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
+    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)
@@ -108,6 +108,7 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
                 val jsonArray = JSONArray()
                 val json = JSONObject()
                 json.put("activity_uuid", activity_uuid)
+                json.put("mapping_initiator", mapping_initiator)
                 jsonArray.put(json)
 
                 if (activityType == HELP_TYPE_REQUEST) {
@@ -134,12 +135,4 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
         }
     }
 
-//    fun updateNotification(activity_type: Int, parent_uuid: String): Boolean {
-//        return try {
-//            db.getNotificationDao().updateActivity(activity_type, parent_uuid)
-//            true
-//        } catch (e: Exception) {
-//            false
-//        }
-//    }
 }

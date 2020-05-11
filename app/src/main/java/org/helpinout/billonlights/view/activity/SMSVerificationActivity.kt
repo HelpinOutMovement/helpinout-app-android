@@ -152,7 +152,9 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
                     finishWithFade()
                 } else {//already registered
                     preferencesService.appId = data.app_id ?: ""
+
                     data.user_detail?.let {
+                        preferencesService.orgName = it.org_name ?: ""
                         saveRegistrationToDatabase(it)
                     }
                 }

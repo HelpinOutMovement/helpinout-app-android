@@ -175,7 +175,7 @@ class FragmentMyRequests : BaseFragment() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val rateReport = BottomSheetsRequestOfferDetailFragment(offerType, item.name, item.detail ?: "", item.pay, item.date_time, item.activity_uuid, onCancelRequestClick = { id, activity_type -> onCancelRequestClick(id, activity_type) })
+        val rateReport = BottomSheetsRequestOfferDetailFragment(offerType, item, onCancelRequestClick = { id, activity_type -> onCancelRequestClick(id, activity_type) })
         rateReport.show(childFragmentManager, null)
     }
 

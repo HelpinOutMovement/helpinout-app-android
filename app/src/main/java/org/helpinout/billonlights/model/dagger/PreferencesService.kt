@@ -13,6 +13,7 @@ class PreferencesService {
     var mobileNumber by stringProperty()
     var step by integerProperty()
     var latitude by doubleProperty(default = 0.0)
+    var orgName by stringProperty()
     var longitude by doubleProperty(default = 0.0)
     var defaultLanguage by stringProperty()
     var zoomLevel by floatProperty(default = 12.05F)
