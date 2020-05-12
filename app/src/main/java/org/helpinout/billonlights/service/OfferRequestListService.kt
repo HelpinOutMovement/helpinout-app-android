@@ -208,7 +208,10 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mappingList.add(it.request_detail!!.user_detail!!)
                     }
                 }
-                if (mappingList.isNotEmpty()) saveMappingToDb(mappingList)
+                if (mappingList.isNotEmpty()) {
+                    db.getMappingDao().deleteMapping(offer.activity_uuid)
+                    saveMappingToDb(mappingList)
+                }
 
                 item.detail = itemDetail
                 item.activity_uuid = offer.activity_uuid
