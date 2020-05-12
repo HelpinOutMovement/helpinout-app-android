@@ -31,7 +31,7 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
             } catch (e: Exception) {
             }
         }
-        db.getNotificationDao().updateActivity(offerType,activity_uuid, SEEN_YES)
+        db.getNotificationDao().updateActivity(offerType,activity_uuid, SEEN_YES,initiator)
 
         return response
     }

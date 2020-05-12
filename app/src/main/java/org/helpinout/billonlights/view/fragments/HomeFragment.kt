@@ -180,11 +180,11 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
             it.first?.let { res ->
                 res.data?.let {
                     progressBar?.hide()
-                    requestNearMe = getString(R.string.request_near_me_home, it.my_offers_match)
-                    offerNearMe = getString(R.string.offer_near_me_home, it.my_requests_match)
+                    requestNearMe = getString(R.string.request_near_me_home, it.my_requests_match)
+                    offerNearMe = getString(R.string.offer_near_me_home, it.my_offers_match)
 
-                    tv_offer.visibleIf(it.my_offers_match != 0)
-                    tv_request.visibleIf(it.my_requests_match != 0)
+                    tv_offer.visibleIf(it.my_requests_match != 0)
+                    tv_request.visibleIf(it.my_offers_match != 0)
                 }
             } ?: kotlin.run {
                 progressBar?.hide()

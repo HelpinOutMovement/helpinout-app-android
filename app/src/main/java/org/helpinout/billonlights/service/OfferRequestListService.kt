@@ -161,7 +161,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
                             notificationDb.insertItems(notificationItem)
                         } else {
-                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "")
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "",mapping.mapping_initiator?:0)
                             if (singleItem == null) {
                                 val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
                                 notificationItem.activity_uuid = mapping.offer_detail?.activity_uuid ?: ""
@@ -170,7 +170,6 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             }
                         }
                         setOfferDetail(mapping)
-
                     } else if (mapping.request_detail != null) {
                         mapping.request_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.request_detail?.user_detail?.activity_type = offer.activity_type
@@ -189,7 +188,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
                             notificationDb.insertItems(notificationItem)
                         } else {
-                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.request_detail?.activity_uuid ?: "")
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.request_detail?.activity_uuid ?: "",mapping.mapping_initiator?:0)
                             if (singleItem == null) {
                                 val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
                                 notificationItem.activity_uuid = mapping.request_detail?.activity_uuid ?: ""
@@ -407,5 +406,9 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             CrashReporter.logException(e)
         }
         return mainData.toString()
+    }
+
+    fun deleteActivityFromDb(activityUuid: String) {
+        db.getMappingDao().deleteMapping(activityUuid)
     }
 }

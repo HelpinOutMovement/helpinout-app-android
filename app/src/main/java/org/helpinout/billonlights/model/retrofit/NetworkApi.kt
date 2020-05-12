@@ -35,7 +35,6 @@ interface NetworkApi {
     @POST("user/emailoffermapping")
     fun getEmailResponseAsync(@Body body: String): Deferred<ServerResponse>
 
-
     @POST("activity/delete")
     fun getActivityDeleteResponseAsync(@Body body: String): Deferred<DeleteDataResponses>
 

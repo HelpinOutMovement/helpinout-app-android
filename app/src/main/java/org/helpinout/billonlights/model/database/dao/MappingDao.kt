@@ -22,4 +22,7 @@ interface MappingDao {
 
     @Query("delete from mapping WHERE activity_uuid=:activity_uuid and parent_uuid=:parentUUid")
     fun deleteMapping(activity_uuid: String, parentUUid: String)
+
+    @Query("delete from mapping WHERE  parent_uuid=:parentUUid")
+    fun deleteMapping(parentUUid: String)
 }

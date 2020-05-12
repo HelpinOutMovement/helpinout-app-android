@@ -70,16 +70,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun fetchData(data: Map<String, String>) {
+        val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
+        val activity_uuid = data[ACTIVITY_UUID].toString()
+        val action = data[ACTION]?.toInt() ?: 0
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val activityType = data[ACTIVITY_TYPE]?.toInt() ?: 0
-                val activity_uuid = data[ACTIVITY_UUID].toString()
-                val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, activityType, activity_uuid)
-                runOnUiThread {
-                   showNotification(data)
-               }
+
+                if (action == NOTIFICATION_OFFER_CANCELLED || action == NOTIFICATION_REQUEST_CANCELLED) {//offer made  is canclledoffer made  is canclled
+                    offerRequestListService.deleteActivityFromDb(activity_uuid)
+                    val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, activityType, activity_uuid)
+                    val intent1 = Intent(BEDGE_REFRESH)
+                    LocalBroadcastManager.getInstance(this@MyFirebaseMessagingService).sendBroadcast(intent1)
+
+                }else{
+                    val response = offerRequestListService.getUserRequestsOfferList(this@MyFirebaseMessagingService, activityType, activity_uuid)
+                    runOnUiThread {
+                        if (action != NOTIFICATION_OFFER_CANCELLED && action != NOTIFICATION_REQUEST_CANCELLED) showNotification(data)
+                    }
+                }
             } catch (e: Exception) {
-                runOnUiThread {
+                if (action != NOTIFICATION_OFFER_CANCELLED && action != NOTIFICATION_REQUEST_CANCELLED) runOnUiThread {
                     showNotification(data)
                 }
             }
@@ -95,11 +105,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var message = "New offer or request"
         if (activityType == 1) {
             if (action == 2) {//request accepted
-                message = getString(R.string.someone_accept_offer, sendName)
+                message = getString(R.string.someone_receive_your_request, sendName)
             }
         } else if (activityType == 2) {
             if (action == 1) {//offer accepted
-                message = getString(R.string.someone_receive_your_request, sendName)
+                message = getString(R.string.someone_accept_offer, sendName)
             }
         }
 
@@ -113,7 +123,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
+        val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setStyle(NotificationCompat.BigTextStyle().bigText(message)).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

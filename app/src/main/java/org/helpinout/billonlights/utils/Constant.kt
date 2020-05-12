@@ -77,3 +77,6 @@ const val ACTIVITY_TIME = "activity_time"
 const val ACTIVITY_UUID = "activity_uuid"
 const val SENDER_NAME = "sender_name"
 const val FROM_NOTIFICATION = "FromNotification"
+
+const val NOTIFICATION_REQUEST_CANCELLED = 3
+const val  NOTIFICATION_OFFER_CANCELLED = 4
