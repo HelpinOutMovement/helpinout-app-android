@@ -136,10 +136,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             channel.lightColor = Color.RED
             channel.enableVibration(true)
             channel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500)
-
             notificationManager.createNotificationChannel(channel)
         }
-        notificationManager.notify(0, notificationBuilder.build())
+
+        notificationManager.notify(preferencesService.last_notification_id, notificationBuilder.build())
+        preferencesService.last_notification_id += 1
     }
 
 }

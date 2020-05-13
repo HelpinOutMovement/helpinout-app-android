@@ -188,6 +188,7 @@ class FragmentMyRequests : BaseFragment() {
             dialog?.dismiss()
             it.first?.let {
                 toastSuccess(R.string.toast_delete_success)
+                (activity as HomeActivity).refreshBedge()
                 loadRequestList()
             } ?: kotlin.run {
                 if (!isNetworkAvailable()) {

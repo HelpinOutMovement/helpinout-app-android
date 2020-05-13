@@ -3,6 +3,11 @@ package org.helpinout.billonlights.utils
 const val CALENDER_FORMAT = "yyyy-MM-dd hh:mm:ss"
 const val TIME_AGO_FORMAT = "yyyy-MM-dd HH:mm:ss"
 
+const val INTERNET_ERROR1="java.net.ConnectException: Failed to connect to"
+const val INTERNET_ERROR2="java.net.UnknownHostException: Unable to resolve host"
+const val INTERNET_ERROR_3="java.net.SocketException"
+const val INTERNET_ERROR_4="javax.net.ssl.sslexception"
+
 const val SERVER_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
 const val APP_INSTALL_FORMAT = "dd-MM-yyyy hh:mm a"
 const val TERMS_OF_SERVICE = "https://helpinout.org/docs/terms_of_service.html"

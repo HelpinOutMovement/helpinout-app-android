@@ -57,7 +57,16 @@ fun ImageView.setImage(id: Int) {
 fun Exception.getStringException(): String {
     val writer = StringWriter()
     this.printStackTrace(PrintWriter(writer))
-    return writer.toString().take(100)
+
+    var error = writer.toString()
+    if (error.contains(INTERNET_ERROR1) || error.contains(INTERNET_ERROR2) || error.contains(
+            INTERNET_ERROR_3
+        ) || error.contains(INTERNET_ERROR_4)
+    ) {
+        error = "Internet issue"
+        return error
+    }
+    return writer.toString().take(80)
 }
 
 fun String.displayTime(): String {

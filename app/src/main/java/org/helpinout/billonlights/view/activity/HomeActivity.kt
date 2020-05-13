@@ -108,8 +108,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         btnPermission.setOnClickListener(this)
         enableLocation.setOnClickListener(this)
         setLanguage()
-        loadRequestList(HELP_TYPE_REQUEST, 1)
-        loadRequestList(HELP_TYPE_OFFER, 2)
+        refreshBedge()
         val filter = IntentFilter()
         filter.addAction(BEDGE_REFRESH)
         LocalBroadcastManager.getInstance(this).registerReceiver(bedgeRefreshReceiver, filter)
@@ -123,10 +122,18 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     private val bedgeRefreshReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent?.action == BEDGE_REFRESH) {
-                loadRequestList(HELP_TYPE_REQUEST, 1)
-                loadRequestList(HELP_TYPE_OFFER, 2)
+                refreshBedge()
             }
         }
+    }
+    fun refreshBedge(){
+        loadRequestList(HELP_TYPE_REQUEST, 1)
+        loadRequestList(HELP_TYPE_OFFER, 2)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshBedge()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
