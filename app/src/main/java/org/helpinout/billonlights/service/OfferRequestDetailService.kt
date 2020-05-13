@@ -49,6 +49,7 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
     private fun deleteActivityFromDb(activityUuid: String?): Boolean {
         activityUuid?.let {
             db.getAddItemDao().deleteActivity(it)
+            db.getMappingDao().deleteMapping(activityUuid)
             return true
         }
         return false

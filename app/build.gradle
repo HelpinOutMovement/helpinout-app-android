@@ -36,7 +36,7 @@ android {
         debug {
             resValue "bool", "Crash_Enable", "false"
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
-            buildConfigField "String", "BASE_URL", "\"http://3.7.52.176:8080/api/v1/\""
+            buildConfigField "String", "BASE_URL", "\"https://app.helpinout.org/api/v1/\""
         }
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -47,6 +47,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
             buildConfigField "String", "BASE_URL", "\"https://app.helpinout.org/api/v1/\""
+        }
+
+        beta_debug {
+            initWith debug
+            resValue "bool", "Crash_Enable", "true"
+            buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
+            buildConfigField "String", "BASE_URL", "\"http://3.7.52.176:8080/api/v1/\""
+        }
+        beta_release {
+            initWith release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            resValue "bool", "Crash_Enable", "true"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
+            buildConfigField "String", "BASE_URL", "\"http://3.7.52.176:8080/api/v1/\""
         }
     }
     compileOptions {

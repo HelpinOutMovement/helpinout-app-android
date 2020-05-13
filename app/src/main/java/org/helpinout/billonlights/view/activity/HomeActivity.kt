@@ -144,7 +144,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         }
         mailMenu?.isVisible= selectedPosition==2
         val logsMenu = menu.findItem(R.id.menu_logs)
-        if (BuildConfig.DEBUG) logsMenu.isVisible = true
+        logsMenu.isVisible = BuildConfig.BUILD_TYPE == "beta_debug"
         return super.onCreateOptionsMenu(menu)
     }
 
