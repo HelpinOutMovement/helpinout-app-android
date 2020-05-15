@@ -31,8 +31,11 @@ class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private
             tv_time.show()
             free_or_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
         } else {
-            tv_notes.text = getString(R.string.note)+ " "+ item.conditions
-            tv_notes.show()
+
+            if (item.activity_category != CATEGORY_PEOPLE) {
+                tv_notes.text = getString(R.string.note)+ " "+ item.conditions
+                tv_notes.show()
+            }
             free_or_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)
             btn_cancel_this_request.text = getString(R.string.cancel_this_offer)
         }
@@ -46,7 +49,8 @@ class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private
         }
         item_name.text = item.name
 
-        tv_detail.text = item.detail?.fromHtml()
+
+        tv_detail.text = item.detail?.replace("%1s", getString(R.string.volunteers))?.replace("%2s", getString(R.string.technical_personnel))?.fromHtml()
 
     }
 }

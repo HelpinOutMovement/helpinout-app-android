@@ -31,6 +31,7 @@ import timber.log.Timber
 
 class RequestDetailActivity : BaseActivity() {
 
+    private var location: String = ""
     private var activity_uuid: String = ""
     private var initiator: Int = 0
     private var offerType: Int = 0
@@ -44,6 +45,7 @@ class RequestDetailActivity : BaseActivity() {
         offerType = intent.getIntExtra(OFFER_TYPE, HELP_TYPE_REQUEST)
         initiator = intent.getIntExtra(INITIATOR, HELP_TYPE_REQUEST)
         activity_uuid = intent.getStringExtra(ACTIVITY_UUID) ?: ""
+        location = intent.getStringExtra(LOCATION) ?: ""
         isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
         if (offerType == HELP_TYPE_REQUEST) {
             if (initiator == HELP_TYPE_REQUEST) {//send request
@@ -83,7 +85,8 @@ class RequestDetailActivity : BaseActivity() {
 
     private fun loadRequestDetails() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getRequestDetails(offerType, initiator, activity_uuid).observe(this, Observer { list ->
+        viewModel.getRequestDetails(offerType, initiator, activity_uuid, location)
+            .observe(this, Observer { list ->
             progress_bar.hide()
             list?.let {
                 itemList.clear()
@@ -219,13 +222,19 @@ class RequestDetailActivity : BaseActivity() {
         viewModel.deleteMappingFromDatabase(parent_uuid, activity_uuid).observe(this, Observer {
             dialog.dismiss()
             if (it) {
-                toastSuccess(R.string.toast_delete_success)
-                loadRequestDetails()
                 val intent1 = Intent(DATA_REFRESH)
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
+                toastSuccess(R.string.toast_delete_success)
+                if (itemList.size == 1) {
+                    goToHome()
+                }else{
+                    loadRequestDetails()
+                }
+
             }
         })
     }
+
 
     override fun onBackPressed() {
             goToHome()

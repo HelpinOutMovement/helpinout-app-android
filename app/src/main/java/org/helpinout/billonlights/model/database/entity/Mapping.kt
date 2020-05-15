@@ -11,6 +11,7 @@ class Mapping {
     var status: Int? = null
     var mapping_initiator: Int? = 0
     var mapping_time: String = ""
+    var distance:String?=""
 }
 
 @Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid","mapping_initiator"], unique = true)])
@@ -40,6 +41,5 @@ class MappingDetail {
     var detail: String? = ""
     var pay:Int=0
     var self_else:Int=0
-    @Ignore
     var distance: String? = null//this is for calculate distance
 }

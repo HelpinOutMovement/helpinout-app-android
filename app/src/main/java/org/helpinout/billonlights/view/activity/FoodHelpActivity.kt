@@ -75,7 +75,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
@@ -100,6 +100,7 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun sendData() {
+
         addData.activity_detail_string = getDetail()
         addData.conditions = edt_conditions.text.toString()
         suggestionData.activity_type = helpType

@@ -12,8 +12,8 @@ android {
         applicationId "org.helpinout.billonlights"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 12
-        versionName "2.1"
+        versionCode 13
+        versionName "2.2"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -137,7 +137,7 @@ dependencies {
     implementation 'org.jetbrains.anko:anko-common:0.9'
 
     //for database view in browser
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    implementation 'com.amitshekhar.android:debug-db:1.0.6'
     //Runtime permission
     implementation 'com.karumi:dexter:6.0.0'
 

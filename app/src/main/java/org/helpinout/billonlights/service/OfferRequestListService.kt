@@ -22,7 +22,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
 
             val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType)
 
-        val notificationList = db.getNotificationDao().getNotificationItems(offerType)
+            val notificationList = db.getNotificationDao().getNotificationItems(offerType)
 
             requestList.forEach { item ->
                 val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
@@ -114,13 +114,18 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         item.technical_personal_quantity = it.technical_personal_quantity
 
                         if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
+                            itemDetail += "<b> %1s </b><br/>"
                             itemDetail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
 
                         }
-                        if (!it.technical_personal_detail.isNullOrEmpty()) {
-                            if (itemDetail.isNotEmpty()) {
-                                itemDetail += "<br/>"
+                        if (!it.technical_personal_detail.isNullOrEmpty() || !it.technical_personal_quantity.isNullOrEmpty() ) {
+                            if (itemDetail.isNotEmpty()){
+                                itemDetail+="<br/>"
                             }
+                            itemDetail += "<b> %2s </b><br/>"
+//                            if (itemDetail.isNotEmpty()) {
+//                                itemDetail += "<br/>"
+//                            }
                             itemDetail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
                         }
 
@@ -142,8 +147,6 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 }
 
                 offer.mapping?.forEach { mapping ->
-
-
                     if (mapping.offer_detail != null) {
                         mapping.offer_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.offer_detail?.user_detail?.activity_type = offer.activity_type
@@ -155,6 +158,8 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
                         mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail!!.self_else
+                        mapping.offer_detail?.user_detail?.distance=  mapping.distance
+
                         if (isFirstTime) {
                             val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
                             notificationItem.activity_uuid = mapping.offer_detail?.activity_uuid ?: ""
@@ -181,6 +186,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
                         mapping.request_detail?.user_detail?.self_else = mapping.request_detail!!.self_else
+                        mapping.request_detail?.user_detail?.distance=  mapping.distance
 
                         if (isFirstTime) {
                             val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
@@ -255,17 +261,18 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
 
                 mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                    detail += "<b> %1s </b><br/>"
                     if (!it.volunters_detail.isNullOrEmpty()) {
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
                         detail += " (" + it.volunters_quantity + ")"
                     }
-
+                    if (detail.isNotEmpty()){
+                        detail+="<br/>"
+                    }
+                    detail += "<b> %2s </b><br/>"
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {
@@ -306,17 +313,19 @@ class OfferRequestListService(private val preferencesService: PreferencesService
             } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
 
                 mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                    detail += "<b> %1s </b><br/>"
                     if (!it.volunters_detail.isNullOrEmpty()) {
                         detail += it.volunters_detail?.take(30)
                     }
                     if (!it.volunters_quantity.isNullOrEmpty()) {
                         detail += " (" + it.volunters_quantity + ")"
                     }
-
+                    if (detail.isNotEmpty()){
+                            detail+="<br/>"
+                    }
+                    detail += "<b> %2s </b><br/>"
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
+
                         detail += it.technical_personal_detail?.take(30)
                     }
                     if (!it.technical_personal_quantity.isNullOrEmpty()) {

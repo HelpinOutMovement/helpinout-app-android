@@ -6,7 +6,10 @@ import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.utils.CATEGORY_AMBULANCE
+import org.helpinout.billonlights.utils.CATEGORY_PEOPLE
+import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
+import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
 import org.json.JSONArray
 import org.json.JSONObject
@@ -164,15 +167,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             it.offers?.let { detailList ->
                 detailList.forEach { detailItem ->
                     try {
-                        val destinationLatLong = detailItem.geo_location?.split(",")
-                        if (!destinationLatLong.isNullOrEmpty()) {
-                            val lat1 = preferencesService.latitude
-                            val long1 = preferencesService.longitude
-                            val lat2 = destinationLatLong[0].toDouble()
-                            val long2 = destinationLatLong[1].toDouble()
-                            detailItem.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
-                        }
-
+                        detailItem.user_detail?.distance =detailItem.distance
                         try {
                             var detail = ""
 
@@ -239,14 +234,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             it.requests?.let { detailList ->
                 detailList.forEach { detailItem ->
                     try {
-                        val destinationLatLong = detailItem.geo_location?.split(",")
-                        if (!destinationLatLong.isNullOrEmpty()) {
-                            val lat1 = preferencesService.latitude
-                            val long1 = preferencesService.longitude
-                            val lat2 = destinationLatLong[0].toDouble()
-                            val long2 = destinationLatLong[1].toDouble()
-                            detailItem.user_detail?.distance = Utils.getDistance(lat1, long1, lat2, long2)
-                        }
+                        detailItem.user_detail?.distance = detailItem.distance
                         try {
                             var detail = ""
 
@@ -517,14 +505,16 @@ class LocationService(private val preferencesService: PreferencesService, privat
             var detail = ""
 
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
+                detail += "<b> %1s </b><br/>"
                 detail += activityDetail.volunters_detail?.take(30) + " (" + activityDetail.volunters_quantity + ")"
 
             }
 
-            if (!activityDetail.technical_personal_detail.isNullOrEmpty()) {
+            if (!activityDetail.technical_personal_detail.isNullOrEmpty()|| !activityDetail.technical_personal_quantity.isNullOrEmpty() ) {
                 if (detail.isNotEmpty()) {
                     detail += "<br/>"
                 }
+                detail += "<b> %2s </b><br/>"
                 detail += activityDetail.technical_personal_detail?.take(30) + " (" + activityDetail.technical_personal_quantity + ")"
             }
 

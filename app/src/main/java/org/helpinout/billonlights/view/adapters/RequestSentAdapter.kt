@@ -12,7 +12,7 @@ import org.helpinout.billonlights.utils.*
 
 class RequestSentAdapter(private var offerType: Int, private var initiator: Int, private var helpType: Int, private var requestSentList: ArrayList<AddCategoryDbItem>,
     private val onSearchForHelpProviderClick: (AddCategoryDbItem) -> Unit,
-    private val onViewDetailClick: (Int, AddCategoryDbItem) -> Unit, private val onNewMatchesClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onRequestSentClick: (Int, Int,Int, String) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
+    private val onViewDetailClick: (Int, AddCategoryDbItem) -> Unit, private val onNewMatchesClick: (Int, Int, Int, AddCategoryDbItem) -> Unit, private val onRequestSentClick: (Int, Int,Int, String,AddCategoryDbItem) -> Unit) : RecyclerView.Adapter<RequestSentAdapter.RequestSentViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestSentViewHolder {
         val viewLayout: ItemRequestSentBinding = parent.inflate(R.layout.item_request_sent)
         return RequestSentViewHolder(viewLayout, offerType)
@@ -30,9 +30,9 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         val ctx = holder.itemView.context
 
         if (item.show_notification == 1 && holder.itemView.tv_offer_received_count.text.toString() != "0") {
-            holder.itemView.tv_offer_received_count.setTextColor(ctx.getColor(R.color.colorPrimary))
+            holder.itemView.tv_offer_received_count.setTextColor(ctx.resources.getColor(R.color.colorPrimary))
         } else {
-            holder.itemView.tv_offer_received_count.setTextColor(ctx.getColor(R.color.colorAccent))
+            holder.itemView.tv_offer_received_count.setTextColor(ctx.resources.getColor(R.color.colorAccent))
         }
 
         if (item.activity_type == HELP_TYPE_REQUEST) {
@@ -49,10 +49,10 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
 
         holder.itemView.tv_offer_received.setOnClickListener {
             val initiat = if (initiator == 1) 2 else 1
-            onRequestSentClick(offerType,initiat,helpType,item.activity_uuid)
+            onRequestSentClick(offerType,initiat,helpType,item.activity_uuid,item)
         }
         holder.itemView.tv_request_sent.setOnClickListener {
-            onRequestSentClick(offerType,initiator,helpType,item.activity_uuid)
+            onRequestSentClick(offerType,initiator,helpType,item.activity_uuid,item)
         }
         holder.itemView.tv_new_matches.setOnClickListener {
             onNewMatchesClick(offerType, initiator, helpType, item)
@@ -75,8 +75,8 @@ class RequestSentAdapter(private var offerType: Int, private var initiator: Int,
         init {
             if (offerType == HELP_TYPE_OFFER) {
                 if (Build.VERSION.SDK_INT >= 28) {
-                    itemView.main_card.outlineAmbientShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
-                    itemView.main_card.outlineSpotShadowColor = itemView.main_card.context.getColor(R.color.colorAccent)
+                    itemView.main_card.outlineAmbientShadowColor = itemView.main_card.context.resources.getColor(R.color.colorAccent)
+                    itemView.main_card.outlineSpotShadowColor = itemView.main_card.context.resources.getColor(R.color.colorAccent)
                 }
             }
         }

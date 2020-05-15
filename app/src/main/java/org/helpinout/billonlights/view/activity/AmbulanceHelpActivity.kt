@@ -41,7 +41,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
@@ -91,7 +91,6 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         item.conditions= ambulanceHelp.conditions
         item.status = 1
         item.pay= ambulanceHelp.pay
-        //item.detail= "<b>"+getString(R.string.note)+ "</b><br/>" + ambulanceHelp.conditions
 
         suggestionData.activity_type = helpType
         suggestionData.latitude = preferencesService.latitude

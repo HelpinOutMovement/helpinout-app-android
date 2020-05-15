@@ -236,9 +236,11 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 val midLatLng = mMap!!.cameraPosition.target
                 suggestionData?.latitude = midLatLng.latitude
                 suggestionData?.longitude = midLatLng.longitude
-                val farRight: LatLng = visibleRegion.farRight
-                val farLeft: LatLng = visibleRegion.farLeft
-                radius = (SphericalUtil.computeDistanceBetween(farLeft, farRight) / 2).toFloat()
+                val topLeftCorner: LatLng = visibleRegion.farLeft
+                val topRightCorner: LatLng = visibleRegion.nearLeft
+
+                radius = (SphericalUtil.computeDistanceBetween(topLeftCorner, topRightCorner) / 2).toFloat()
+
                 loadSuggestionData()
             }
         }
@@ -278,7 +280,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                 if (bottomItemList.isEmpty()) {
                     goToRequestDetailScreen()
                 } else {
-                    if (bottomAdapter!!.getCheckedItemsList().isEmpty()) {
+                    if (!chk_all.isChecked && bottomAdapter!!.getCheckedItemsList().isEmpty()) {
                         toastError(R.string.please_select_provider_helper)
                     } else {
                         sendRequestOffersToServer()
@@ -334,6 +336,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
                             mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail?.self_else?:0
                             mapping.offer_detail?.user_detail?.pay= mapping.offer_detail!!.pay
+                            mapping.offer_detail?.user_detail?.distance= mapping.distance
                             setOfferDetail(mapping)
                         } else if (mapping.request_detail != null) {
                             mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
@@ -347,6 +350,7 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
                             mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
                             mapping.request_detail?.user_detail?.self_else = mapping.request_detail?.self_else?:0
                             mapping.request_detail?.user_detail?.pay= mapping.request_detail!!.pay
+                            mapping.request_detail?.user_detail?.distance= mapping.distance
                             setRequestDetail(mapping)
                         }
                     }
@@ -382,21 +386,18 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
 
                 mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.volunters_quantity + ")"
+
+                    if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "<b> %1s </b><br/>"
+                        detail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
                     }
 
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                    if (!it.technical_personal_detail.isNullOrEmpty()|| !it.technical_personal_quantity.isNullOrEmpty() ) {
                         if (detail.isNotEmpty()) {
                             detail += "<br/>"
                         }
-                        detail += it.technical_personal_detail?.take(30)
-                    }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.technical_personal_quantity + ")"
+                        detail += "<b> %2s </b><br/>"
+                        detail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
                     }
                 }
 
@@ -430,22 +431,20 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
             } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
 
                 mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.volunters_quantity + ")"
+
+                    if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
+                        detail += "<b> %1s </b><br/>"
+                        detail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
                     }
 
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
+                    if (!it.technical_personal_detail.isNullOrEmpty()|| !it.technical_personal_quantity.isNullOrEmpty() ) {
                         if (detail.isNotEmpty()) {
                             detail += "<br/>"
                         }
-                        detail += it.technical_personal_detail?.take(30)
+                        detail += "<b> %2s </b><br/>"
+                        detail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
                     }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.technical_personal_quantity + ")"
-                    }
+
                 }
 
             } else {

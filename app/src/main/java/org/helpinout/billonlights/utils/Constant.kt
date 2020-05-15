@@ -30,6 +30,7 @@ const val UPDATE_PROFILE = "UpdateProfile"
 const val UPDATE_LANGAUGE = "UpdateLanguage"
 const val OFFER_TYPE = "OfferType"
 const val INITIATOR = "initiator"
+const val LOCATION="location"
 const val DATA_REFRESH = "DataRefresh"
 const val BEDGE_REFRESH="BedgeRefresh"
 const val RADIUS = "Radius"
@@ -45,7 +46,7 @@ const val HINDI = 2
 const val KANNAD = 3
 const val MARATHI = 4
 const val GUJRATI = 5
-const val ALLOW_NUMBER1 = "+917303767448"
+const val ALLOW_NUMBER1 = "+917303767448"//
 const val ALLOW_NUMBER2 = "+918800579215"
 
 const val ENGLISH_CODE = "en"

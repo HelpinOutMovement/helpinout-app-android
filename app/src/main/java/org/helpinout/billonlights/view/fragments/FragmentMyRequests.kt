@@ -67,7 +67,7 @@ class FragmentMyRequests : BaseFragment() {
         }
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
-        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, { item -> onSearchForHelpProviderClick(item) }, { offer, item -> onViewDetailClick(offerType, item) }, { offer, initiat, help, item -> onNewMatchesClick(offerType, initiator, help, item) }, { a, b, help, uuid -> onRequestSentClick(a, b, help, uuid) })
+        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, { item -> onSearchForHelpProviderClick(item) }, { offer, item -> onViewDetailClick(offerType, item) }, { offer, initiat, help, item -> onNewMatchesClick(offerType, initiator, help, item) }, { a, b, help, uuid,item -> onRequestSentClick(a, b, help, uuid,item) })
         val itemDecorator = ItemOffsetDecoration(activity!!, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -130,12 +130,13 @@ class FragmentMyRequests : BaseFragment() {
         })
     }
 
-    private fun onRequestSentClick(offerType: Int, initiator: Int, helpType: Int, activity_uuid: String) {
+    private fun onRequestSentClick(offerType: Int, initiator: Int, helpType: Int, activity_uuid: String,item:AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        activity?.startActivityForResult<RequestDetailActivity>(activityResult, OFFER_TYPE to offerType, INITIATOR to initiator, HELP_TYPE to helpType, ACTIVITY_UUID to activity_uuid)
+        val location = item.geo_location?:""
+        activity?.startActivityForResult<RequestDetailActivity>(activityResult, OFFER_TYPE to offerType, INITIATOR to initiator, HELP_TYPE to helpType, ACTIVITY_UUID to activity_uuid, LOCATION to location)
         activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
     }
 

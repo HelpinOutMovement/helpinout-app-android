@@ -21,6 +21,6 @@ interface AddItemDao {
     @Query("delete from add_item WHERE activity_uuid=:formUuid")
     fun deleteActivity(formUuid: String)
 
-    @Query("Select * from add_item where activity_type =:offerType")
+    @Query("Select * from add_item where activity_type =:offerType order by date_time")
     fun getMyRequestsOrOffers(offerType: Int): List<AddCategoryDbItem>
 }

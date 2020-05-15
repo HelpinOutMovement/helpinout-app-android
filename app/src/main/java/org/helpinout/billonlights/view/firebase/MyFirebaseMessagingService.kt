@@ -123,7 +123,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setStyle(NotificationCompat.BigTextStyle().bigText(message)).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
+        val notificationBuilder = NotificationCompat.Builder(this, "default").setContentTitle(data[TITLE]).setStyle(NotificationCompat.BigTextStyle().bigText(message)).setContentText(message).setAutoCancel(true).setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)).setContentIntent(pendingIntent).setContentInfo("Hello").setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.icon)).setColor(resources.getColor(R.color.colorAccent)).setLights(Color.RED, 1000, 300).setDefaults(Notification.DEFAULT_VIBRATE).setNumber(++numMessages).setSmallIcon(R.drawable.icon)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -139,8 +139,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(preferencesService.last_notification_id, notificationBuilder.build())
-        preferencesService.last_notification_id += 1
+        notificationManager.notify(0, notificationBuilder.build())
     }
 
 }

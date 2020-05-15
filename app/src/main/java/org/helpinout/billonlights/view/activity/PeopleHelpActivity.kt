@@ -42,7 +42,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 2000) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()

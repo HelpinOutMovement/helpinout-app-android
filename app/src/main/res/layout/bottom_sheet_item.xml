@@ -55,9 +55,9 @@
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
             android:textSize="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintTop_toTopOf="@+id/rating_bar"
             tools:text="@string/distance_km" />
 
@@ -83,8 +83,22 @@
             android:textStyle="bold"
             android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_message"
+            app:layout_constraintTop_toTopOf="@+id/tv_message"
             tools:text="Free" />
+
+        <TextView
+            android:id="@+id/tv_notes"
+            style="@style/StyleTextViewNormal"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_message"
+            tools:text="Notes:" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

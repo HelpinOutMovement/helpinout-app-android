@@ -6,11 +6,8 @@ import kotlinx.android.synthetic.main.bottom_sheet_item.view.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.databinding.BottomSheetItemBinding
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
-import org.helpinout.billonlights.utils.fromHtml
-import org.helpinout.billonlights.utils.inflate
-import org.helpinout.billonlights.utils.visibleIf
 
 
 class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDetail>, private val onCheckedChange: () -> Unit) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
@@ -40,6 +37,8 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
             if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.can_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
 
             holder.itemView.free_or_paid.text = context.getString(if (homeItem.pay == 1) R.string.not_free else R.string.free)
+            holder.itemView.tv_notes.show()
+            holder.itemView.tv_notes.text = ("<b>" + context.getString(R.string.note) + "</b> " + homeItem.offer_note).fromHtml()
         }
         holder.itemView.tv_name.setOnClickListener {
             homeItem.isSelected = !homeItem.isSelected

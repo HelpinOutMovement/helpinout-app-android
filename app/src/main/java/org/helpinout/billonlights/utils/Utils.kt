@@ -31,20 +31,20 @@ class Utils {
             return SimpleDateFormat("ZZZZZ", Locale.getDefault()).format(System.currentTimeMillis())
         }
 
-        fun getDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
-            val km = 1.609344
-            return try {
-                val theta = lon1 - lon2
-                var distance = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
-
-                distance = acos(distance)
-                distance = rad2deg(distance)
-                distance *= 60 * 1.1515
-                return String.format("%.1f", distance * km)
-            } catch (e: Exception) {
-                "Unknown"
-            }
-        }
+//        fun getDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): String {
+//            val km = 1.609344
+//            return try {
+//                val theta = lon1 - lon2
+//                var distance = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
+//
+//                distance = acos(distance)
+//                distance = rad2deg(distance)
+//                distance *= 60 * 1.1515
+//                return String.format("%.1f", distance * km)
+//            } catch (e: Exception) {
+//                "Unknown"
+//            }
+//        }
 
         private fun deg2rad(deg: Double): Double {
             return deg * Math.PI / 180.0

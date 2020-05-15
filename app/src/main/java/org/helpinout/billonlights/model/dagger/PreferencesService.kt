@@ -18,7 +18,6 @@ class PreferencesService {
     var defaultLanguage by stringProperty()
     var zoomLevel by floatProperty(default = 12.05F)
 
-    var last_notification_id by integerProperty()
 
     var offerFirstTime by booleanProperty(default = true)
     var requestFirstTime by booleanProperty(default = true)

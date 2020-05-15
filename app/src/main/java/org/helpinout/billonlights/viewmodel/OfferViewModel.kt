@@ -56,10 +56,10 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return offerRequestResponse
     }
 
-    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): MutableLiveData<List<MappingDetail>> {
+    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String,location:String): MutableLiveData<List<MappingDetail>> {
         val list = MutableLiveData<List<MappingDetail>>()
         GlobalScope.launch(Dispatchers.IO) {
-            val listItems = offerRequestDetailService.getRequestDetails(offerType, initiator, activity_uuid)
+            val listItems = offerRequestDetailService.getRequestDetails(offerType, initiator, activity_uuid,location)
             list.postValue(listItems)
         }
         return list

@@ -24,6 +24,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.layout_ask_for_help.view.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
@@ -142,6 +143,10 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 val midLatLng = mMap!!.cameraPosition.target
                 preferencesService.latitude = midLatLng.latitude
                 preferencesService.longitude = midLatLng.longitude
+                val visibleRegion = it.projection.visibleRegion
+                val topLeftCorner: LatLng = visibleRegion.farLeft
+                val topRightCorner: LatLng = visibleRegion.nearLeft
+                (activity as HomeActivity).radius =(SphericalUtil.computeDistanceBetween(topLeftCorner, topRightCorner)/2).toFloat()
                 showPinOnCurrentLocation(midLatLng!!.latitude, midLatLng.longitude)
             }
         }

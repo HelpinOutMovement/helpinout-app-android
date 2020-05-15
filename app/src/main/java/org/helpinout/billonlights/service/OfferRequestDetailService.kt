@@ -16,21 +16,9 @@ import org.json.JSONObject
 
 class OfferRequestDetailService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase, private val app: Application) {
 
-    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String): List<MappingDetail> {
+    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String,location:String): List<MappingDetail> {
         val response = db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
-        response.forEach { detail ->
-            try {
-                val destinationLatLong = detail.geo_location?.split(",")
-                if (!destinationLatLong.isNullOrEmpty()) {
-                    val lat1 = preferencesService.latitude
-                    val long1 = preferencesService.longitude
-                    val lat2 = destinationLatLong[0].toDouble()
-                    val long2 = destinationLatLong[1].toDouble()
-                    detail.distance = Utils.getDistance(lat1, long1, lat2, long2)
-                }
-            } catch (e: Exception) {
-            }
-        }
+
         db.getNotificationDao().updateActivity(offerType,activity_uuid, SEEN_YES,initiator)
 
         return response

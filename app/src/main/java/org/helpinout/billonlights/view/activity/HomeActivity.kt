@@ -75,7 +75,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val window: Window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                    window.statusBarColor = resources.getColor(R.color.colorPrimaryDark)
                 }
             }
             1 -> {
@@ -86,7 +86,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val window: Window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                    window.statusBarColor = resources.getColor(R.color.colorPrimaryDark)
                     mailMenu?.isVisible = false
                 }
             }
@@ -98,7 +98,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val window: Window = window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                    window.statusBarColor = getColor(R.color.colorAccentDark)
+                    window.statusBarColor = resources.getColor(R.color.colorAccentDark)
                     mailMenu?.isVisible = true
                 }
             }
@@ -237,7 +237,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val window: Window = window
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                        window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                        window.statusBarColor = resources.getColor(R.color.colorPrimaryDark)
                     }
                     val home = nav_view.menu.findItem(R.id.nav_home)
                     home.isChecked = true
@@ -258,7 +258,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val window: Window = window
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                        window.statusBarColor = getColor(R.color.colorPrimaryDark)
+                        window.statusBarColor = resources.getColor(R.color.colorPrimaryDark)
                     }
                     mailMenu?.isVisible = false
                     my_request.isChecked = true
@@ -281,7 +281,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         val window: Window = window
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                        window.statusBarColor = getColor(R.color.colorAccentDark)
+                        window.statusBarColor = resources.getColor(R.color.colorAccentDark)
                     }
                     my_offers.isChecked = true
                     bottom_nav_view.menu.getItem(2).isChecked = true
