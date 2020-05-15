@@ -28,4 +28,24 @@
         <item>@color/gplus_color_4</item>
     </integer-array>
 
+    <string-array name="org_types">
+        <item>@string/org_type0</item>
+        <item>@string/org_type1</item>
+        <item>@string/org_type2</item>
+        <item>@string/org_type3</item>
+        <item>@string/org_type4</item>
+        <item>@string/org_type5</item>
+        <item>@string/org_type6</item>
+    </string-array>
+
+    <integer-array name="org_types_index">
+        <item>@string/org_types_index0</item>
+        <item>@string/org_types_index1</item>
+        <item>@string/org_types_index2</item>
+        <item>@string/org_types_index3</item>
+        <item>@string/org_types_index4</item>
+        <item>@string/org_types_index5</item>
+        <item>@string/org_types_index6</item>
+    </integer-array>
+
 </resources>

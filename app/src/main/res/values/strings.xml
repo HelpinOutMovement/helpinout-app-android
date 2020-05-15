@@ -50,25 +50,22 @@
     <string name="toast_error_please_choose_org_type" translatable="false">Please choose organization type</string>
     <string name="toast_success_registration_success" translatable="false">Registration successful</string>
 
-    <string-array name="org_types">
-        <item>Organization type</item>
-        <item>Commercial Organization</item>
-        <item>Community Organization</item>
-        <item>Government</item>
-        <item>Health Organization</item>
-        <item>Non-profit Organization</item>
-        <item>Other</item>
-    </string-array>
+    <string name="org_type0">Organization type</string>
+    <string name="org_type1">Commercial Organization</string>
+    <string name="org_type2">Community Organization</string>
+    <string name="org_type3">Government</string>
+    <string name="org_type4">Health Organization</string>
+    <string name="org_type5">Non-profit Organization</string>
+    <string name="org_type6">Other</string>
 
-    <integer-array name="org_types_index">
-        <item>-1</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>0</item>
-    </integer-array>
+    <string name="org_types_index0">-1</string>
+    <string name="org_types_index1">1</string>
+    <string name="org_types_index2">2</string>
+    <string name="org_types_index3">3</string>
+    <string name="org_types_index4">4</string>
+    <string name="org_types_index5">5</string>
+    <string name="org_types_index6">0</string>
+
 
     <!-- End Registration screen -->
 
