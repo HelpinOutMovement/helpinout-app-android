@@ -158,7 +158,7 @@
   <string name="need_help_with">ಸಹಾಯದ ಅಗತ್ಯವಿದೆ …</string>
   <string name="today">ಇಂದು</string>
   <string name="yesterday">ನಿನ್ನೆ</string>
-  <string name="days_ago">ದಿನಗಳ ಹಿಂದೆ</string>
+  <string name="days_ago">%1$s ದಿನಗಳ ಹಿಂದೆ</string>
   <string name="request_call_him">ಅವರು ನಿಮ್ಮನ್ನು ಕರೆಯುತ್ತಾರೆ, ಅಥವಾ ನೀವು ಅವರನ್ನು ಕರೆಯಬಹುದು</string>
   <string name="toast_error_some_error">ಕೆಲವು ದೋಷ ಸಂಭವಿಸಿದೆ</string>
   <string name="loading">ಲೋಡ್ ಆಗುತ್ತಿದೆ …</string>
