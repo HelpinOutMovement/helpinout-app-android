@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name" translatable="false">HelpinOut</string>
-    <string name="label_app_name" translatable="false"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
-    <string name="all_right_reserved" translatable="false">© Helpinout. All rights reserved.</string>
-    <string name="website_name" translatable="false">www.helpinout.org</string>
+    <string name="app_name" >HelpinOut</string>
+    <string name="label_app_name" ><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
+    <string name="all_right_reserved" >© Helpinout. All rights reserved.</string>
+    <string name="website_name" >www.helpinout.org</string>
     <string name="instruction_text"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-givers and help-seekers<br/>around you]]></string>
     <string name="btn_continue">Continue</string>
 
@@ -12,18 +12,18 @@
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_login">Login / Signup</string>
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
-    <string name="terms_Of_service" translatable="false">Terms of Service</string>
-    <string name="privacy_policy" translatable="false">Privacy Policy</string>
-    <string name="toast_error_phone_number" translatable="false">Please enter phone number</string>
-    <string name="toast_error_invalid_phone_number" translatable="false">Please enter valid phone number</string>
+    <string name="terms_Of_service" >Terms of Service</string>
+    <string name="privacy_policy" >Privacy Policy</string>
+    <string name="toast_error_phone_number" >Please enter phone number</string>
+    <string name="toast_error_invalid_phone_number" >Please enter valid phone number</string>
     <!-- End Login screen -->
 
     <!-- SMS Verification screen -->
     <string name="label_enter_otp">Enter OTP</string>
     <string name="button_verify">Verify</string>
-    <string name="retry_msg" translatable="false">Resend OTP</string>
-    <string name="toast_error_please_enter_otp" translatable="false">Please enter OTP</string>
-    <string name="you_can_try_max_try" translatable="false">You can try maximum %1$s otp</string>
+    <string name="retry_msg" >Resend OTP</string>
+    <string name="toast_error_please_enter_otp" >Please enter OTP</string>
+    <string name="you_can_try_max_try" >You can try maximum %1$s otp</string>
 
     <string name="otp_send_success">OTP sent successfully</string>
     <string name="otp_send_to">OTP code sent to %1$s</string>
@@ -42,13 +42,13 @@
     <string name="label_unit_division">Unit / Division / Function / Location</string>
     <string name="label_start">Start</string>
 
-    <string name="toast_error_please_enter_first_name" translatable="false">Please enter your First Name</string>
-    <string name="toast_error_please_enter_last_name" translatable="false">Please enter your Last Name</string>
-    <string name="toast_error_please_enter_organization_name" translatable="false">Please enter Organization Name</string>
+    <string name="toast_error_please_enter_first_name" >Please enter your First Name</string>
+    <string name="toast_error_please_enter_last_name" >Please enter your Last Name</string>
+    <string name="toast_error_please_enter_organization_name" >Please enter Organization Name</string>
 
-    <string name="toast_error_please_enter_unit_division" translatable="false">Please enter Unit / Division / Function / Location</string>
-    <string name="toast_error_please_choose_org_type" translatable="false">Please choose organization type</string>
-    <string name="toast_success_registration_success" translatable="false">Registration successful</string>
+    <string name="toast_error_please_enter_unit_division" >Please enter Unit / Division / Function / Location</string>
+    <string name="toast_error_please_choose_org_type" >Please choose organization type</string>
+    <string name="toast_success_registration_success" >Registration successful</string>
 
     <string name="org_type0">Organization type</string>
     <string name="org_type1">Commercial Organization</string>
@@ -70,8 +70,8 @@
     <!-- End Registration screen -->
 
     <!-- Profile screen -->
-    <string name="update_profile" translatable="false">Update profile</string>
-    <string name="toast_success_update_success" translatable="false">Profile updated successfully</string>
+    <string name="update_profile" >Update profile</string>
+    <string name="toast_success_update_success" >Profile updated successfully</string>
 
     <!-- End profile screen -->
 
@@ -105,11 +105,11 @@
     <!-- End Home screen -->
 
     <!-- Choose Language screen -->
-    <string name="english" translatable="false">English</string>
-    <string name="hindi" translatable="false">हिन्दी</string>
-    <string name="kannad" translatable="false">ಕನ್ನಡ</string>
-    <string name="marathi" translatable="false">मराठी</string>
-    <string name="gujrati" translatable="false">ગુજરાતી</string>
+    <string name="english" >English</string>
+    <string name="hindi" >हिन्दी</string>
+    <string name="kannad" >ಕನ್ನಡ</string>
+    <string name="marathi" >मराठी</string>
+    <string name="gujrati" >ગુજરાતી</string>
     <!-- End Choose Language screen -->
 
     <!-- Change Language screen -->
@@ -122,9 +122,9 @@
     <string name="label_yes">Yes</string>
     <string name="label_no">No</string>
     <string name="about">About</string>
-    <string name="label_logs" translatable="false">Crash logs</string>
+    <string name="label_logs" >Crash logs</string>
 
-    <string name="google_maps_key" translatable="false">AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
+    <string name="google_maps_key" >AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
 
 
     <!-- Ask for help  screen -->
@@ -183,7 +183,7 @@
     <string name="help_offers_received_from">Help offers received from</string>
     <string name="offer_send_to">Offers have been sent to</string>
     <string name="help_request_received_from">Help requests received from</string>
-    <string name="request_help_text">YOur number has been shared with them.  They will call you if they can help you</string>
+    <string name="request_help_text">Your number has been shared with them.  They will call you if they can help you</string>
     <string name="view_details">View details</string>
     <string name="offer_help_text">Your number has been shared with them.  They will call you if they need your help</string>
     <string name="call_them">Call\nthem</string>
@@ -263,7 +263,7 @@
     <string name="loading">Loading...</string>
     <string name="someone_accept_offer">%1$s has responded to your offer! Please follow up with them.</string>
     <string name="someone_receive_your_request">%1$s has responded to your request! Please follow up with them</string>
-    <string name="help_in_out_profile">Username:</string>
+    <string name="help_in_out_profile">HelpinOut Profile:</string>
     <string name="someone_else">Someone else</string>
     <string name="my_self">Myself</string>
     <string name="who_need_helps">Who needs help?</string>

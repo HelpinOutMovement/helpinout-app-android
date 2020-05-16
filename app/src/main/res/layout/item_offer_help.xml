@@ -57,9 +57,11 @@
                 android:paddingStart="@dimen/_12sdp"
                 android:text="@{@string/request_near_me(item.nearRequest)}"
                 android:textSize="@dimen/_12sdp"
+                android:maxLines="2"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/action_title"
                 app:layout_constraintTop_toBottomOf="@+id/action_title"
-                tools:text="24 Requests near me" />
+                tools:text="24 Requests near me asj h hdkfsfhs hhhksdf" />
 
             <TextView
                 android:id="@+id/tv_total_request"

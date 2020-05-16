@@ -7,6 +7,7 @@
   <string name="btn_continue">ಮುಂದುವರಿಸಿ</string>
   <string name="label_enter_your_mobile_no">ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
   <string name="label_login">ಲಾಗಿನ್ / ಸೈನ್ ಅಪ್</string>
+  <string name="by_signing_you_are_agree">ಸೈನ್ ಅಪ್ ಮಾಡುವ ಮೂಲಕ ನೀವು ಒಪ್ಪುತ್ತೀರಿ</string>
   <string name="terms_Of_service"><![CDATA[ಸೇವಾ ನಿಯಮಗಳು]]></string>
   <string name="privacy_policy"><![CDATA[ಗೌಪ್ಯತಾ ನೀತಿ]]></string>
   <string name="toast_error_phone_number">ದಯವಿಟ್ಟು ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ</string>
@@ -17,7 +18,6 @@
   <string name="toast_error_please_enter_otp">ದಯವಿಟ್ಟು ಒಟಿಪಿಯನ್ನು ನಮೂದಿಸಿ</string>
   <string name="you_can_try_max_try">ಒಟ್ಟು %1$s ಬಾರಿ ಒಟಿಪಿಯನ್ನು  ಪೃಯತ್ನಿಸಬಹುದು</string>
   <string name="otp_send_success">ಒಟಿಪಿಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಕಳುಹಿಸಲಾಗಿದೆ</string>
-  <string name="otp_description">ಒಟಿಪಿ ಮೆಸೆಜಿಗಾಗಿ ಪರಿಶೀಲಿಸಿ</string>
   <string name="otp_send_to">OTP ಕೋಡ್ ಅನ್ನು %1$s ಗೆ ಕಳುಹಿಸಲಾಗಿದೆ</string>
   <string name="change_phone_number">ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಬದಲಾಯಿಸಿ</string>
   <string name="label_register">ನೋಂದಾಯಿಸಿ</string>
@@ -34,12 +34,13 @@
   <string name="toast_error_please_enter_unit_division">ದಯವಿಟ್ಟು ಘಟಕ / ವಿಭಾಗ / ವರ್ಗವನ್ನು ನಮೂದಿಸಿ</string>
   <string name="toast_error_please_choose_org_type">ದಯವಿಟ್ಟು ಸಂಸ್ಥೆಯ ವಿಭಾಗವನ್ನು ಆರಿಸಿ</string>
   <string name="toast_success_registration_success">ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿದೆ</string>
-  <string name="nio_org_type_1">ವಾಣಿಜ್ಯ ಸಂಸ್ಥೆ</string>
-  <string name="nio_org_type_2">ಸಮುದಾಯ ಸಂಸ್ಥೆ</string>
-  <string name="nio_org_type_3">ಸರ್ಕಾರ</string>
-  <string name="nio_org_type_4">ಆರೋಗ್ಯ ಸಂಸ್ಥೆ</string>
-  <string name="nio_org_type_5">ಲಾಭರಹಿತ</string>
-  <string name="nio_org_type_6">ಇತರೆ</string>
+  <string name="org_type0">ಸಂಸ್ಥೆಯ ವಿಭಾಗ / ವರ್ಗ</string>
+  <string name="org_type1">ವಾಣಿಜ್ಯ ಸಂಸ್ಥೆ</string>
+  <string name="org_type2">ಸಮುದಾಯ ಸಂಸ್ಥೆ</string>
+  <string name="org_type3">ಸರ್ಕಾರ</string>
+  <string name="org_type4">ಆರೋಗ್ಯ ಸಂಸ್ಥೆ</string>
+  <string name="org_type5">ಲಾಭರಹಿತ</string>
+  <string name="org_type6">ಇತರೆ</string>
   <string name="update_profile">ಪ್ರೊಫೈಲ್ ಅಪ್ಡೇಟ್</string>
   <string name="toast_success_update_success">ಪ್ರೊಫೈಲ್ ಅಪ್ಡೇಟ್ ಯಶಸ್ವಿಯಾಗಿದೆ</string>
   <string name="identify_location">ಮೇಲೆ ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ಗುರುತಿಸಿ, ನಂತರ ಕೆಳಗೆ ಆಯ್ಕೆಮಾಡಿ</string>
@@ -52,9 +53,11 @@
   <string name="language">ಭಾಷೆ</string>
   <string name="title_about">ಬಗ್ಗೆ</string>
   <string name="title_feedback">ಪ್ರತಿಕ್ರಿಯೆ</string>
+  <string name="title_form">ಫಾರ್ಮ್</string>
   <string name="toast_press_again_to_exit">ದಯವಿಟ್ಟು ಪುನಃ ಹಿಂದಕ್ಕೆ ಒತ್ತಿ</string>
   <string name="you_are_here">ನೀವು ಇಲ್ಲಿದ್ದೀರಿ</string>
   <string name="change">ಬದಲಾವಣೆ</string>
+  <string name="message_permission">ಈ ವೈಶಿಷ್ಟ್ಯವನ್ನು ಬಳಸಲು ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಅನುಮತಿ ಅಗತ್ಯವಿದೆ. ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಲ್ಲಿ ನೀವು ಅವುಗಳನ್ನು ನೀಡಬಹುದು.</string>
   <string name="message_need_permission">ಅನುಮತಿಗಳು ಬೇಕು</string>
   <string name="title_go_to_setting">ಸೆಟ್ಟಿಂಗ್ಸ್ಗೆ ಹೋಗಿ</string>
   <string name="label_location">ಸ್ಥಳವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</string>
@@ -91,7 +94,6 @@
   <string name="we_can_not_pay">ನಾವು ಪಾವತಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
   <string name="volunteers">ಸ್ವಯಂಸೇವಕರು</string>
   <string name="technical_personnel">ತಾಂತ್ರಿಕ ಸಿಬ್ಬಂದಿ</string>
-  <string name="hint_how_many_people">ಎಷ್ಟು ಜನರು?</string>
   <string name="we_charge">ನಾವು ಚಾರ್ಜ್ ಮಾಡುತ್ತೇವೆ</string>
   <string name="for_free">ಉಚಿತವಾಗಿ</string>
   <string name="hint_conditions"><![CDATA[ವಿನಂತಿಸುವವರಿಗೆ ತಿಳಿಯಲು ಸಮಯ, ವಿತರಣೆ, ಆಯ್ಕೆಯ ಮೇಲಿನ ನಿರ್ಬಂಧಗಳನ್ನು ನಮೂದಿಸಿ …]]></string>
@@ -120,12 +122,9 @@
   <string name="comment">ಪ್ರತಿಕ್ರಿಯೆಗಳು</string>
   <string name="submit">ಸಲ್ಲಿಸು</string>
   <string name="help_from_them">ಇತರರು ಅವರಿಂದ ಸಹಾಯ ತೆಗೆದುಕೊಳ್ಳಬೇಕೇ?</string>
+  <string name="help_from_them_request">ಇತರರು ಅವರಿಂದ ಸಹಾಯ ತೆಗೆದುಕೊಳ್ಳಬೇಕೇ?</string>
   <string name="rating_success">ರೇಟಿಂಗ್ ಯಶಸ್ವಿಯಾಗಿದೆ</string>
-  <string name="sent_requests">ವಿನಂತಿಗಳನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
-  <string name="sent_offers">ಕಳುಹಿಸಿದ ಕೊಡುಗೆಗಳು</string>
   <string name="delete_confirmation">ನೀವು ರದ್ದು ಮಾಡಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
-  <string name="total_offers">%1$s ಕೊಡುಗೆಗಳು</string>
-  <string name="total_requests"><![CDATA[%1$s ವಿನಂತಿಗಳು]]></string>
   <string name="no_request_sent"><![CDATA[ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ, ಆದರೆ ಯಾವುದೇ ನೇರ ವಿನಂತಿಯನ್ನು ಇನ್ನೂ ಯಾರಿಗೂ ಕಳುಹಿಸಲಾಗಿಲ್ಲ.<br/><br/>ಇತರರು ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿದಾಗ ನಿಮಗೆ ಸಹಾಯ ಮಾಡಲು ಮುಂದಾಗಬಹುದು.]]></string>
   <string name="no_offer_sent"><![CDATA[ನಿಮ್ಮ ಪ್ರಸ್ತಾಪವನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ, ಆದರೆ ಯಾವುದೇ ನೇರ ಪ್ರಸ್ತಾಪವನ್ನು ಇನ್ನೂ ಯಾರಿಗೂ ಕಳುಹಿಸಲಾಗಿಲ್ಲ.<br/><br/>ಇತರರು ನಿಮ್ಮ ಪ್ರಸ್ತಾಪವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿದಾಗ ನಿಮ್ಮ ಸಹಾಯವನ್ನು ಕೋರಬಹುದು<br/><br/>ನೀವು ಅದನ್ನು ರದ್ದುಗೊಳಿಸುವವರೆಗೂ ಈ ಕೊಡುಗೆ ಸಕ್ರಿಯವಾಗಿರುತ್ತದೆ]]></string>
   <string name="no_offer_sended">ನೀವು ಇನ್ನೂ ಸಹಾಯ ಮಾಡಲು ಮುಂದಾಗಿಲ್ಲ.</string>
@@ -147,12 +146,10 @@
   <string name="phone_number_will_be_send_to_provider">ನಿಮ್ಮ ಸಹಾಯಗಾರರಿಗೆ ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಕಳುಹಿಸಲಾಗುತ್ತದೆ</string>
   <string name="phone_number_will_be_send_to_requester">ಈ ಸಹಾಯಕೋರುವವರಿಗೆ ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ಕಳುಹಿಸಲಾಗುತ್ತದೆ</string>
   <string name="send_request">ಬೇಡಿಕೆ ಕಳಿಸಿ</string>
-  <string name="search_for_help_provider">ಸಹಾಯ ಒದಗಿಸುವವರಿಗಾಗಿ ಹುಡುಕಿ</string>
-  <string name="search_for_help_requester">ವಿನಂತಿಸುವವರಿಗಾಗಿ ಹುಡುಕಿ</string>
   <string name="no_help_requeter">ಆಯ್ದ ನಕ್ಷೆ-ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರಸ್ತುತ ಯಾವುದೇ ಸಹಾಯ-ವಿನಂತಿಗಳಿಲ್ಲ. ನೀವು ನಕ್ಷೆಯಲ್ಲಿ ಇತರ ಸ್ಥಳಗಳನ್ನು ಹುಡುಕಬಹುದು, ಅಥವಾ ನಿಮ್ಮ ಕೊಡುಗೆಯನ್ನು ನೋಂದಾಯಿಸಲು ಕೆಳಗೆ ಮುಂದುವರಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
   <string name="no_help_provider">ಆಯ್ದ ನಕ್ಷೆ-ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರಸ್ತುತ ಯಾವುದೇ ಸಹಾಯ-ಪೂರೈಕೆದಾರರು ಇಲ್ಲ. ನೀವು ನಕ್ಷೆಯಲ್ಲಿ ಇತರ ಸ್ಥಳಗಳನ್ನು ಹುಡುಕಬಹುದು, ಅಥವಾ ನಿಮ್ಮ ವಿನಂತಿಯನ್ನು ನೋಂದಾಯಿಸಲು ಕೆಳಗೆ ಮುಂದುವರಿಸಿ ಕ್ಲಿಕ್ ಮಾಡಿ.</string>
   <string name="please_select_provider_helper">ದಯವಿಟ್ಟು ಮೊದಲು ಒದಗಿಸುವವರು ಅಥವಾ ಸಹಾಯಕರನ್ನು ಆಯ್ಕೆ ಮಾಡಿ</string>
-  <string name="distance_km">ಕಿ.ಮೀ ದೂರದಲ್ಲಿದೆ</string>
+  <string name="distance_km">%1$s ಕಿ.ಮೀ ದೂರದಲ್ಲಿದೆ</string>
   <string name="send_offer">ಪ್ರಸ್ತಾಪವನ್ನು ಕಳುಹಿಸಿ</string>
   <string name="label_app_version">ಅಪ್ಲಿಕೇಶನ್ ಆವೃತ್ತಿ:%1$s</string>
   <string name="version_date">ಆವೃತ್ತಿ ದಿನಾಂಕ:%1$s</string>
@@ -171,11 +168,8 @@
   <string name="someone_else">ಬೇರೆ ಯಾರೋ</string>
   <string name="my_self">ನಾನೇ</string>
   <string name="who_need_helps">ಯಾರಿಗೆ ಸಹಾಯ ಬೇಕು?</string>
-  <string name="not_rated_yet">(ಇನ್ನೂ ರೇಟ್ ಮಾಡಿಲ್ಲ)</string>
   <string name="label_add_item">ಇನ್ನಷ್ಟು ಸೇರಿಸಿ</string>
   <string name="should_othe_help_them">ಇತರರು ಅವರಿಗೆ ಸಹಾಯ ಮಾಡಬೇಕೇ?</string>
-  <string name="niu_delete">ಅಳಿಸಿ</string>
-  <string name="niu_offfer_received">ಕೊಡುಗೆಗಳನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿದೆ</string>
-  <string name="niu_rate_report">ದರ / ವರದಿ</string>
-  <string name="niu_was_sent">ಸಹಾಯ ವಿನಂತಿಯನ್ನು ಕಳುಹಿಸಲಾಗಿದೆ</string>
+  <string name="seeking_help_for_someone_else">ಬೇರೊಬ್ಬರಿಗೆ ಸಹಾಯವನ್ನು ಹುಡುಕು</string>
+  <string name="new_text">ಹೊಸದು</string>
 </resources>
