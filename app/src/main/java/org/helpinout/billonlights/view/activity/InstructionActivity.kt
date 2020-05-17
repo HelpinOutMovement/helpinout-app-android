@@ -11,7 +11,7 @@ class InstructionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         btnContinue.setOnClickListener {
-            preferencesService.step = LOGIN_STEP
+//            preferencesService.step = LOGIN_STEP
             startActivity<LoginActivity>()
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finishWithFade()

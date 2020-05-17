@@ -64,7 +64,7 @@ class LanguageChooserActivity : BaseActivity() {
             setResult(Activity.RESULT_OK, returnIntent)
             finishWithFade()
         } else {
-            preferencesService.step = INSTRUCTION_STEP
+//            preferencesService.step = INSTRUCTION_STEP
             startActivity<InstructionActivity>()
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finishWithFade()

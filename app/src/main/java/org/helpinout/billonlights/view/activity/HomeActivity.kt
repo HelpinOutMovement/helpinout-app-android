@@ -369,6 +369,17 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                     restartActivity()
                 }
             }
+            R.id.nav_russian -> {
+                checkLanguageItem()
+                val russian = nav_view.menu.findItem(R.id.nav_russian)
+                russian.isChecked = true
+                item.actionView = getMenuImageView()
+                if (preferencesService.defaultLanguage != RUSSIAN_CODE) {
+                    preferencesService.defaultLanguage = RUSSIAN_CODE
+                    changeAppLanguage(preferencesService.defaultLanguage)
+                    restartActivity()
+                }
+            }
         }
         closeDrawer()
         return false
@@ -389,11 +400,15 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
         gujrati.isChecked = false
 
+        val russian = nav_view.menu.findItem(R.id.nav_russian)
+        russian.isChecked = false
+
         nav_view.menu.findItem(R.id.nav_english).actionView = null
         nav_view.menu.findItem(R.id.nav_hindi).actionView = null
         nav_view.menu.findItem(R.id.nav_kannad).actionView = null
         nav_view.menu.findItem(R.id.nav_marathi).actionView = null
         nav_view.menu.findItem(R.id.nav_gujrati).actionView = null
+        nav_view.menu.findItem(R.id.nav_russian).actionView = null
     }
 
     private fun restartActivity() {
@@ -458,6 +473,11 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
                 val gujrati = nav_view.menu.findItem(R.id.nav_gujrati)
                 gujrati.isChecked = true
                 nav_view.menu.findItem(R.id.nav_gujrati).actionView = getMenuImageView()
+            }
+            RUSSIAN_CODE -> {
+                val russian = nav_view.menu.findItem(R.id.nav_russian)
+                russian.isChecked = true
+                nav_view.menu.findItem(R.id.nav_russian).actionView = getMenuImageView()
             }
         }
     }

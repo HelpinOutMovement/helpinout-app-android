@@ -71,6 +71,10 @@
             android:visible="false"
             android:title="@string/gujrati" />
 
+        <item
+            android:id="@+id/nav_russian"
+            android:checkable="false"
+            android:title="@string/russian" />
     </group>
 
 </menu>
