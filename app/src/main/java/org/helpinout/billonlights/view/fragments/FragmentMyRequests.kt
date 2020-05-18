@@ -80,7 +80,7 @@ class FragmentMyRequests : BaseFragment() {
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getMyRequestsOrOffers(offerType, initiator).observe(this, Observer { list ->
+        viewModel.getMyRequestsOrOffers(offerType, initiator,activity!!).observe(this, Observer { list ->
             try {
                 progress_bar.hide()
                 list?.let {

@@ -43,11 +43,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         (application as BillionLightsApplication).getAppComponent().inject(this)
     }
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): MutableLiveData<List<AddCategoryDbItem>> {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int,context:Context): MutableLiveData<List<AddCategoryDbItem>> {
         val offerRequestResponse = MutableLiveData<List<AddCategoryDbItem>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                offerRequestResponse.postValue(offerRequestListService.getMyRequestsOrOffers(offerType, initiator))
+                offerRequestResponse.postValue(offerRequestListService.getMyRequestsOrOffers(offerType, initiator,context))
             } catch (e: Exception) {
 
             }
@@ -116,11 +116,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int): MutableLiveData<Pair<String?, String>> {
+    fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): MutableLiveData<Pair<String?, String>> {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(offerRequestDetailService.makeCallTracking(parent_uuid, activity_uuid, activityType), ""))
+                response.postValue(Pair(offerRequestDetailService.makeCallTracking(parent_uuid, activity_uuid, activityType,mapping_initiator), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }

@@ -15,7 +15,7 @@ import timber.log.Timber
 class OfferRequestListService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase, private val app: Application) {
 
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int): ArrayList<AddCategoryDbItem> {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int,context: Context): ArrayList<AddCategoryDbItem> {
 
             val finalRequest = ArrayList<AddCategoryDbItem>()
             val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
@@ -38,7 +38,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 item.requestSent = mapping.filter { it.mapping_initiator == initiator }.size
             }
             finalRequest.forEach { item ->
-                item.name = app.getString(item.activity_category.getName())
+                item.name = context.getString(item.activity_category.getName())
                 item.icon = item.activity_category.getIcon()
             }
         return finalRequest

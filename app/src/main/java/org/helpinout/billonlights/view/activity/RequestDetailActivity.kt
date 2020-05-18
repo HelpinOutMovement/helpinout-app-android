@@ -201,7 +201,7 @@ class RequestDetailActivity : BaseActivity() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.makeCallTracking(parentUUid, activity_uuid, helpType).observe(this, Observer {
+        viewModel.makeCallTracking(parentUUid, activity_uuid, helpType,initiator).observe(this, Observer {
             if (it.first != null) Timber.d("Response success of make call api")
         })
     }

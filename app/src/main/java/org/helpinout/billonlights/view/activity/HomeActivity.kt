@@ -538,7 +538,7 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     private fun loadRequestList(offerType: Int, initiator: Int) {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getMyRequestsOrOffers(offerType, initiator).observe(this, Observer { list ->
+        viewModel.getMyRequestsOrOffers(offerType, initiator,this).observe(this, Observer { list ->
             try {
                 val count = list.filter { it.show_notification == 1 }.size
                 if (count > 0) {

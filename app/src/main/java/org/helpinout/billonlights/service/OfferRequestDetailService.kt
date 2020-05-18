@@ -73,9 +73,9 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
         }
     }
 
-    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int): String {
+    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,0))
+            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,mapping_initiator))
         }
     }
 

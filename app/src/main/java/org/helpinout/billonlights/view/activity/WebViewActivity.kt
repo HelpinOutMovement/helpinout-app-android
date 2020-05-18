@@ -14,7 +14,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_webview.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.*
-import java.net.URLEncoder
 
 
 class WebViewActivity : BaseActivity() {
