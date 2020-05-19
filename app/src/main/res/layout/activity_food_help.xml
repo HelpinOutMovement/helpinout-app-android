@@ -24,11 +24,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_70sdp"
                 android:layout_gravity="center"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:adjustViewBounds="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_food" />
 
             <LinearLayout
@@ -76,11 +76,11 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
-                android:hint="@string/hint_conditions"
-                android:maxLines="20"
                 android:gravity="top"
+                android:hint="@string/hint_conditions"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="500"
+                android:maxLines="20"
                 android:padding="@dimen/_5sdp"
                 android:singleLine="false"
                 android:visibility="gone"

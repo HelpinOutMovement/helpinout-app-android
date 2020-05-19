@@ -10,7 +10,7 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 
 
-class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDetail>, private val onCheckedChange: () -> Unit) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
+class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDetail>) : RecyclerView.Adapter<BottomSheetHelpAdapter.BottomSheetViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BottomSheetViewHolder {
         val viewLayout: BottomSheetItemBinding = parent.inflate(R.layout.bottom_sheet_item)
         return BottomSheetViewHolder(viewLayout)
@@ -42,7 +42,6 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
         }
         holder.itemView.tv_name.setOnClickListener {
             homeItem.isSelected = !homeItem.isSelected
-            onCheckedChange()
         }
     }
 

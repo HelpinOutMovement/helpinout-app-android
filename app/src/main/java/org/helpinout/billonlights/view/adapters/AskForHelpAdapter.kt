@@ -8,7 +8,7 @@ import org.helpinout.billonlights.model.database.entity.OfferHelpItem
 import org.helpinout.billonlights.utils.inflate
 
 
-class AskForHelpAdapter(var selfElse:Int,var itemList: ArrayList<OfferHelpItem>, private val onItemClick: (OfferHelpItem,Int) -> Unit) : RecyclerView.Adapter<AskForHelpAdapter.AskForHelpViewHolder>() {
+class AskForHelpAdapter(var selfElse: Int, var itemList: ArrayList<OfferHelpItem>, private val onItemClick: (OfferHelpItem, Int) -> Unit) : RecyclerView.Adapter<AskForHelpAdapter.AskForHelpViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AskForHelpViewHolder {
         val viewLayout: ItemAskForHelpBinding = parent.inflate(R.layout.item_ask_for_help)
         return AskForHelpViewHolder(viewLayout)
@@ -18,7 +18,7 @@ class AskForHelpAdapter(var selfElse:Int,var itemList: ArrayList<OfferHelpItem>,
         val item = itemList[position]
         holder.item.item = item
         holder.item.mainItem.setOnClickListener {
-            onItemClick(item,selfElse)
+            onItemClick(item, selfElse)
         }
     }
 

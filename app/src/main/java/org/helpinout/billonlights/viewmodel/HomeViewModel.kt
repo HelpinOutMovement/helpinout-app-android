@@ -42,8 +42,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         homeItemList.add(LanguageItem(context.getString(R.string.hindi), HINDI, HINDI_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.kannad), KANNAD, KANNAD_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.russian), RUSSIAN, RUSSIAN_CODE))
-//        homeItemList.add(LanguageItem(context.getString(R.string.marathi), MARATHI, MARATHI_CODE))
-//        homeItemList.add(LanguageItem(context.getString(R.string.gujrati), GUJRATI, GUJRATI_CODE))
+        //        homeItemList.add(LanguageItem(context.getString(R.string.marathi), MARATHI, MARATHI_CODE))
+        //        homeItemList.add(LanguageItem(context.getString(R.string.gujrati), GUJRATI, GUJRATI_CODE))
         list.postValue(homeItemList)
         return list
     }
@@ -126,7 +126,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val addActivityResponse = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val response = locationService.getNewAddActivityResult(body,address)
+                val response = locationService.getNewAddActivityResult(body, address)
                 addActivityResponse.postValue(Pair(response, ""))
             } catch (e: Exception) {
                 addActivityResponse.postValue(Pair(null, e.getStringException()))
@@ -137,13 +137,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun sendEmailToServer(email: String): MutableLiveData<Pair<ServerResponse?, String>> {
         val emailResponse = MutableLiveData<Pair<ServerResponse?, String>>()
-         GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             try {
-                emailResponse.postValue(Pair( offerRequestListService.sendEmailToServer(email),""))
-            }catch (e:Exception){
-                emailResponse.postValue(Pair(null,e.getStringException()))
+                emailResponse.postValue(Pair(offerRequestListService.sendEmailToServer(email), ""))
+            } catch (e: Exception) {
+                emailResponse.postValue(Pair(null, e.getStringException()))
             }
-         }
+        }
         return emailResponse
     }
 

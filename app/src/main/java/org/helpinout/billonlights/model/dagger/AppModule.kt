@@ -44,11 +44,11 @@ class AppModule(private var app: Application) {
 
     @Provides
     @Singleton
-    fun provideOfferRequestService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase,app: Application) = OfferRequestListService(preferencesService, service, db,app)
+    fun provideOfferRequestService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase, app: Application) = OfferRequestListService(preferencesService, service, db, app)
 
     @Provides
     @Singleton
-    fun provideOfferRequestDetailService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase,app: Application) = OfferRequestDetailService(preferencesService, service, db,app)
+    fun provideOfferRequestDetailService(preferencesService: PreferencesService, service: NetworkApiProvider, db: AppDatabase, app: Application) = OfferRequestDetailService(preferencesService, service, db, app)
 
 
     @Provides

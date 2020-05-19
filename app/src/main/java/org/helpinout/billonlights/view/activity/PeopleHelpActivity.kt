@@ -29,7 +29,7 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         peopleHelp.activity_type = helpType
         peopleHelp.activity_uuid = getUuid()
         peopleHelp.activity_category = 2
-        suggestionData.activity_category = 2
+
         peopleHelp.date_time = currentDateTime()
         selfHelp = intent.getIntExtra(SELF_ELSE, 0)
         peopleHelp.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude.toString()
@@ -67,6 +67,14 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun createSuggestionData() {
+        suggestionData.activity_category = 2
+        suggestionData.activity_type = helpType
+        suggestionData.latitude = preferencesService.latitude
+        suggestionData.longitude = preferencesService.longitude
+        suggestionData.accuracy = preferencesService.gpsAccuracy
+    }
+
     private fun sendDataToServer() {
         dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog?.show()
@@ -78,11 +86,8 @@ class PeopleHelpActivity : BaseActivity(), View.OnClickListener {
         activityDetail.technical_personal_detail = edt_technical_personnel.text.toString()
         activityDetail.technical_personal_quantity = edt_qty2.text.toString()
         peopleHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
-        peopleHelp.selfHelp= selfHelp
-        suggestionData.activity_type = helpType
-        suggestionData.latitude = preferencesService.latitude
-        suggestionData.longitude = preferencesService.longitude
-        suggestionData.accuracy = preferencesService.gpsAccuracy
+        peopleHelp.selfHelp = selfHelp
+        createSuggestionData()
 
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.sendPeopleHelp(peopleHelp, activityDetail).observe(this, Observer {

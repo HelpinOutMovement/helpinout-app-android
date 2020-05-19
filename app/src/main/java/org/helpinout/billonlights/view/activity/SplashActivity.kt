@@ -6,9 +6,7 @@ import android.os.Handler
 import android.provider.Settings
 import org.helpinout.billonlights.BuildConfig.DEBUG
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.utils.INSTRUCTION_STEP
 import org.helpinout.billonlights.utils.LANGUAGE_STEP
-import org.helpinout.billonlights.utils.LOGIN_STEP
 import org.helpinout.billonlights.utils.REGISTRATION_STEP
 import org.jetbrains.anko.startActivity
 
@@ -39,12 +37,6 @@ class SplashActivity : BaseActivity() {
             when (preferencesService.step) {
                 LANGUAGE_STEP -> {
                     startActivity<LanguageChooserActivity>()
-                }
-                INSTRUCTION_STEP -> {
-                    startActivity<InstructionActivity>()
-                }
-                LOGIN_STEP -> {
-                    startActivity<LoginActivity>()
                 }
                 REGISTRATION_STEP -> {
                     startActivity<RegistrationActivity>()

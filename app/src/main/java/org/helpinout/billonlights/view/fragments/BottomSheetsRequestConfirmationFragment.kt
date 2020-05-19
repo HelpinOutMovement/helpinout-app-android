@@ -11,7 +11,7 @@ import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
 import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
 
-class BottomSheetsRequestConfirmationFragment(private val helpType: Int, val uuid: String,private val suggestionData: SuggestionRequest, private val onConfirmationYesClick: (SuggestionRequest,String) -> Unit, private val onConfirmationNoClick: (Int, String) -> Unit) : BottomSheetDialogFragment() {
+class BottomSheetsRequestConfirmationFragment(private val helpType: Int, val uuid: String, private val suggestionData: SuggestionRequest, private val onConfirmationYesClick: (SuggestionRequest, String) -> Unit, private val onConfirmationNoClick: (Int, String) -> Unit) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (helpType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -32,7 +32,7 @@ class BottomSheetsRequestConfirmationFragment(private val helpType: Int, val uui
 
         button_yes.setOnClickListener {
             dismiss()
-            onConfirmationYesClick(suggestionData,uuid)
+            onConfirmationYesClick(suggestionData, uuid)
         }
         button_no.setOnClickListener {
             dismiss()

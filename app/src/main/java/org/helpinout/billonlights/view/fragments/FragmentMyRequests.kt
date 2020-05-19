@@ -67,7 +67,7 @@ class FragmentMyRequests : BaseFragment() {
         }
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
-        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, { item -> onSearchForHelpProviderClick(item) }, { offer, item -> onViewDetailClick(offerType, item) }, { offer, initiat, help, item -> onNewMatchesClick(offerType, initiator, help, item) }, { a, b, help, uuid,item -> onRequestSentClick(a, b, help, uuid,item) })
+        adapter = RequestSentAdapter(offerType, initiator, helpType, itemList, { item -> onSearchForHelpProviderClick(item) }, { offer, item -> onViewDetailClick(offerType, item) }, { a, b, help, uuid, item -> onRequestSentClick(a, b, help, uuid, item) })
         val itemDecorator = ItemOffsetDecoration(activity!!, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter
@@ -80,15 +80,12 @@ class FragmentMyRequests : BaseFragment() {
         val initiator = arguments?.getInt(INITIATOR, 0) ?: 0
         val helpType = arguments?.getInt(HELP_TYPE, 0) ?: 0
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getMyRequestsOrOffers(offerType, initiator,activity!!).observe(this, Observer { list ->
+        viewModel.getMyRequestsOrOffers(offerType, initiator, activity!!).observe(this, Observer { list ->
             try {
                 progress_bar.hide()
                 list?.let {
                     itemList.clear()
                     itemList.addAll(list.reversed())
-                }
-                if (helpType == HELP_TYPE_OFFER) {
-                    (activity as HomeActivity).hideMailIcon(itemList.isNotEmpty())
                 }
                 recycler_view.goneIf(itemList.isEmpty())
                 tv_no_data_available.visibleIf(itemList.isEmpty())
@@ -106,7 +103,7 @@ class FragmentMyRequests : BaseFragment() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getNewMatchesResponse(activity_type).observe(this, Observer {
             if (it.first != null) {
-                if (activity_type== HELP_TYPE_OFFER){
+                if (activity_type == HELP_TYPE_OFFER) {
                     it.first!!.data?.offers?.forEach { request ->
                         val item = itemList.find {
                             it.activity_uuid == request.activity_uuid
@@ -115,7 +112,7 @@ class FragmentMyRequests : BaseFragment() {
                             item.newMatchesCount = request.new_matches
                         }
                     }
-                }else{
+                } else {
                     it.first!!.data?.requests?.forEach { request ->
                         val item = itemList.find {
                             it.activity_uuid == request.activity_uuid
@@ -130,12 +127,12 @@ class FragmentMyRequests : BaseFragment() {
         })
     }
 
-    private fun onRequestSentClick(offerType: Int, initiator: Int, helpType: Int, activity_uuid: String,item:AddCategoryDbItem) {
+    private fun onRequestSentClick(offerType: Int, initiator: Int, helpType: Int, activity_uuid: String, item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val location = item.geo_location?:""
+        val location = item.geo_location ?: ""
         activity?.startActivityForResult<RequestDetailActivity>(activityResult, OFFER_TYPE to offerType, INITIATOR to initiator, HELP_TYPE to helpType, ACTIVITY_UUID to activity_uuid, LOCATION to location)
         activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
     }
@@ -146,7 +143,7 @@ class FragmentMyRequests : BaseFragment() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        if (item.parent_uuid.isNullOrEmpty()) {//for  search for help providers or search for help requester
+        if (item.parent_uuid.isNullOrEmpty()) { //for  search for help providers or search for help requester
             val suggestionData = SuggestionRequest()
             suggestionData.activity_uuid = item.activity_uuid
             suggestionData.activity_category = item.activity_category
@@ -162,14 +159,6 @@ class FragmentMyRequests : BaseFragment() {
             activity!!.startActivity<HelpProviderRequestersActivity>(SUGGESTION_DATA to suggestionDataAsString, HELP_TYPE to item.activity_type)
         }
     }
-
-    private fun onNewMatchesClick(offerType: Int, initiator: Int, helpType: Int, item: AddCategoryDbItem) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
-            return
-        }
-        mLastClickTime = SystemClock.elapsedRealtime()
-    }
-
 
     private fun onViewDetailClick(offerType: Int, item: AddCategoryDbItem) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
@@ -229,7 +218,7 @@ class FragmentMyRequests : BaseFragment() {
             if (intent?.action == DATA_REFRESH) {
                 checkOfferList()
             }
-            if (intent?.action==BEDGE_REFRESH){
+            if (intent?.action == BEDGE_REFRESH) {
                 loadRequestList()
             }
         }

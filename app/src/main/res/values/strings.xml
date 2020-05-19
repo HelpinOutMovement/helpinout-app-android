@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name" >HelpinOut</string>
-    <string name="label_app_name" ><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
-    <string name="all_right_reserved" >© Helpinout. All rights reserved.</string>
-    <string name="website_name" >www.helpinout.org</string>
+    <string name="app_name">HelpinOut</string>
+    <string name="label_app_name"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font> ]]></string>
+    <string name="all_right_reserved">© Helpinout. All rights reserved.</string>
+    <string name="website_name">www.helpinout.org</string>
     <string name="instruction_text"><![CDATA[<font color=#EE6B6B>Ask for Help</font> <br/> Offer Help<br/><br/> Find help-givers and help-seekers<br/>around you]]></string>
     <string name="btn_continue">Continue</string>
 
@@ -12,18 +12,18 @@
     <string name="label_enter_your_mobile_no">Enter your mobile number</string>
     <string name="label_login">Login / Signup</string>
     <string name="by_signing_you_are_agree">By signing up you agree to</string>
-    <string name="terms_Of_service" >Terms of Service</string>
-    <string name="privacy_policy" >Privacy Policy</string>
-    <string name="toast_error_phone_number" >Please enter phone number</string>
-    <string name="toast_error_invalid_phone_number" >Please enter valid phone number</string>
+    <string name="terms_Of_service">Terms of Service</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="toast_error_phone_number">Please enter phone number</string>
+    <string name="toast_error_invalid_phone_number">Please enter valid phone number</string>
     <!-- End Login screen -->
 
     <!-- SMS Verification screen -->
     <string name="label_enter_otp">Enter OTP</string>
     <string name="button_verify">Verify</string>
-    <string name="retry_msg" >Resend OTP</string>
-    <string name="toast_error_please_enter_otp" >Please enter OTP</string>
-    <string name="you_can_try_max_try" >You can try maximum %1$s otp</string>
+    <string name="retry_msg">Resend OTP</string>
+    <string name="toast_error_please_enter_otp">Please enter OTP</string>
+    <string name="you_can_try_max_try">You can try maximum %1$s otp</string>
 
     <string name="otp_send_success">OTP sent successfully</string>
     <string name="otp_send_to">OTP code sent to %1$s</string>
@@ -42,13 +42,13 @@
     <string name="label_unit_division">Unit / Division / Function / Location</string>
     <string name="label_start">Start</string>
 
-    <string name="toast_error_please_enter_first_name" >Please enter your First Name</string>
-    <string name="toast_error_please_enter_last_name" >Please enter your Last Name</string>
-    <string name="toast_error_please_enter_organization_name" >Please enter Organization Name</string>
+    <string name="toast_error_please_enter_first_name">Please enter your First Name</string>
+    <string name="toast_error_please_enter_last_name">Please enter your Last Name</string>
+    <string name="toast_error_please_enter_organization_name">Please enter Organization Name</string>
 
-    <string name="toast_error_please_enter_unit_division" >Please enter Unit / Division / Function / Location</string>
-    <string name="toast_error_please_choose_org_type" >Please choose organization type</string>
-    <string name="toast_success_registration_success" >Registration successful</string>
+    <string name="toast_error_please_enter_unit_division">Please enter Unit / Division / Function / Location</string>
+    <string name="toast_error_please_choose_org_type">Please choose organization type</string>
+    <string name="toast_success_registration_success">Registration successful</string>
 
     <string name="org_type0">Organization type</string>
     <string name="org_type1">Commercial Organization</string>
@@ -70,8 +70,8 @@
     <!-- End Registration screen -->
 
     <!-- Profile screen -->
-    <string name="update_profile" >Update profile</string>
-    <string name="toast_success_update_success" >Profile updated successfully</string>
+    <string name="update_profile">Update profile</string>
+    <string name="toast_success_update_success">Profile updated successfully</string>
 
     <!-- End profile screen -->
 
@@ -105,11 +105,11 @@
     <!-- End Home screen -->
 
     <!-- Choose Language screen -->
-    <string name="english" >English</string>
-    <string name="hindi" >हिन्दी</string>
-    <string name="kannad" >ಕನ್ನಡ</string>
-    <string name="marathi" >मराठी</string>
-    <string name="gujrati" >ગુજરાતી</string>
+    <string name="english">English</string>
+    <string name="hindi">हिन्दी</string>
+    <string name="kannad">ಕನ್ನಡ</string>
+    <string name="marathi">मराठी</string>
+    <string name="gujrati">ગુજરાતી</string>
     <string name="russian">русский</string>
     <!-- End Choose Language screen -->
 
@@ -123,9 +123,9 @@
     <string name="label_yes">Yes</string>
     <string name="label_no">No</string>
     <string name="about">About</string>
-    <string name="label_logs" >Crash logs</string>
+    <string name="label_logs">Crash logs</string>
 
-    <string name="google_maps_key" >AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
+    <string name="google_maps_key">AIzaSyDLPRUnByJfCoHVaVyXMq5ehv_Br7L2WL8</string>
 
 
     <!-- Ask for help  screen -->

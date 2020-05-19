@@ -1,7 +1,6 @@
 package org.helpinout.billonlights.model.database.entity
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
@@ -11,10 +10,10 @@ class Mapping {
     var status: Int? = null
     var mapping_initiator: Int? = 0
     var mapping_time: String = ""
-    var distance:String?=""
+    var distance: String? = ""
 }
 
-@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid","mapping_initiator"], unique = true)])
+@Entity(tableName = "mapping", indices = [Index(value = ["parent_uuid", "activity_uuid", "mapping_initiator"], unique = true)])
 class MappingDetail {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
@@ -39,7 +38,7 @@ class MappingDetail {
     var offer_note: String? = ""
     var mapping_initiator: Int? = 0
     var detail: String? = ""
-    var pay:Int=0
-    var self_else:Int=0
-    var distance: String? = null//this is for calculate distance
+    var pay: Int = 0
+    var self_else: Int = 0
+    var distance: String? = null //this is for calculate distance
 }

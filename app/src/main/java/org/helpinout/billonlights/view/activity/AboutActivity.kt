@@ -16,7 +16,6 @@ class AboutActivity : BaseActivity() {
         tvInstallDate.text = getString(R.string.app_install_date, getInstallTime())
     }
 
-
     override fun getLayout(): Int {
         return R.layout.activity_about
     }

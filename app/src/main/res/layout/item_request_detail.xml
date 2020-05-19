@@ -98,11 +98,11 @@
             android:paddingStart="@dimen/_10sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:text="@string/rate"
-            android:visibility="gone"
             android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
             app:layout_constraintEnd_toEndOf="@+id/rating_bar"
             app:layout_constraintStart_toStartOf="@+id/rating_bar"
-            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
             app:layout_constraintTop_toTopOf="@+id/rating_bar" />
 
 

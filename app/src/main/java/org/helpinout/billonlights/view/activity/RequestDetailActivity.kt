@@ -48,16 +48,16 @@ class RequestDetailActivity : BaseActivity() {
         location = intent.getStringExtra(LOCATION) ?: ""
         isFromNotification = intent.getBooleanExtra(FROM_NOTIFICATION, false)
         if (offerType == HELP_TYPE_REQUEST) {
-            if (initiator == HELP_TYPE_REQUEST) {//send request
+            if (initiator == HELP_TYPE_REQUEST) { //send request
                 supportActionBar?.title = getString(R.string.request_send_to)
-            } else {//offer received
+            } else { //offer received
                 supportActionBar?.title = getString(R.string.help_offers_received_from)
             }
         } else {
             tv_no_sender.text = getString(R.string.no_offer_sent)
-            if (initiator == HELP_TYPE_OFFER) {//send offer
+            if (initiator == HELP_TYPE_OFFER) { //send offer
                 supportActionBar?.title = getString(R.string.offer_send_to)
-            } else {//request received from
+            } else { //request received from
                 supportActionBar?.title = getString(R.string.help_request_received_from)
             }
         }
@@ -65,11 +65,10 @@ class RequestDetailActivity : BaseActivity() {
     }
 
 
-
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = RequestDetailAdapter(itemList, onReportBlockClick = { item -> onReportBlockClick(item) }, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = {i, name, detail, description, pay ,selfHelp-> onDetailClick(i,name, detail, description, pay,selfHelp) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
+        adapter = RequestDetailAdapter(itemList, onRateClick = { item -> onRateClick(item) }, onDeleteClick = { item -> onDeleteClick(item) }, onDetailClick = { i, name, detail, description, pay, selfHelp -> onDetailClick(i, name, detail, description, pay, selfHelp) }, onMakeCallClick = { parentUuid, activityUUid -> onMakeCallClick(parentUuid, activityUUid) })
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 0, 0))
         recycler_view.adapter = adapter
@@ -85,17 +84,16 @@ class RequestDetailActivity : BaseActivity() {
 
     private fun loadRequestDetails() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.getRequestDetails(offerType, initiator, activity_uuid, location)
-            .observe(this, Observer { list ->
-            progress_bar.hide()
-            list?.let {
-                itemList.clear()
-                itemList.addAll(list)
-            }
-            recycler_view.goneIf(itemList.isEmpty())
-            tv_no_sender.visibleIf(itemList.isEmpty())
-            adapter.notifyDataSetChanged()
-        })
+        viewModel.getRequestDetails(offerType, initiator, activity_uuid, location).observe(this, Observer { list ->
+                progress_bar.hide()
+                list?.let {
+                    itemList.clear()
+                    itemList.addAll(list)
+                }
+                recycler_view.goneIf(itemList.isEmpty())
+                tv_no_sender.visibleIf(itemList.isEmpty())
+                adapter.notifyDataSetChanged()
+            })
     }
 
     private fun onRateClick(item: MappingDetail) {
@@ -103,7 +101,7 @@ class RequestDetailActivity : BaseActivity() {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        if (item.parent_uuid.isNullOrEmpty()) {//for  search for help providers or search for help requester
+        if (item.parent_uuid.isNullOrEmpty()) { //for  search for help providers or search for help requester
             val suggestionData = SuggestionRequest()
             suggestionData.activity_uuid = item.activity_uuid ?: ""
             suggestionData.activity_category = item.activity_category ?: 0
@@ -122,10 +120,6 @@ class RequestDetailActivity : BaseActivity() {
             val rateReport = BottomSheetRateReportFragmentForMapping(item, onSubmitClick = { _, rating, recommendToOther, comments -> onSubmitClick(item, rating, recommendToOther, comments) })
             rateReport.show(supportFragmentManager, null)
         }
-    }
-
-    private fun onReportBlockClick(item: MappingDetail) {
-
     }
 
     private fun onSubmitClick(item: MappingDetail, rating: String, recommendToOther: Int, comments: String) {
@@ -151,11 +145,11 @@ class RequestDetailActivity : BaseActivity() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
 
-        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.mapping_initiator!!,item.activity_type!!, item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2,mapping_initiator -> onDeleteYesClick(uuid1, uuid2,mapping_initiator) })
+        val deleteDialog = BottomSheetsDeleteConfirmationFragment(item.mapping_initiator!!, item.activity_type!!, item.parent_uuid, item.activity_uuid ?: "", onDeleteYesClick = { uuid1, uuid2, mapping_initiator -> onDeleteYesClick(uuid1, uuid2, mapping_initiator) })
         deleteDialog.show(supportFragmentManager, null)
     }
 
-    private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String,mapping_initiator:Int) {
+    private fun onDeleteYesClick(parent_uuid: String?, activity_uuid: String, mapping_initiator: Int) {
 
         val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog.show()
@@ -181,7 +175,7 @@ class RequestDetailActivity : BaseActivity() {
                 }
             })
         } else {
-            viewModel.deleteMapping(parent_uuid, activity_uuid, offerType,mapping_initiator).observe(this, Observer {
+            viewModel.deleteMapping(parent_uuid, activity_uuid, offerType, mapping_initiator).observe(this, Observer {
                 dialog.dismiss()
                 it.first?.let {
                     deleteMappingFromDatabase(parent_uuid, activity_uuid)
@@ -201,17 +195,17 @@ class RequestDetailActivity : BaseActivity() {
         }
         mLastClickTime = SystemClock.elapsedRealtime()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.makeCallTracking(parentUUid, activity_uuid, helpType,initiator).observe(this, Observer {
+        viewModel.makeCallTracking(parentUUid, activity_uuid, helpType, initiator).observe(this, Observer {
             if (it.first != null) Timber.d("Response success of make call api")
         })
     }
 
-    private fun onDetailClick(type:Int,name: String, detail: String, description: String, pay: Int,self_else:Int) {
+    private fun onDetailClick(type: Int, name: String, detail: String, description: String, pay: Int, self_else: Int) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < DOUBLE_CLICK_TIME) {
             return
         }
         mLastClickTime = SystemClock.elapsedRealtime()
-        val deleteDialog = BottomSheetsDetailFragment(type,offerType, name, detail, description, pay,self_else)
+        val deleteDialog = BottomSheetsDetailFragment(type, offerType, name, detail, description, pay, self_else)
         deleteDialog.show(supportFragmentManager, null)
     }
 
@@ -227,7 +221,7 @@ class RequestDetailActivity : BaseActivity() {
                 toastSuccess(R.string.toast_delete_success)
                 if (itemList.size == 1) {
                     goToHome()
-                }else{
+                } else {
                     loadRequestDetails()
                 }
 
@@ -237,13 +231,13 @@ class RequestDetailActivity : BaseActivity() {
 
 
     override fun onBackPressed() {
-            goToHome()
+        goToHome()
         super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-                goToHome()
+            goToHome()
         }
         return super.onOptionsItemSelected(item)
     }

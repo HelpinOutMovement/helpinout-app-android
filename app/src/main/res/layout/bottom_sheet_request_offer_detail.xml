@@ -64,11 +64,11 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_detail"
-        tools:text="Notes" />
+        tools:text="Notes"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/free_or_paid"

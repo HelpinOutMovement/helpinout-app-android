@@ -59,10 +59,7 @@ fun Exception.getStringException(): String {
     this.printStackTrace(PrintWriter(writer))
 
     var error = writer.toString()
-    if (error.contains(INTERNET_ERROR1) || error.contains(INTERNET_ERROR2) || error.contains(
-            INTERNET_ERROR_3
-        ) || error.contains(INTERNET_ERROR_4)
-    ) {
+    if (error.contains(INTERNET_ERROR1) || error.contains(INTERNET_ERROR2) || error.contains(INTERNET_ERROR_3) || error.contains(INTERNET_ERROR_4)) {
         error = "Internet issue"
         return error
     }

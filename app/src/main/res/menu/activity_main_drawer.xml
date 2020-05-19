@@ -62,14 +62,14 @@
         <item
             android:id="@+id/nav_marathi"
             android:checkable="false"
-            android:visible="false"
-            android:title="@string/marathi" />
+            android:title="@string/marathi"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_gujrati"
             android:checkable="false"
-            android:visible="false"
-            android:title="@string/gujrati" />
+            android:title="@string/gujrati"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_russian"

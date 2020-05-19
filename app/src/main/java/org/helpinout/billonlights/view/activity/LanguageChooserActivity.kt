@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import kotlinx.android.synthetic.main.activity_help.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.LanguageItem
-import org.helpinout.billonlights.utils.*
+import org.helpinout.billonlights.utils.DOUBLE_CLICK_TIME
+import org.helpinout.billonlights.utils.UPDATE_LANGAUGE
+import org.helpinout.billonlights.utils.toastSuccess
+import org.helpinout.billonlights.utils.visibleIf
 import org.helpinout.billonlights.view.adapters.LanguageChooserAdapter
 import org.helpinout.billonlights.view.view.ItemOffsetDecoration
 import org.helpinout.billonlights.viewmodel.HomeViewModel
@@ -64,7 +67,6 @@ class LanguageChooserActivity : BaseActivity() {
             setResult(Activity.RESULT_OK, returnIntent)
             finishWithFade()
         } else {
-//            preferencesService.step = INSTRUCTION_STEP
             startActivity<InstructionActivity>()
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finishWithFade()

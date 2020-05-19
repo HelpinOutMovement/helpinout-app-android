@@ -148,7 +148,7 @@ abstract class LocationActivity : BaseActivity(), LocationListener, OnPermission
     override fun onDestroy() {
         super.onDestroy()
         try {
-            if (mGoogleApiClient != null&& mGoogleApiClient!!.isConnected) {
+            if (mGoogleApiClient != null && mGoogleApiClient!!.isConnected) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this)
             }
         } catch (e: Exception) {

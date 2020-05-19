@@ -21,7 +21,7 @@ class LanguageChooserAdapter(var languageList: ArrayList<LanguageItem>, private 
             onItemClick(labguageItem)
         }
     }
-    
+
     override fun getItemCount(): Int {
         return languageList.size
     }

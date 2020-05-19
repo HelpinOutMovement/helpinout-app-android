@@ -30,8 +30,6 @@ import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import kotlinx.android.synthetic.main.layout_permission.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.model.database.entity.ActivityAddDetail
-import org.helpinout.billonlights.model.database.entity.Mapping
-import org.helpinout.billonlights.model.database.entity.MappingDetail
 import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.adapters.BottomSheetHelpAdapter
@@ -160,15 +158,10 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.setHasFixedSize(true)
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 10, -10))
-        bottomAdapter = BottomSheetHelpAdapter(bottomItemList, onCheckedChange = { onCheckedChange() })
+        bottomAdapter = BottomSheetHelpAdapter(bottomItemList)
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
-    }
-
-    private fun onCheckedChange() {
-        //val isAllChecked = bottomAdapter?.isAllItemChecked() ?: false
-        //chk_all.isChecked = isAllChecked
     }
 
     override fun onPermissionAllow() {
@@ -317,178 +310,38 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         dialog?.show()
         val list = bottomAdapter?.getCheckedItemsList() ?: listOf()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-
-        val isSendToAll = if (chk_all.isChecked) 1 else 0// this is for check all
-
-        viewModel.sendOfferRequesterToServer(radius,suggestionData!!.latitude,suggestionData!!.longitude,isSendToAll,suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
+        val isSendToAll = if (chk_all.isChecked) 1 else 0 // this is for check all
+        viewModel.sendOfferRequesterToServer(radius, suggestionData!!.latitude, suggestionData!!.longitude, isSendToAll, suggestionData!!.activity_type, suggestionData!!.activity_uuid, list).observe(this, Observer {
+            dialog?.dismiss()
             if (it.first != null) {
                 if (it.first!!.data != null) {
-                    it.first!!.data!!.mapping?.forEach { mapping ->
-                        if (mapping.offer_detail != null) {
-                            mapping.offer_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.offer_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
-                            mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
-                            mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
-                            mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
-                            mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
-                            mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
-                            mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
-                            mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
-                            mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail?.self_else?:0
-                            mapping.offer_detail?.user_detail?.pay= mapping.offer_detail!!.pay
-                            mapping.offer_detail?.user_detail?.distance= mapping.distance
-                            setOfferDetail(mapping)
-                        } else if (mapping.request_detail != null) {
-                            mapping.request_detail?.user_detail?.parent_uuid = it.first!!.data!!.activity_uuid
-                            mapping.request_detail?.user_detail?.activity_type = it.first!!.data!!.activity_type
-                            mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
-                            mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
-                            mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
-                            mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
-                            mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
-                            mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
-                            mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
-                            mapping.request_detail?.user_detail?.self_else = mapping.request_detail?.self_else?:0
-                            mapping.request_detail?.user_detail?.pay= mapping.request_detail!!.pay
-                            mapping.request_detail?.user_detail?.distance= mapping.distance
-                            setRequestDetail(mapping)
-                        }
-                    }
                     if (it.first!!.data!!.mapping.isNullOrEmpty()) {
                         toastError(R.string.toast_error_some_error)
                         finish()
                     } else {
-                        saveMappingToDataBase(it.first!!.data!!.mapping)
+                        showNextActivity()
                         toastSuccess(if (helpType == HELP_TYPE_REQUEST) R.string.request_send_success else R.string.offer_send_success)
                     }
-                } else {
-                    dialog?.dismiss()
                 }
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
                 } else toastError(it.second)
-                dialog?.dismiss()
                 CrashReporter.logCustomLogs(it.second)
             }
         })
     }
 
+    private fun showNextActivity() {
+        startActivity<RequestDetailActivity>(OFFER_TYPE to helpType, INITIATOR to helpType, HELP_TYPE to helpType, ACTIVITY_UUID to (suggestionData?.activity_uuid ?: ""))
+        overridePendingTransition(R.anim.enter, R.anim.exit)
+        val intent1 = Intent(DATA_REFRESH)
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
 
-    private fun setRequestDetail(mapping: Mapping) {
-        try {
-            var detail = ""
+        val returnIntent = Intent()
+        setResult(Activity.RESULT_OK, returnIntent)
+        finish()
 
-            if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    mapping.offer_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
-                }
-            } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-
-                    if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "<b> %1s </b><br/>"
-                        detail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
-                    }
-
-                    if (!it.technical_personal_detail.isNullOrEmpty()|| !it.technical_personal_quantity.isNullOrEmpty() ) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
-                        detail += "<b> %2s </b><br/>"
-                        detail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
-                    }
-                }
-
-            } else {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += " (" + it.quantity + ")"
-                    }
-                    if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
-                    }
-                }
-            }
-            mapping.request_detail?.user_detail?.detail = detail
-        } catch (e: Exception) {
-            Timber.d("")
-        }
-    }
-
-    private fun setOfferDetail(mapping: Mapping) {
-        try {
-            var detail = ""
-
-            if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    mapping.offer_detail?.user_detail?.offer_note = mapping.request_detail?.offer_note
-                }
-            } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-
-                    if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                        detail += "<b> %1s </b><br/>"
-                        detail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
-                    }
-
-                    if (!it.technical_personal_detail.isNullOrEmpty()|| !it.technical_personal_quantity.isNullOrEmpty() ) {
-                        if (detail.isNotEmpty()) {
-                            detail += "<br/>"
-                        }
-                        detail += "<b> %2s </b><br/>"
-                        detail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
-                    }
-
-                }
-
-            } else {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += " (" + it.quantity + ")"
-                    }
-                    if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
-                    }
-                }
-            }
-            mapping.offer_detail?.user_detail?.detail = detail
-        } catch (e: Exception) {
-            Timber.d("")
-        }
-    }
-
-    private fun saveMappingToDataBase(mapping: List<Mapping>?) {
-        val mappingList = ArrayList<MappingDetail>()
-        mapping?.forEach {
-            if (it.offer_detail != null) {
-                mappingList.add(it.offer_detail!!.user_detail!!)
-            } else {
-                mappingList.add(it.request_detail!!.user_detail!!)
-            }
-        }
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.saveMapping(mappingList).observe(this, Observer {
-            dialog?.dismiss()
-            if (it) {
-                startActivity<RequestDetailActivity>(OFFER_TYPE to helpType, INITIATOR to helpType, HELP_TYPE to helpType, ACTIVITY_UUID to (suggestionData?.activity_uuid ?: ""))
-                overridePendingTransition(R.anim.enter, R.anim.exit)
-                val intent1 = Intent(DATA_REFRESH)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(intent1)
-
-                val returnIntent = Intent()
-                setResult(Activity.RESULT_OK, returnIntent)
-                finish()
-            }
-        })
     }
 
     private fun goToRequestDetailScreen() {

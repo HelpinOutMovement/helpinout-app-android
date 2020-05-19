@@ -12,8 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:paddingBottom="@dimen/_5sdp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_5sdp">
 
         <CheckBox
             android:id="@+id/tv_name"
@@ -30,14 +30,14 @@
             android:id="@+id/tv_self_help"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
-            android:visibility="gone"
             android:layout_marginTop="@dimen/_5sdp"
-            android:textSize="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:text="@string/seeking_help_for_someone_else"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            android:text= "@string/seeking_help_for_someone_else" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
         <RatingBar
@@ -54,8 +54,8 @@
             android:id="@+id/distance"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
-            android:textSize="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_5sdp"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintTop_toTopOf="@+id/rating_bar"
@@ -66,8 +66,8 @@
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/distance"
@@ -78,10 +78,10 @@
             android:id="@+id/free_or_paid"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
-            android:textSize="@dimen/_12sdp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_message"
             tools:text="Free" />
@@ -90,10 +90,10 @@
             android:id="@+id/tv_notes"
             style="@style/StyleTextViewNormal"
             android:layout_width="0dp"
-            android:visibility="gone"
             android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_message"

@@ -2,8 +2,8 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/_45sdp"
     android:layout_height="@dimen/_45sdp"
-    android:scaleType="fitXY"
     android:padding="@dimen/_10sdp"
+    android:scaleType="fitXY"
     android:src="@drawable/ic_email">
 
 </ImageView>

@@ -21,8 +21,6 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.view.view.HelpInTextWatcher
 import org.helpinout.billonlights.viewmodel.HomeViewModel
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.json.JSONArray
-import org.json.JSONObject
 
 
 class FoodHelpActivity : BaseActivity(), View.OnClickListener {
@@ -101,13 +99,12 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
 
     private fun sendData() {
 
-        addData.activity_detail_string = getDetail()
         addData.conditions = edt_conditions.text.toString()
         suggestionData.activity_type = helpType
         suggestionData.latitude = preferencesService.latitude
         suggestionData.longitude = preferencesService.longitude
         suggestionData.accuracy = preferencesService.gpsAccuracy
-        addData.selfHelp= selfHelp
+        addData.selfHelp = selfHelp
         val address = getAddress(preferencesService.latitude, preferencesService.longitude)
         dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog?.show()
@@ -124,18 +121,6 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
 
             }
         })
-    }
-
-    private fun getDetail(): JSONArray {
-        val jsonArray = JSONArray()
-        addData.activity_count = addData.activity_detail.size
-        addData.activity_detail.forEach { item ->
-            val jsonObj = JSONObject()
-            jsonObj.put("detail", item.detail)
-            jsonObj.put("qty", item.qty)
-            jsonArray.put(jsonObj)
-        }
-        return jsonArray
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

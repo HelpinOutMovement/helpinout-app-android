@@ -22,20 +22,20 @@ class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if (offerType == HELP_TYPE_REQUEST) {
             if (item.activity_category == CATEGORY_AMBULANCE) {
                 tv_notes.show()
-                tv_notes.text = getString(R.string.note, " " + item.conditions)
+                tv_notes.text = ("<b>" + getString(R.string.note) + "</b>" + " " + item.conditions).fromHtml()
             } else tv_notes.hide()
-
             tv_time.show()
             free_or_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
         } else {
-
             if (item.activity_category != CATEGORY_PEOPLE) {
-                tv_notes.text = getString(R.string.note)+ " "+ item.conditions
                 tv_notes.show()
-            }
+                tv_notes.text = ("<b>" + getString(R.string.note) + "</b>" + " " + item.conditions).fromHtml()
+            } else tv_notes.hide()
+
             free_or_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)
             btn_cancel_this_request.text = getString(R.string.cancel_this_offer)
         }

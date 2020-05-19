@@ -9,40 +9,143 @@ import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
 import org.helpinout.billonlights.utils.*
+import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber
 
 class OfferRequestListService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase, private val app: Application) {
 
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int,context: Context): ArrayList<AddCategoryDbItem> {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int, context: Context): ArrayList<AddCategoryDbItem> {
 
-            val finalRequest = ArrayList<AddCategoryDbItem>()
-            val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
+        val finalRequest = ArrayList<AddCategoryDbItem>()
+        val requestList = db.getAddItemDao().getMyRequestsOrOffers(offerType)
 
-            val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType)
+        val mappingList = db.getMappingDao().getMyRequestsOrOffers(offerType)
 
-            val notificationList = db.getNotificationDao().getNotificationItems(offerType)
+        val notificationList = db.getNotificationDao().getNotificationItems(offerType)
 
-            requestList.forEach { item ->
-                val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
-                finalRequest.add(item)
-                item.offersReceived = mapping.filter { it.mapping_initiator != initiator }.size
+        requestList.forEach { item ->
+            val mapping = mappingList.filter { it.parent_uuid == item.activity_uuid }
+            finalRequest.add(item)
+            item.offersReceived = mapping.filter { it.mapping_initiator != initiator }.size
 
-                val notificationItem = notificationList.find { it.parent_uuid == item.activity_uuid && it.mapping_initiator != initiator && it.activity_type == offerType }
+            val notificationItem = notificationList.find { it.parent_uuid == item.activity_uuid && it.mapping_initiator != initiator && it.activity_type == offerType }
 
-                notificationItem?.let {
-                    item.show_notification = 1
-                }
-
-                item.requestSent = mapping.filter { it.mapping_initiator == initiator }.size
+            notificationItem?.let {
+                item.show_notification = 1
             }
-            finalRequest.forEach { item ->
-                item.name = context.getString(item.activity_category.getName())
-                item.icon = item.activity_category.getIcon()
-            }
+
+            item.requestSent = mapping.filter { it.mapping_initiator == initiator }.size
+        }
+        finalRequest.forEach { item ->
+            item.name = context.getString(item.activity_category.getName())
+            item.icon = item.activity_category.getIcon()
+        }
         return finalRequest
 
+    }
+
+    suspend fun sendOfferRequests(radius: Float, lat: Double, longitude: Double, isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
+        val response = service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(radius, lat, longitude, isSendToAll, activity_type, activity_uuid, list)) }
+        parseResponse(response)
+        return response
+    }
+
+    private fun parseResponse(responses: ActivityResponses) {
+        if (responses.data != null) {
+            responses.data!!.mapping?.forEach { mapping ->
+                if (mapping.offer_detail != null) {
+                    mapping.offer_detail?.user_detail?.parent_uuid = responses.data!!.activity_uuid
+                    mapping.offer_detail?.user_detail?.activity_type = responses.data!!.activity_type
+                    mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
+                    mapping.offer_detail?.user_detail?.activity_category = mapping.offer_detail?.activity_category
+                    mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
+                    mapping.offer_detail?.user_detail?.geo_location = mapping.offer_detail?.geo_location
+                    mapping.offer_detail?.user_detail?.offer_note = mapping.offer_detail?.offer_note
+                    mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                    mapping.offer_detail?.user_detail?.date_time = mapping.mapping_time
+                    mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail?.self_else ?: 0
+                    mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
+                    mapping.offer_detail?.user_detail?.distance = mapping.distance
+                    setOfferDetail(mapping)
+                } else if (mapping.request_detail != null) {
+                    mapping.request_detail?.user_detail?.parent_uuid = responses.data!!.activity_uuid
+                    mapping.request_detail?.user_detail?.activity_type = responses.data!!.activity_type
+                    mapping.request_detail?.user_detail?.activity_uuid = mapping.request_detail?.activity_uuid
+                    mapping.request_detail?.user_detail?.activity_category = mapping.request_detail?.activity_category
+                    mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
+                    mapping.request_detail?.user_detail?.geo_location = mapping.request_detail?.geo_location
+                    mapping.request_detail?.user_detail?.offer_note = mapping.request_detail?.request_note
+                    mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
+                    mapping.request_detail?.user_detail?.date_time = mapping.mapping_time
+                    mapping.request_detail?.user_detail?.self_else = mapping.request_detail?.self_else ?: 0
+                    mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
+                    mapping.request_detail?.user_detail?.distance = mapping.distance
+                    setRequestDetail(mapping)
+                }
+            }
+            if (!responses.data!!.mapping.isNullOrEmpty()) {
+                val mappingList = ArrayList<MappingDetail>()
+                responses.data!!.mapping?.forEach {
+                    if (it.offer_detail != null) {
+                        mappingList.add(it.offer_detail!!.user_detail!!)
+                    } else {
+                        mappingList.add(it.request_detail!!.user_detail!!)
+                    }
+                }
+                saveMappingToDb(mappingList)
+            }
+        }
+    }
+
+    private fun createOffererRequester(radius: Float, lat: Double, longitude: Double, isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
+        val mainData = JSONObject()
+        try {
+            mainData.put("app_id", preferencesService.appId)
+            mainData.put("imei_no", preferencesService.imeiNumber)
+            mainData.put("app_version", preferencesService.appVersion)
+            mainData.put("date_time", Utils.currentDateTime())
+            val bodyJson = JSONObject()
+            try {
+                FirebaseInstanceId.getInstance().token?.let {
+                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
+                }
+                bodyJson.put("activity_type", activity_type)
+                bodyJson.put("activity_uuid", activity_uuid)
+
+                if (isSendToAll == 1) {
+                    bodyJson.put("all_requester", 1)
+                    bodyJson.put("radius", radius)
+                    bodyJson.put("geo_location", "$lat,$longitude")
+
+                } else {
+                    if (activity_type == HELP_TYPE_REQUEST) {
+                        val jsonArray = JSONArray()
+                        list.forEach {
+                            val user = JSONObject()
+                            user.put("activity_uuid", it.activity_uuid)
+                            jsonArray.put(user)
+                        }
+                        bodyJson.put("offerer", jsonArray)
+                    } else {
+                        val jsonArray = JSONArray()
+                        list.forEach {
+                            val user = JSONObject()
+                            user.put("activity_uuid", it.activity_uuid)
+                            jsonArray.put(user)
+                        }
+                        bodyJson.put("requester", jsonArray)
+                    }
+                }
+                mainData.put("data", bodyJson)
+            } catch (e: Exception) {
+                CrashReporter.logException(e)
+            }
+        } catch (e: Exception) {
+            CrashReporter.logException(e)
+        }
+        return mainData.toString()
     }
 
     suspend fun getUserRequestsOfferList(context: Context, activityType: Int, activity_uuid: String = ""): ActivityResponses {
@@ -118,14 +221,11 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             itemDetail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
 
                         }
-                        if (!it.technical_personal_detail.isNullOrEmpty() || !it.technical_personal_quantity.isNullOrEmpty() ) {
-                            if (itemDetail.isNotEmpty()){
-                                itemDetail+="<br/>"
+                        if (!it.technical_personal_detail.isNullOrEmpty() || !it.technical_personal_quantity.isNullOrEmpty()) {
+                            if (itemDetail.isNotEmpty()) {
+                                itemDetail += "<br/>"
                             }
                             itemDetail += "<b> %2s </b><br/>"
-//                            if (itemDetail.isNotEmpty()) {
-//                                itemDetail += "<br/>"
-//                            }
                             itemDetail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
                         }
 
@@ -148,6 +248,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
 
                 offer.mapping?.forEach { mapping ->
                     if (mapping.offer_detail != null) {
+
                         mapping.offer_detail?.user_detail?.parent_uuid = offer.activity_uuid
                         mapping.offer_detail?.user_detail?.activity_type = offer.activity_type
                         mapping.offer_detail?.user_detail?.activity_uuid = mapping.offer_detail?.activity_uuid
@@ -158,7 +259,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.offer_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.offer_detail?.user_detail?.pay = mapping.offer_detail!!.pay
                         mapping.offer_detail?.user_detail?.self_else = mapping.offer_detail!!.self_else
-                        mapping.offer_detail?.user_detail?.distance=  mapping.distance
+                        mapping.offer_detail?.user_detail?.distance = mapping.distance
 
                         if (isFirstTime) {
                             val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
@@ -166,7 +267,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
                             notificationDb.insertItems(notificationItem)
                         } else {
-                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "",mapping.mapping_initiator?:0)
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.offer_detail?.activity_uuid ?: "", mapping.mapping_initiator ?: 0)
                             if (singleItem == null) {
                                 val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
                                 notificationItem.activity_uuid = mapping.offer_detail?.activity_uuid ?: ""
@@ -186,7 +287,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                         mapping.request_detail?.user_detail?.mapping_initiator = mapping.mapping_initiator
                         mapping.request_detail?.user_detail?.pay = mapping.request_detail!!.pay
                         mapping.request_detail?.user_detail?.self_else = mapping.request_detail!!.self_else
-                        mapping.request_detail?.user_detail?.distance=  mapping.distance
+                        mapping.request_detail?.user_detail?.distance = mapping.distance
 
                         if (isFirstTime) {
                             val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_YES)
@@ -194,7 +295,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                             notificationItem.mapping_initiator = mapping.mapping_initiator ?: 0
                             notificationDb.insertItems(notificationItem)
                         } else {
-                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.request_detail?.activity_uuid ?: "",mapping.mapping_initiator?:0)
+                            val singleItem = notificationDb.getNotificationItems(offer.activity_type, offer.activity_uuid, mapping.request_detail?.activity_uuid ?: "", mapping.mapping_initiator ?: 0)
                             if (singleItem == null) {
                                 val notificationItem = NotificationItem(offer.activity_type, offer.activity_uuid, SEEN_NO)
                                 notificationItem.activity_uuid = mapping.request_detail?.activity_uuid ?: ""
@@ -268,8 +369,8 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                     if (!it.volunters_quantity.isNullOrEmpty()) {
                         detail += " (" + it.volunters_quantity + ")"
                     }
-                    if (detail.isNotEmpty()){
-                        detail+="<br/>"
+                    if (detail.isNotEmpty()) {
+                        detail += "<br/>"
                     }
                     detail += "<b> %2s </b><br/>"
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -320,8 +421,8 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                     if (!it.volunters_quantity.isNullOrEmpty()) {
                         detail += " (" + it.volunters_quantity + ")"
                     }
-                    if (detail.isNotEmpty()){
-                            detail+="<br/>"
+                    if (detail.isNotEmpty()) {
+                        detail += "<br/>"
                     }
                     detail += "<b> %2s </b><br/>"
                     if (!it.technical_personal_detail.isNullOrEmpty()) {
@@ -362,7 +463,7 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         }
     }
 
-    suspend fun getNewMatches(activityType: Int):NewMatchResponses{
+    suspend fun getNewMatches(activityType: Int): NewMatchResponses {
         return service.makeCall {
             it.networkApi.getNewMatchesAsync(createNewMatchesRequest(activityType))
         }

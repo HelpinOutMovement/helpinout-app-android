@@ -11,8 +11,8 @@
     <item
         android:id="@+id/menu_email"
         android:title="@string/label_send_mail"
-        app:actionLayout="@layout/layout_email"
         android:visible="false"
+        app:actionLayout="@layout/layout_email"
         app:showAsAction="always" />
 
     <item

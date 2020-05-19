@@ -37,7 +37,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
                 FirebaseInstanceId.getInstance().token?.let {
                     preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
                 }
-
+                body.activity_detail_string = getDetail(body)
                 bodyJson.put("activity_uuid", body.activity_uuid)
                 bodyJson.put("activity_type", body.activity_type)
                 bodyJson.put("geo_location", preferencesService.latitude.toString() + "," + preferencesService.longitude)
@@ -62,6 +62,18 @@ class LocationService(private val preferencesService: PreferencesService, privat
             CrashReporter.logException(e)
         }
         return mainData.toString()
+    }
+
+    private fun getDetail(addData: AddData): JSONArray {
+        val jsonArray = JSONArray()
+        addData.activity_count = addData.activity_detail.size
+        addData.activity_detail.forEach { item ->
+            val jsonObj = JSONObject()
+            jsonObj.put("detail", item.detail)
+            jsonObj.put("qty", item.qty)
+            jsonArray.put(jsonObj)
+        }
+        return jsonArray
     }
 
     private fun saveRequestToDatabase(addData: AddData, first: ActivityResponses?, address: String) {
@@ -90,8 +102,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
             categoryItem.conditions = addData.conditions
             categoryItem.address = address
             categoryItem.status = 1
-            categoryItem.self_else= addData.selfHelp
-            categoryItem.pay= addData.pay
+            categoryItem.self_else = addData.selfHelp
+            categoryItem.pay = addData.pay
 
             addItemList.add(categoryItem)
             saveFoodItemToDatabase(addItemList)
@@ -105,59 +117,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
     }
 
 
-    suspend fun sendOfferRequests(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): ActivityResponses {
-        return service.makeCall { it.networkApi.sendOfferRequestsAsync(createOffererRequester(radius,lat,longitude,isSendToAll, activity_type, activity_uuid, list)) }
-    }
-
-    private fun createOffererRequester(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): String {
-        val mainData = JSONObject()
-        try {
-            mainData.put("app_id", preferencesService.appId)
-            mainData.put("imei_no", preferencesService.imeiNumber)
-            mainData.put("app_version", preferencesService.appVersion)
-            mainData.put("date_time", currentDateTime())
-            val bodyJson = JSONObject()
-            try {
-                FirebaseInstanceId.getInstance().token?.let {
-                    preferencesService.firebaseId = FirebaseInstanceId.getInstance().token!!
-                }
-                bodyJson.put("activity_type", activity_type)
-                bodyJson.put("activity_uuid", activity_uuid)
-
-                if (isSendToAll == 1) {
-                    bodyJson.put("all_requester", 1)
-                    bodyJson.put("radius", radius)
-                    bodyJson.put("geo_location", "$lat,$longitude")
-
-                } else {
-                    if (activity_type == HELP_TYPE_REQUEST) {
-                        val jsonArray = JSONArray()
-                        list.forEach {
-                            val user = JSONObject()
-                            user.put("activity_uuid", it.activity_uuid)
-                            jsonArray.put(user)
-                        }
-                        bodyJson.put("offerer", jsonArray)
-                    } else {
-                        val jsonArray = JSONArray()
-                        list.forEach {
-                            val user = JSONObject()
-                            user.put("activity_uuid", it.activity_uuid)
-                            jsonArray.put(user)
-                        }
-                        bodyJson.put("requester", jsonArray)
-                    }
-                }
-                mainData.put("data", bodyJson)
-            } catch (e: Exception) {
-                CrashReporter.logException(e)
-            }
-        } catch (e: Exception) {
-            CrashReporter.logException(e)
-        }
-        return mainData.toString()
-    }
-
     suspend fun getNewSuggestionResult(body: SuggestionRequest, radius: Float): ActivityResponses {
         val response = service.makeCall {
             it.networkApi.getActivitySuggestionResponseAsync(createNewSuggestionRequest(body, radius))
@@ -167,7 +126,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
             it.offers?.let { detailList ->
                 detailList.forEach { detailItem ->
                     try {
-                        detailItem.user_detail?.distance =detailItem.distance
+                        detailItem.user_detail?.distance = detailItem.distance
                         try {
                             var detail = ""
 
@@ -500,8 +459,8 @@ class LocationService(private val preferencesService: PreferencesService, privat
             singleItem.activity_count = peopleHelp.activity_count
             singleItem.geo_location = peopleHelp.geo_location
             singleItem.address = peopleHelp.address
-            singleItem.conditions= peopleHelp.conditions
-            singleItem.pay= peopleHelp.pay
+            singleItem.conditions = peopleHelp.conditions
+            singleItem.pay = peopleHelp.pay
             var detail = ""
 
             if (!activityDetail.volunters_detail.isNullOrEmpty() || !activityDetail.volunters_quantity.isNullOrEmpty()) {
@@ -510,7 +469,7 @@ class LocationService(private val preferencesService: PreferencesService, privat
 
             }
 
-            if (!activityDetail.technical_personal_detail.isNullOrEmpty()|| !activityDetail.technical_personal_quantity.isNullOrEmpty() ) {
+            if (!activityDetail.technical_personal_detail.isNullOrEmpty() || !activityDetail.technical_personal_quantity.isNullOrEmpty()) {
                 if (detail.isNotEmpty()) {
                     detail += "<br/>"
                 }
@@ -532,8 +491,10 @@ class LocationService(private val preferencesService: PreferencesService, privat
         }
     }
 
-    suspend fun getAmbulanceHelpResponse(ambulanceHelp: AddData): ServerResponse {
-        return service.makeCall { it.networkApi.getActivityAmbulancesResponseAsync(createAmbulanceRequest(ambulanceHelp)) }
+    suspend fun getAmbulanceHelpResponse(ambulanceHelp: AddData, suggestionData: SuggestionRequest): ServerResponse {
+        val response = service.makeCall { it.networkApi.getActivityAmbulancesResponseAsync(createAmbulanceRequest(ambulanceHelp)) }
+        saveRequestToDatabase(ambulanceHelp, suggestionData)
+        return response
     }
 
     private fun createAmbulanceRequest(ambulance: AddData): String {
@@ -574,5 +535,32 @@ class LocationService(private val preferencesService: PreferencesService, privat
         return mainData.toString()
     }
 
+    private fun saveRequestToDatabase(ambulanceHelp: AddData, suggestionData: SuggestionRequest) {
+        val addItemList = ArrayList<AddCategoryDbItem>()
+        val item = AddCategoryDbItem()
+        item.activity_type = ambulanceHelp.activity_type
+        item.activity_uuid = ambulanceHelp.activity_uuid
+        item.date_time = ambulanceHelp.date_time
+        item.activity_category = ambulanceHelp.activity_category
+        item.activity_count = ambulanceHelp.activity_count
+        item.geo_location = ambulanceHelp.geo_location
+        item.address = ambulanceHelp.address
+        item.qty = ambulanceHelp.qty ?: ""
+        item.conditions = ambulanceHelp.conditions
+        item.status = 1
+        item.pay = ambulanceHelp.pay
 
+        suggestionData.activity_type = ambulanceHelp.activity_type
+        suggestionData.latitude = preferencesService.latitude
+        suggestionData.longitude = preferencesService.longitude
+        suggestionData.accuracy = preferencesService.gpsAccuracy
+        addItemList.add(item)
+        saveFoodItemsToDb(addItemList)
+    }
+
+    internal fun saveFoodItemsToDb(addItemList: ArrayList<AddCategoryDbItem>): Boolean {
+        val items = addItemList.toTypedArray()
+        val count = db.getAddItemDao().insertMultipleRecords(*items)
+        return count.isNotEmpty()
+    }
 }

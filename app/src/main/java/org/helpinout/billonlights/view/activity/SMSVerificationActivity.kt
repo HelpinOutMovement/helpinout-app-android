@@ -33,7 +33,7 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
     private var timer: CountDownTimer? = null
     private var resendToken: String? = null
     private var mAuth: FirebaseAuth? = null
-    private val timerTime = 60//sec
+    private val timerTime = 60 //sec
     private var isTimerEnd = false
     private var maxTry = 3
     private var retry = 0
@@ -41,7 +41,7 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        tv_otp_sms.text = getString(R.string.otp_send_to, preferencesService.countryCode  + preferencesService.mobileNumber)
+        tv_otp_sms.text = getString(R.string.otp_send_to, preferencesService.countryCode + preferencesService.mobileNumber)
         requestCode()
         btn_verify.setOnClickListener(this)
         tv_timer.setOnClickListener(this)
@@ -53,7 +53,7 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun sendVerificationCode(number: String) {
-        if (number == ALLOW_NUMBER1||number==ALLOW_NUMBER2) {
+        if (number == ALLOW_NUMBER1 || number == ALLOW_NUMBER2) {
             checkIfNotRegistered()
         } else PhoneAuthProvider.getInstance().verifyPhoneNumber(number, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallBack)
     }
@@ -143,14 +143,14 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
             dialog.dismiss()
             if (it.first != null) {
                 val data = (it.first as LoginResponse).data
-                if (data == null) {//Registration required
+                if (data == null) { //Registration required
                     preferencesService.step = REGISTRATION_STEP
                     startActivity<RegistrationActivity>()
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                     val returnIntent = Intent()
                     setResult(Activity.RESULT_OK, returnIntent)
                     finishWithFade()
-                } else {//already registered
+                } else { //already registered
                     preferencesService.appId = data.app_id ?: ""
 
                     data.user_detail?.let {

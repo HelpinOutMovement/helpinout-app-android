@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.avneesh.crashreporter.CrashReporter
 import kotlinx.android.synthetic.main.activity_ambulance_help.*
 import org.helpinout.billonlights.R
-import org.helpinout.billonlights.model.database.entity.AddCategoryDbItem
 import org.helpinout.billonlights.model.database.entity.AddData
 import org.helpinout.billonlights.model.database.entity.SuggestionRequest
 import org.helpinout.billonlights.utils.*
@@ -33,7 +32,7 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         selfHelp = intent.getIntExtra(SELF_ELSE, 0)
         ambulanceHelp.geo_location = preferencesService.latitude.toString() + "," + preferencesService.longitude
         initTitle()
-        if (helpType== HELP_TYPE_OFFER){
+        if (helpType == HELP_TYPE_OFFER) {
             tv_note_to.setText(R.string.note_to_requester)
         }
         we_can_pay.setOnClickListener(this)
@@ -47,10 +46,12 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         mLastClickTime = SystemClock.elapsedRealtime()
         when (v) {
             we_can_pay -> {
+                hideKeyboard()
                 ambulanceHelp.pay = 1
                 sendDataToServer()
             }
             we_can_not_pay -> {
+                hideKeyboard()
                 ambulanceHelp.pay = 0
                 sendDataToServer()
             }
@@ -64,10 +65,10 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         ambulanceHelp.conditions = edt_conditions.text.toString()
         ambulanceHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.sendAmbulanceHelp(ambulanceHelp).observe(this, Observer {
+        viewModel.sendAmbulanceHelp(ambulanceHelp, suggestionData).observe(this, Observer {
             dialog?.dismiss()
             if (it.first != null && it.first?.status == 1) {
-                saveRequestToDatabase()
+                askForConfirmation(ambulanceHelp.activity_uuid, suggestionData)
             } else {
                 if (!isNetworkAvailable()) {
                     toastError(R.string.toast_error_internet_issue)
@@ -76,39 +77,6 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
             }
         })
     }
-
-    private fun saveRequestToDatabase() {
-        val addItemList = ArrayList<AddCategoryDbItem>()
-        val item = AddCategoryDbItem()
-        item.activity_type = ambulanceHelp.activity_type
-        item.activity_uuid = ambulanceHelp.activity_uuid
-        item.date_time = ambulanceHelp.date_time
-        item.activity_category = ambulanceHelp.activity_category
-        item.activity_count = ambulanceHelp.activity_count
-        item.geo_location = ambulanceHelp.geo_location
-        item.address = ambulanceHelp.address
-        item.qty = ambulanceHelp.qty ?: ""
-        item.conditions= ambulanceHelp.conditions
-        item.status = 1
-        item.pay= ambulanceHelp.pay
-
-        suggestionData.activity_type = helpType
-        suggestionData.latitude = preferencesService.latitude
-        suggestionData.longitude = preferencesService.longitude
-        suggestionData.accuracy = preferencesService.gpsAccuracy
-
-        addItemList.add(item)
-
-        val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
-        viewModel.saveFoodItemToDatabase(addItemList).observe(this, Observer {
-            dialog?.dismiss()
-            if (it) {
-                askForConfirmation(ambulanceHelp.activity_uuid,suggestionData)
-            }
-        })
-    }
-
-
 
 
     override fun getLayout(): Int {

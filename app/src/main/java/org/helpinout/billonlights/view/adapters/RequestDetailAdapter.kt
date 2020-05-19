@@ -11,7 +11,7 @@ import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.timeAgo
 
 
-class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onReportBlockClick: (MappingDetail) -> Unit, private val onRateClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (Int,String, String, String, Int,Int) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
+class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, private val onRateClick: (MappingDetail) -> Unit, private val onDeleteClick: (MappingDetail) -> Unit, private val onDetailClick: (Int, String, String, String, Int, Int) -> Unit, private val onMakeCallClick: (String?, String) -> Unit) : RecyclerView.Adapter<RequestDetailAdapter.RequestDetailViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestDetailViewHolder {
         val viewLayout: ItemRequestDetailBinding = parent.inflate(R.layout.item_request_detail)
         return RequestDetailViewHolder(viewLayout)
@@ -27,27 +27,27 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
         holder.itemView.tv_rate.visibleIf(item.rating_count == 0)
         holder.itemView.rating_bar.rating = item.rating_avg ?: 0.0F
         holder.itemView.tv_view_detail.setOnClickListener {
-            onDetailClick(item.activity_category?:0 , item.profile_name?:"", item.offer_note ?: "", item.detail ?: "", item.pay,item.self_else)
+            onDetailClick(item.activity_category ?: 0, item.profile_name ?: "", item.offer_note ?: "", item.detail ?: "", item.pay, item.self_else)
         }
 
         if (item.activity_type == HELP_TYPE_REQUEST) {
-            if (item.activity_type == item.mapping_initiator) {//Requests have been sent to
+            if (item.activity_type == item.mapping_initiator) { //Requests have been sent to
                 val text = holder.itemView.context.getString(if (item.mobile_no_visibility == 1) R.string.request_call_him else R.string.request_help_text)
                 holder.itemView.tv_detail.text = text
                 holder.itemView.tv_detail.visibleIf(text.isNotEmpty())
                 holder.itemView.iv_call.visibleIf(item.mobile_no_visibility == 1)
                 holder.itemView.tv_cal_them.visibleIf(item.mobile_no_visibility == 1)
-            } else {//Help offers received from
+            } else { //Help offers received from
                 holder.itemView.iv_call.show()
                 holder.itemView.tv_cal_them.show()
             }
 
         } else {
-            if (item.activity_type == item.mapping_initiator) {//Offers have been sent to
+            if (item.activity_type == item.mapping_initiator) { //Offers have been sent to
                 val text = holder.itemView.context.getString(R.string.offer_help_text)
                 holder.itemView.tv_detail.text = text
                 holder.itemView.tv_detail.visibleIf(text.isNotEmpty())
-            } else {//Help requests received from
+            } else { //Help requests received from
                 holder.itemView.iv_call.visibleIf(item.mobile_no_visibility == 1)
                 holder.itemView.tv_cal_them.visibleIf(item.mobile_no_visibility == 1)
                 holder.itemView.iv_call.show()

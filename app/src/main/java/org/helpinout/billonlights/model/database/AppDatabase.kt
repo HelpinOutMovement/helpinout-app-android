@@ -14,7 +14,7 @@ import org.helpinout.billonlights.model.database.entity.NotificationItem
 import org.helpinout.billonlights.model.database.entity.Registration
 
 
-@Database(entities = [(Registration::class), (AddCategoryDbItem::class), (MappingDetail::class),(NotificationItem::class)], version = 4, exportSchema = false)
+@Database(entities = [(Registration::class), (AddCategoryDbItem::class), (MappingDetail::class), (NotificationItem::class)], version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRegistrationDao(): RegistrationDao
     abstract fun getAddItemDao(): AddItemDao

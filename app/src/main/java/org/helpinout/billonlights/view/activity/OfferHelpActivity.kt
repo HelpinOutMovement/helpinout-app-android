@@ -39,7 +39,7 @@ class OfferHelpActivity : LocationActivity(), View.OnClickListener {
     private val mRecyclerView by lazy {
         recycler_view.itemAnimator = DefaultItemAnimator()
         recycler_view.setHasFixedSize(true)
-        adapter = OfferHelpAdapter(itemList, onItemClick = { item,i -> onItemClick(item,i) })
+        adapter = OfferHelpAdapter(itemList, onItemClick = { item, i -> onItemClick(item, i) })
         val itemDecorator = ItemOffsetDecoration(this@OfferHelpActivity, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = adapter

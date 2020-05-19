@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import org.helpinout.billonlights.utils.SEEN_YES
 
 @Entity(tableName = "notification_items", indices = [Index(value = ["activity_type", "mapping_initiator", "parent_uuid", "activity_uuid"], unique = true)])
-class NotificationItem(var activity_type: Int = 0, var parent_uuid: String = "",var seen: Int = SEEN_YES) {
+class NotificationItem(var activity_type: Int = 0, var parent_uuid: String = "", var seen: Int = SEEN_YES) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 

@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_detail.*
 import org.helpinout.billonlights.R
 import org.helpinout.billonlights.utils.*
 
-class BottomSheetsDetailFragment(private val type:Int,private val offerType: Int, private val name: String, private val detail: String, private val description: String, private val pay: Int,private val self_else:Int) : BottomSheetDialogFragment() {
+class BottomSheetsDetailFragment(private val type: Int, private val offerType: Int, private val name: String, private val detail: String, private val description: String, private val pay: Int, private val self_else: Int) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, if (offerType == HELP_TYPE_REQUEST) R.style.BottomSheetThemeAskForHelp else R.style.BottomSheetThemeOfferHelp)
@@ -25,19 +25,19 @@ class BottomSheetsDetailFragment(private val type:Int,private val offerType: Int
         if (offerType == HELP_TYPE_REQUEST) {
             note.show()
             divider1.show()
-            tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description.replace("%1s",getString(R.string.volunteers)).replace("%2s",getString(R.string.technical_personnel))).fromHtml()
-            free_or_paid.text= getString(if (pay==1) R.string.not_free else R.string.free)
+            tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
+            free_or_paid.text = getString(if (pay == 1) R.string.not_free else R.string.free)
         } else {
-            tv_items.text = (getString(R.string.need_help_with) + "<br/>" + description.replace("%1s",getString(R.string.volunteers)).replace("%2s",getString(R.string.technical_personnel))).fromHtml()
-            free_or_paid.text= getString(if (pay==1) R.string.can_pay else R.string.can_not_pay)
-            tv_help_for.visibleIf(self_else==2)
+            tv_items.text = (getString(R.string.need_help_with) + "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
+            free_or_paid.text = getString(if (pay == 1) R.string.can_pay else R.string.can_not_pay)
+            tv_help_for.visibleIf(self_else == 2)
         }
 
-        if (type== CATEGORY_PEOPLE){
+        if (type == CATEGORY_PEOPLE) {
             note.hide()
             divider1.hide()
         }
-        if(type== CATEGORY_AMBULANCE){
+        if (type == CATEGORY_AMBULANCE) {
             note.show()
             divider1.show()
         }

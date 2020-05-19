@@ -124,7 +124,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 detectRadius()
                 try {
                     getRequesterAndHelper()
-                }catch (e:Exception){
+                } catch (e: Exception) {
 
                 }
                 stopLocationUpdate()
@@ -146,7 +146,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
                 val visibleRegion = it.projection.visibleRegion
                 val topLeftCorner: LatLng = visibleRegion.farLeft
                 val topRightCorner: LatLng = visibleRegion.nearLeft
-                (activity as HomeActivity).radius =(SphericalUtil.computeDistanceBetween(topLeftCorner, topRightCorner)/2).toFloat()
+                (activity as HomeActivity).radius = (SphericalUtil.computeDistanceBetween(topLeftCorner, topRightCorner) / 2).toFloat()
                 showPinOnCurrentLocation(midLatLng!!.latitude, midLatLng.longitude)
             }
         }
@@ -180,7 +180,7 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
     private fun getRequesterAndHelper() {
         progressBar?.show()
-        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)//activity as HomeActivity).radius
+        val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java) //activity as HomeActivity).radius
         viewModel.sendUserLocationToServer(6349.542f).observe(this, Observer { it ->
             it.first?.let { res ->
                 res.data?.let {
@@ -275,12 +275,12 @@ class HomeFragment : LocationFragment(), OnMapReadyCallback, View.OnClickListene
 
         alertLayout.my_self.setOnClickListener {
             dialog.dismiss()
-            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST,SELF_ELSE to 1)
+            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST, SELF_ELSE to 1)
             activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
         }
         alertLayout.someone_else.setOnClickListener {
             dialog.dismiss()
-            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST,SELF_ELSE to 2)
+            activity?.startActivity<AskForHelpActivity>(HELP_TYPE to HELP_TYPE_REQUEST, SELF_ELSE to 2)
             activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
         }
 

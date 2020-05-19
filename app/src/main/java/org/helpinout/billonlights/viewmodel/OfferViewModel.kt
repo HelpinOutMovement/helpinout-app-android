@@ -38,16 +38,15 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     private val compositeDisposable = CompositeDisposable()
 
 
-
     init {
         (application as BillionLightsApplication).getAppComponent().inject(this)
     }
 
-    fun getMyRequestsOrOffers(offerType: Int, initiator: Int,context:Context): MutableLiveData<List<AddCategoryDbItem>> {
+    fun getMyRequestsOrOffers(offerType: Int, initiator: Int, context: Context): MutableLiveData<List<AddCategoryDbItem>> {
         val offerRequestResponse = MutableLiveData<List<AddCategoryDbItem>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                offerRequestResponse.postValue(offerRequestListService.getMyRequestsOrOffers(offerType, initiator,context))
+                offerRequestResponse.postValue(offerRequestListService.getMyRequestsOrOffers(offerType, initiator, context))
             } catch (e: Exception) {
 
             }
@@ -56,10 +55,10 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return offerRequestResponse
     }
 
-    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String,location:String): MutableLiveData<List<MappingDetail>> {
+    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String, location: String): MutableLiveData<List<MappingDetail>> {
         val list = MutableLiveData<List<MappingDetail>>()
         GlobalScope.launch(Dispatchers.IO) {
-            val listItems = offerRequestDetailService.getRequestDetails(offerType, initiator, activity_uuid,location)
+            val listItems = offerRequestDetailService.getRequestDetails(offerType, initiator, activity_uuid, location)
             list.postValue(listItems)
         }
         return list
@@ -77,11 +76,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun sendOfferRequesterToServer(radius:Float,lat:Double,longitude:Double,isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
+    fun sendOfferRequesterToServer(radius: Float, lat: Double, longitude: Double, isSendToAll: Int, activity_type: Int, activity_uuid: String, list: List<ActivityAddDetail>): MutableLiveData<Pair<ActivityResponses?, String>> {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.sendOfferRequests(radius,lat,longitude,isSendToAll, activity_type, activity_uuid, list), ""))
+                response.postValue(Pair(offerRequestListService.sendOfferRequests(radius, lat, longitude, isSendToAll, activity_type, activity_uuid, list), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -90,12 +89,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-
-    fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int,mapping_initiator: Int): MutableLiveData<Pair<String?, String>> {
+    fun deleteMapping(parent_uuid: String?, activity_uuid: String, activity_type: Int, mapping_initiator: Int): MutableLiveData<Pair<String?, String>> {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(offerRequestDetailService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type,mapping_initiator), ""))
+                response.postValue(Pair(offerRequestDetailService.deleteMappingFromServer(parent_uuid, activity_uuid, activity_type, mapping_initiator), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -116,11 +114,11 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): MutableLiveData<Pair<String?, String>> {
+    fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int, mapping_initiator: Int): MutableLiveData<Pair<String?, String>> {
         val response = MutableLiveData<Pair<String?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(offerRequestDetailService.makeCallTracking(parent_uuid, activity_uuid, activityType,mapping_initiator), ""))
+                response.postValue(Pair(offerRequestDetailService.makeCallTracking(parent_uuid, activity_uuid, activityType, mapping_initiator), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -158,7 +156,7 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         val response = MutableLiveData<Pair<ActivityResponses?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.getPeopleResponse(peopleHelp,activityDetail), ""))
+                response.postValue(Pair(locationService.getPeopleResponse(peopleHelp, activityDetail), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
@@ -166,22 +164,14 @@ class OfferViewModel(application: Application) : AndroidViewModel(application) {
         return response
     }
 
-    fun sendAmbulanceHelp(ambulanceHelp: AddData): MutableLiveData<Pair<ServerResponse?, String>> {
+    fun sendAmbulanceHelp(ambulanceHelp: AddData, suggestionData: SuggestionRequest): MutableLiveData<Pair<ServerResponse?, String>> {
         val response = MutableLiveData<Pair<ServerResponse?, String>>()
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                response.postValue(Pair(locationService.getAmbulanceHelpResponse(ambulanceHelp), ""))
+                response.postValue(Pair(locationService.getAmbulanceHelpResponse(ambulanceHelp, suggestionData), ""))
             } catch (e: Exception) {
                 response.postValue(Pair(null, e.getStringException()))
             }
-        }
-        return response
-    }
-
-    fun saveFoodItemToDatabase(addItemList: ArrayList<AddCategoryDbItem>): MutableLiveData<Boolean> {
-        val response = MutableLiveData<Boolean>()
-        doAsync {
-            response.postValue(offerRequestListService.saveFoodItemsToDb(addItemList))
         }
         return response
     }

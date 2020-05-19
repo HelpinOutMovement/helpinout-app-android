@@ -35,13 +35,13 @@
         android:id="@+id/tv_help_for"
         style="@style/StyleTextViewNormal"
         android:layout_width="0dp"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_10sdp"
+        android:text="@string/seeking_help_for_someone_else"
+        android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name"
-        android:text="@string/seeking_help_for_someone_else"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
 
     <TextView
@@ -76,9 +76,9 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:text="@string/note"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/divider1"
         app:layout_constraintEnd_toStartOf="@+id/iv_expend_collapse"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
         tools:visibility="visible" />
 
     <TextView
@@ -96,9 +96,9 @@
         android:id="@+id/free_or_paid"
         style="@style/StyleTextViewNormal"
         android:layout_width="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:layout_marginTop="@dimen/_10sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_condition"
         tools:text="Free" />

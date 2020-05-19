@@ -91,11 +91,11 @@
             <TextView
                 android:id="@+id/tv_offer_received"
                 style="@style/StyleTextView"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/offers_received"
                 android:textSize="@dimen/_12sdp"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
                 app:layout_constraintEnd_toStartOf="@+id/tv_offer_received_count"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider1" />
@@ -124,11 +124,11 @@
             <TextView
                 android:id="@+id/tv_request_sent"
                 style="@style/StyleTextView"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/requests_sent"
                 android:textSize="@dimen/_12sdp"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
                 app:layout_constraintEnd_toStartOf="@+id/tv_request_send_count"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
@@ -155,10 +155,10 @@
             <TextView
                 android:id="@+id/tv_search_for_help_providers"
                 style="@style/StyleTextView"
-                android:padding="@dimen/_10sdp"
-                android:text="@string/search_for_help_givers"
                 android:background="?android:selectableItemBackground"
                 android:clickable="true"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/search_for_help_givers"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_new_matches"
                 app:layout_constraintStart_toStartOf="parent"
@@ -169,10 +169,10 @@
                 style="@style/StyleTextView"
                 android:layout_width="0dp"
                 android:padding="@dimen/_10sdp"
-                android:visibility="gone"
                 android:text="@string/new_matches"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider3" />
 

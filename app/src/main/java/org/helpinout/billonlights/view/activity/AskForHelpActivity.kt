@@ -19,7 +19,6 @@ class AskForHelpActivity : BaseActivity() {
     private var itemList = ArrayList<OfferHelpItem>()
     private lateinit var adapter: AskForHelpAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setTitle(R.string.toolbar_need_help_with)

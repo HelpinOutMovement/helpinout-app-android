@@ -16,10 +16,10 @@ import org.json.JSONObject
 
 class OfferRequestDetailService(private val preferencesService: PreferencesService, private val service: NetworkApiProvider, private val db: AppDatabase, private val app: Application) {
 
-    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String,location:String): List<MappingDetail> {
+    fun getRequestDetails(offerType: Int, initiator: Int, activity_uuid: String, location: String): List<MappingDetail> {
         val response = db.getMappingDao().getMyRequestsOrOffersByUuid(offerType, initiator, activity_uuid)
 
-        db.getNotificationDao().updateActivity(offerType,activity_uuid, SEEN_YES,initiator)
+        db.getNotificationDao().updateActivity(offerType, activity_uuid, SEEN_YES, initiator)
 
         return response
     }
@@ -67,19 +67,19 @@ class OfferRequestDetailService(private val preferencesService: PreferencesServi
         return mainData.toString()
     }
 
-    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
+    suspend fun deleteMappingFromServer(parent_uuid: String?, activity_uuid: String, activityType: Int, mapping_initiator: Int): String {
         return service.makeCall {
-            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,mapping_initiator))
+            it.networkApi.getMappingDeleteResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType, mapping_initiator))
         }
     }
 
-    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
+    suspend fun makeCallTracking(parent_uuid: String?, activity_uuid: String, activityType: Int, mapping_initiator: Int): String {
         return service.makeCall {
-            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType,mapping_initiator))
+            it.networkApi.getCallInitiateResponseAsync(createMappingDeleteRequest(parent_uuid, activity_uuid, activityType, mapping_initiator))
         }
     }
 
-    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int,mapping_initiator:Int): String {
+    private fun createMappingDeleteRequest(parent_uuid: String?, activity_uuid: String, activityType: Int, mapping_initiator: Int): String {
         val mainData = JSONObject()
         try {
             mainData.put("app_id", preferencesService.appId)

@@ -1,12 +1,10 @@
 package org.helpinout.billonlights.view.activity
 
-import android.R.attr.country
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.Editable
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.activity_register.*
@@ -151,7 +149,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
         val dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
         dialog.setCancelable(false)
         dialog.show()
-        preferencesService.orgName= registration.org_name?:""
+        preferencesService.orgName = registration.org_name ?: ""
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
         viewModel.getRegistrationResult(registration).observe(this, Observer {
             dialog.dismiss()
@@ -177,7 +175,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
         dialog.show()
 
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
-        preferencesService.orgName= registration.org_name?:""
+        preferencesService.orgName = registration.org_name ?: ""
         viewModel.getUpdateProfileResult(registration).observe(this, Observer {
             dialog.dismiss()
             if (it.first != null) {

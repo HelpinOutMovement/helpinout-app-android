@@ -87,7 +87,7 @@ abstract class BaseActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onItemClick(item: OfferHelpItem,selfElse:Int) {
+    fun onItemClick(item: OfferHelpItem, selfElse: Int) {
         when (item.type) {
             CATEGORY_FOOD -> {
                 startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_FOOD, SELF_ELSE to selfElse)
