@@ -41,6 +41,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         homeItemList.add(LanguageItem(context.getString(R.string.english), ENGLISH, ENGLISH_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.hindi), HINDI, HINDI_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.kannad), KANNAD, KANNAD_CODE))
+        homeItemList.add(LanguageItem(context.getString(R.string.tamil), TAMIL, TAMIL_CODE))
+        homeItemList.add(LanguageItem(context.getString(R.string.telugu), TELUGU, TELUGU_CODE))
         homeItemList.add(LanguageItem(context.getString(R.string.russian), RUSSIAN, RUSSIAN_CODE))
         //        homeItemList.add(LanguageItem(context.getString(R.string.marathi), MARATHI, MARATHI_CODE))
         //        homeItemList.add(LanguageItem(context.getString(R.string.gujrati), GUJRATI, GUJRATI_CODE))

@@ -72,6 +72,16 @@
             android:visible="false" />
 
         <item
+            android:id="@+id/nav_tamil"
+            android:checkable="false"
+            android:title="@string/tamil"/>
+
+        <item
+            android:id="@+id/nav_telugu"
+            android:checkable="false"
+            android:title="@string/telugu" />
+
+        <item
             android:id="@+id/nav_russian"
             android:checkable="false"
             android:title="@string/russian" />

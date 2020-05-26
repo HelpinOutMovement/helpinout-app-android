@@ -43,6 +43,8 @@ const val WEB_URL = "WebUrl"
 const val ENGLISH = 1
 const val HINDI = 2
 const val KANNAD = 3
+const val TAMIL = 4
+const val TELUGU = 5
 const val MARATHI = 4
 const val GUJRATI = 5
 const val RUSSIAN = 6
@@ -55,10 +57,12 @@ const val HINDI_CODE = "hi"
 const val KANNAD_CODE = "kn"
 const val MARATHI_CODE = "mr"
 const val GUJRATI_CODE = "gu"
+const val TAMIL_CODE = "ta"
+const val TELUGU_CODE = "te"
 const val RUSSIAN_CODE = "ru"
 
-val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati, R.id.nav_russian)
-val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE, RUSSIAN_CODE)
+val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati,R.id.nav_tamil,R.id.nav_telugu, R.id.nav_russian)
+val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE,TAMIL_CODE,TELUGU_CODE, RUSSIAN_CODE)
 
 
 const val CATEGORY_TYPE = "Item_Type"

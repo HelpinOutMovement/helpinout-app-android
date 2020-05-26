@@ -110,6 +110,8 @@
     <string name="kannad">ಕನ್ನಡ</string>
     <string name="marathi">मराठी</string>
     <string name="gujrati">ગુજરાતી</string>
+    <string name="tamil">தமிழ்</string>
+    <string name="telugu">తెలుగు</string>
     <string name="russian">русский</string>
     <!-- End Choose Language screen -->
 
