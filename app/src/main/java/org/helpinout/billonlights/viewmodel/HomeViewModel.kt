@@ -53,15 +53,22 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun getAskForHelpItems(context: Context): MutableLiveData<List<OfferHelpItem>> {
         val list = MutableLiveData<List<OfferHelpItem>>()
         val askForHelpItemList = ArrayList<OfferHelpItem>()
+
         askForHelpItemList.add(OfferHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food))
-        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group))
         askForHelpItemList.add(OfferHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter))
         askForHelpItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask))
-        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
-        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
-        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.transport), CATEGORY_MEDICAL_TRANSPORT, R.drawable.ic_transporthelp))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.volunteers), CATEGORY_MEDICAL_VOLUNTEERS, R.drawable.ic_volunteers))
         askForHelpItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.giveaways), CATEGORY_MEDICAL_GIVEAWAYS, R.drawable.ic_giveaways))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.paid_work), CATEGORY_MEDICAL_PAID_WORK, R.drawable.ic_paid_work))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.animal_care), CATEGORY_MEDICAL_ANIMAL_SUPPORT, R.drawable.ic_animalcare))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.fruits_vegetables), CATEGORY_MEDICAL_FRUITS_VEGETABLES, R.drawable.ic_fruit_veggies))
+        askForHelpItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
         askForHelpItemList.add(OfferHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other))
+
         list.postValue(askForHelpItemList)
         return list
     }
@@ -71,13 +78,18 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val offerItemList = ArrayList<OfferHelpItem>()
 
         offerItemList.add(OfferHelpItem(context.getString(R.string.food), CATEGORY_FOOD, R.drawable.ic_food))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.people), CATEGORY_PEOPLE, R.drawable.ic_group))
         offerItemList.add(OfferHelpItem(context.getString(R.string.shelter), CATEGORY_SHELTER, R.drawable.ic_shelter))
         offerItemList.add(OfferHelpItem(context.getString(R.string.med_ppe), CATEGORY_MED_PPE, R.drawable.ic_mask))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
-        offerItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.transport), CATEGORY_MEDICAL_TRANSPORT, R.drawable.ic_transporthelp))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.volunteers), CATEGORY_MEDICAL_VOLUNTEERS, R.drawable.ic_volunteers))
         offerItemList.add(OfferHelpItem(context.getString(R.string.medical_equipment), CATEGORY_MEDICAL_EQUIPMENT, R.drawable.ic_medical))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.giveaways), CATEGORY_MEDICAL_GIVEAWAYS, R.drawable.ic_giveaways))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.medicines), CATEGORY_MEDICINES, R.drawable.ic_medicines))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.paid_work), CATEGORY_MEDICAL_PAID_WORK, R.drawable.ic_paid_work))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.testing), CATEGORY_TESTING, R.drawable.ic_testing))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.animal_care), CATEGORY_MEDICAL_ANIMAL_SUPPORT, R.drawable.ic_animalcare))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.fruits_vegetables), CATEGORY_MEDICAL_FRUITS_VEGETABLES, R.drawable.ic_fruit_veggies))
+        offerItemList.add(OfferHelpItem(context.getString(R.string.ambulance), CATEGORY_AMBULANCE, R.drawable.ic_ambulance))
         offerItemList.add(OfferHelpItem(context.getString(R.string.other_things), CATEGORY_OTHERS, R.drawable.ic_other))
 
         GlobalScope.launch(Dispatchers.IO) {

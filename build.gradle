@@ -20,7 +20,7 @@ ext {
     roomDataBase = '1.1.1'
 }
 buildscript {
-    ext.kotlin_version = '1.3.71'
+    ext.kotlin_version = '1.3.72'
     ext.gradlePluginVersion = '3.0.1'
     repositories {
         google()

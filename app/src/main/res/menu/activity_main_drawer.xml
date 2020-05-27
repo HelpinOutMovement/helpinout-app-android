@@ -74,7 +74,7 @@
         <item
             android:id="@+id/nav_tamil"
             android:checkable="false"
-            android:title="@string/tamil"/>
+            android:title="@string/tamil" />
 
         <item
             android:id="@+id/nav_telugu"

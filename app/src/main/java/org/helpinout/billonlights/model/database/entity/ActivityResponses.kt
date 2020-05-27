@@ -52,10 +52,4 @@ class ActivityAddDetail {
 class ActivityDetailSubItem {
     var detail: String? = ""
     var quantity: String? = ""
-    var volunters_required: Int? = 0
-    var volunters_detail: String? = ""
-    var volunters_quantity: String? = ""
-    var technical_personal_required: Int = 0
-    var technical_personal_detail: String? = ""
-    var technical_personal_quantity: String? = ""
 }

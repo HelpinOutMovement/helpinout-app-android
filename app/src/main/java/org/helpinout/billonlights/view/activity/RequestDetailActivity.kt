@@ -85,15 +85,15 @@ class RequestDetailActivity : BaseActivity() {
     private fun loadRequestDetails() {
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.getRequestDetails(offerType, initiator, activity_uuid, location).observe(this, Observer { list ->
-                progress_bar.hide()
-                list?.let {
-                    itemList.clear()
-                    itemList.addAll(list)
-                }
-                recycler_view.goneIf(itemList.isEmpty())
-                tv_no_sender.visibleIf(itemList.isEmpty())
-                adapter.notifyDataSetChanged()
-            })
+            progress_bar.hide()
+            list?.let {
+                itemList.clear()
+                itemList.addAll(list)
+            }
+            recycler_view.goneIf(itemList.isEmpty())
+            tv_no_sender.visibleIf(itemList.isEmpty())
+            adapter.notifyDataSetChanged()
+        })
     }
 
     private fun onRateClick(item: MappingDetail) {

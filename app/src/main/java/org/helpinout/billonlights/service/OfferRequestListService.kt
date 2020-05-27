@@ -207,41 +207,21 @@ class OfferRequestListService(private val preferencesService: PreferencesService
                 var itemDetail = ""
                 offer.activity_detail?.forEachIndexed { index, it ->
 
-                    if (offer.activity_category == CATEGORY_PEOPLE) {
-                        //for people
-                        item.volunters_required = it.volunters_required
-                        item.volunters_detail = it.volunters_detail
-                        item.volunters_quantity = it.volunters_quantity
-                        item.technical_personal_required = it.technical_personal_required
-                        item.technical_personal_detail = it.technical_personal_detail
-                        item.technical_personal_quantity = it.technical_personal_quantity
-
-                        if (!it.volunters_detail.isNullOrEmpty() || !it.volunters_quantity.isNullOrEmpty()) {
-                            itemDetail += "<b> %1s </b><br/>"
-                            itemDetail += it.volunters_detail?.take(30) + " (" + it.volunters_quantity + ")"
-
+                    when (offer.activity_category) {
+                        CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
+                            itemDetail = it.detail ?: ""
                         }
-                        if (!it.technical_personal_detail.isNullOrEmpty() || !it.technical_personal_quantity.isNullOrEmpty()) {
-                            if (itemDetail.isNotEmpty()) {
+                        else -> {
+                            if (!it.detail.isNullOrEmpty()) {
+                                itemDetail += it.detail?.take(30)
+                            }
+                            if (!it.quantity.isNullOrEmpty()) {
+                                itemDetail += " (" + it.quantity + ")"
+                            }
+
+                            if (offer.activity_detail!!.size - 1 != index) {
                                 itemDetail += "<br/>"
                             }
-                            itemDetail += "<b> %2s </b><br/>"
-                            itemDetail += it.technical_personal_detail?.take(30) + " (" + it.technical_personal_quantity + ")"
-                        }
-
-                    } else if (offer.activity_category == CATEGORY_AMBULANCE) {
-                        item.qty = it.quantity
-                        itemDetail = ""
-                    } else {
-                        if (!it.detail.isNullOrEmpty()) {
-                            itemDetail += it.detail?.take(30)
-                        }
-                        if (!it.quantity.isNullOrEmpty()) {
-                            itemDetail += " (" + it.quantity + ")"
-                        }
-
-                        if (offer.activity_detail!!.size - 1 != index) {
-                            itemDetail += "<br/>"
                         }
                     }
                 }
@@ -351,49 +331,25 @@ class OfferRequestListService(private val preferencesService: PreferencesService
     private fun setOfferDetail(mapping: Mapping) {
         try {
             var detail = ""
-
-            if (mapping.offer_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
+            mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
+                when (mapping.offer_detail?.activity_category) {
+                    CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
+                        detail = it.detail ?: ""
                     }
-                    detail += it.quantity
-                }
-            } else if (mapping.offer_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    detail += "<b> %1s </b><br/>"
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.volunters_quantity + ")"
-                    }
-                    if (detail.isNotEmpty()) {
-                        detail += "<br/>"
-                    }
-                    detail += "<b> %2s </b><br/>"
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
-                        detail += it.technical_personal_detail?.take(30)
-                    }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.technical_personal_quantity + ")"
-                    }
-                }
-
-            } else {
-                mapping.offer_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += " (" + it.quantity + ")"
-                    }
-                    if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
+                    else -> {
+                        if (!it.detail.isNullOrEmpty()) {
+                            detail += it.detail?.take(30)
+                        }
+                        if (!it.quantity.isNullOrEmpty()) {
+                            detail += " (" + it.quantity + ")"
+                        }
+                        if (mapping.offer_detail?.activity_detail!!.size - 1 != index) {
+                            detail += "<br/>"
+                        }
                     }
                 }
             }
+
             mapping.offer_detail?.user_detail?.detail = detail
         } catch (e: Exception) {
             Timber.d("")
@@ -404,49 +360,25 @@ class OfferRequestListService(private val preferencesService: PreferencesService
         try {
             var detail = ""
 
-            if (mapping.request_detail?.activity_category == CATEGORY_AMBULANCE) {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (it.quantity.isNullOrEmpty()) {
-                        it.quantity = ""
+            mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
+                when (mapping.request_detail?.activity_category) {
+                    CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
+                        detail = it.detail ?: ""
                     }
-                    detail += it.quantity
-                }
-            } else if (mapping.request_detail?.activity_category == CATEGORY_PEOPLE) {
-
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    detail += "<b> %1s </b><br/>"
-                    if (!it.volunters_detail.isNullOrEmpty()) {
-                        detail += it.volunters_detail?.take(30)
-                    }
-                    if (!it.volunters_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.volunters_quantity + ")"
-                    }
-                    if (detail.isNotEmpty()) {
-                        detail += "<br/>"
-                    }
-                    detail += "<b> %2s </b><br/>"
-                    if (!it.technical_personal_detail.isNullOrEmpty()) {
-
-                        detail += it.technical_personal_detail?.take(30)
-                    }
-                    if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                        detail += " (" + it.technical_personal_quantity + ")"
-                    }
-                }
-
-            } else {
-                mapping.request_detail?.activity_detail?.forEachIndexed { index, it ->
-                    if (!it.detail.isNullOrEmpty()) {
-                        detail += it.detail?.take(30)
-                    }
-                    if (!it.quantity.isNullOrEmpty()) {
-                        detail += " (" + it.quantity + ")"
-                    }
-                    if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
-                        detail += "<br/>"
+                    else -> {
+                        if (!it.detail.isNullOrEmpty()) {
+                            detail += it.detail?.take(30)
+                        }
+                        if (!it.quantity.isNullOrEmpty()) {
+                            detail += " (" + it.quantity + ")"
+                        }
+                        if (mapping.request_detail?.activity_detail!!.size - 1 != index) {
+                            detail += "<br/>"
+                        }
                     }
                 }
             }
+
             mapping.request_detail?.user_detail?.detail = detail
         } catch (e: Exception) {
             Timber.d("")

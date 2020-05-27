@@ -130,28 +130,40 @@ fun Activity.openUrl(url: String) {
 
 fun Int.getName(): Int {
     return when (this) {
-        1 -> R.string.food
-        2 -> R.string.people
-        3 -> R.string.shelter
-        4 -> R.string.med_ppe
-        5 -> R.string.testing
-        6 -> R.string.medicines
-        7 -> R.string.ambulance
-        8 -> R.string.medical_equipment
+        CATEGORY_FOOD -> R.string.food
+        CATEGORY_SHELTER -> R.string.shelter
+        CATEGORY_MED_PPE -> R.string.med_ppe
+        CATEGORY_TESTING -> R.string.testing
+        CATEGORY_MEDICINES -> R.string.medicines
+        CATEGORY_AMBULANCE -> R.string.ambulance
+        CATEGORY_MEDICAL_EQUIPMENT -> R.string.medical_equipment
+
+        CATEGORY_MEDICAL_VOLUNTEERS -> R.string.volunteers
+        CATEGORY_MEDICAL_FRUITS_VEGETABLES -> R.string.fruits_vegetables
+        CATEGORY_MEDICAL_TRANSPORT -> R.string.transport
+        CATEGORY_MEDICAL_ANIMAL_SUPPORT -> R.string.animal_care
+        CATEGORY_MEDICAL_GIVEAWAYS -> R.string.giveaways
+        CATEGORY_MEDICAL_PAID_WORK -> R.string.paid_work
         else -> R.string.other_things
     }
 }
 
 fun Int.getIcon(): Int {
     return when (this) {
-        1 -> R.drawable.ic_food
-        2 -> R.drawable.ic_group
-        3 -> R.drawable.ic_shelter
-        4 -> R.drawable.ic_mask
-        5 -> R.drawable.ic_testing
-        6 -> R.drawable.ic_medicines
-        7 -> R.drawable.ic_ambulance
-        8 -> R.drawable.ic_medical
+        CATEGORY_FOOD -> R.drawable.ic_food
+        CATEGORY_SHELTER -> R.drawable.ic_shelter
+        CATEGORY_MED_PPE -> R.drawable.ic_mask
+        CATEGORY_TESTING -> R.drawable.ic_testing
+        CATEGORY_MEDICINES -> R.drawable.ic_medicines
+        CATEGORY_AMBULANCE -> R.drawable.ic_ambulance
+        CATEGORY_MEDICAL_EQUIPMENT -> R.drawable.ic_medical
+
+        CATEGORY_MEDICAL_VOLUNTEERS -> R.drawable.ic_volunteers
+        CATEGORY_MEDICAL_FRUITS_VEGETABLES -> R.drawable.ic_fruit_veggies
+        CATEGORY_MEDICAL_TRANSPORT -> R.drawable.ic_transporthelp
+        CATEGORY_MEDICAL_ANIMAL_SUPPORT -> R.drawable.ic_animalcare
+        CATEGORY_MEDICAL_GIVEAWAYS -> R.drawable.ic_giveaways
+        CATEGORY_MEDICAL_PAID_WORK -> R.drawable.ic_paid_work
         else -> R.drawable.ic_other
     }
 }

@@ -61,20 +61,27 @@ const val TAMIL_CODE = "ta"
 const val TELUGU_CODE = "te"
 const val RUSSIAN_CODE = "ru"
 
-val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati,R.id.nav_tamil,R.id.nav_telugu, R.id.nav_russian)
-val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE,TAMIL_CODE,TELUGU_CODE, RUSSIAN_CODE)
+val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati, R.id.nav_tamil, R.id.nav_telugu, R.id.nav_russian)
+val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE, TAMIL_CODE, TELUGU_CODE, RUSSIAN_CODE)
 
 
 const val CATEGORY_TYPE = "Item_Type"
+const val CATEGORY_OTHERS = 0
 const val CATEGORY_FOOD = 1
-const val CATEGORY_PEOPLE = 2
 const val CATEGORY_SHELTER = 3
 const val CATEGORY_MED_PPE = 4
 const val CATEGORY_TESTING = 5
 const val CATEGORY_MEDICINES = 6
 const val CATEGORY_AMBULANCE = 7
 const val CATEGORY_MEDICAL_EQUIPMENT = 8
-const val CATEGORY_OTHERS = 0
+
+const val CATEGORY_MEDICAL_VOLUNTEERS = 9
+const val CATEGORY_MEDICAL_FRUITS_VEGETABLES = 10
+const val CATEGORY_MEDICAL_TRANSPORT = 11
+const val CATEGORY_MEDICAL_ANIMAL_SUPPORT = 12
+const val CATEGORY_MEDICAL_GIVEAWAYS = 13
+const val CATEGORY_MEDICAL_PAID_WORK = 14
+
 
 const val SELECTED_INDEX = "SelectedIndex"
 

@@ -6,10 +6,7 @@ import org.helpinout.billonlights.model.dagger.PreferencesService
 import org.helpinout.billonlights.model.database.AppDatabase
 import org.helpinout.billonlights.model.database.entity.*
 import org.helpinout.billonlights.model.retrofit.NetworkApiProvider
-import org.helpinout.billonlights.utils.CATEGORY_AMBULANCE
-import org.helpinout.billonlights.utils.CATEGORY_PEOPLE
-import org.helpinout.billonlights.utils.HELP_TYPE_OFFER
-import org.helpinout.billonlights.utils.HELP_TYPE_REQUEST
+import org.helpinout.billonlights.utils.*
 import org.helpinout.billonlights.utils.Utils.Companion.currentDateTime
 import org.json.JSONArray
 import org.json.JSONObject
@@ -130,38 +127,14 @@ class LocationService(private val preferencesService: PreferencesService, privat
                         try {
                             var detail = ""
 
+
                             when (detailItem.activity_category) {
-                                CATEGORY_AMBULANCE -> {
-                                    detailItem.activity_detail?.forEachIndexed { _, it ->
-                                        if (!it.quantity.isNullOrEmpty()) {
-                                            detail += it.quantity
-                                        }
-                                    }
-                                }
-                                CATEGORY_PEOPLE -> {
+                                CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
                                     detailItem.activity_detail?.forEachIndexed { _, it ->
 
-                                        if (!it.volunters_detail.isNullOrEmpty()) {
-                                            detail += it.volunters_detail?.take(30)
-
+                                        if (!it.detail.isNullOrEmpty()) {
+                                            detail += it.detail
                                         }
-                                        if (!it.volunters_quantity.isNullOrEmpty()) {
-                                            detail += " (" + it.volunters_quantity + ")"
-
-                                        }
-                                        if (!it.technical_personal_detail.isNullOrEmpty()) {
-                                            if (detail.isNotEmpty()) {
-                                                detail += "<br/>"
-                                            }
-
-                                            if (!it.technical_personal_detail.isNullOrEmpty()) {
-                                                detail += it.technical_personal_detail?.take(30)
-                                            }
-                                            if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                                                detail += " (" + it.technical_personal_quantity + ")"
-                                            }
-                                        }
-
                                     }
                                 }
                                 else -> {
@@ -198,39 +171,14 @@ class LocationService(private val preferencesService: PreferencesService, privat
                             var detail = ""
 
                             when (detailItem.activity_category) {
-                                CATEGORY_AMBULANCE -> {
+                                CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
                                     detailItem.activity_detail?.forEachIndexed { _, it ->
-                                        if (!it.quantity.isNullOrEmpty()) {
-                                            detail += it.quantity
+                                        if (!it.detail.isNullOrEmpty()) {
+                                            detail += it.detail
                                         }
                                     }
                                 }
-                                CATEGORY_PEOPLE -> {
-                                    detailItem.activity_detail?.forEachIndexed { _, it ->
 
-                                        if (!it.volunters_detail.isNullOrEmpty()) {
-                                            detail += it.volunters_detail?.take(30)
-
-                                        }
-                                        if (!it.volunters_quantity.isNullOrEmpty()) {
-                                            detail += " (" + it.volunters_quantity + ")"
-
-                                        }
-                                        if (!it.technical_personal_detail.isNullOrEmpty()) {
-                                            if (detail.isNotEmpty()) {
-                                                detail += "<br/>"
-                                            }
-
-                                            if (!it.technical_personal_detail.isNullOrEmpty()) {
-                                                detail += it.technical_personal_detail?.take(30)
-                                            }
-                                            if (!it.technical_personal_quantity.isNullOrEmpty()) {
-                                                detail += " (" + it.technical_personal_quantity + ")"
-                                            }
-                                        }
-
-                                    }
-                                }
                                 else -> {
                                     detailItem.activity_detail?.forEachIndexed { index, it ->
                                         if (!it.detail.isNullOrEmpty()) {
@@ -478,12 +426,6 @@ class LocationService(private val preferencesService: PreferencesService, privat
             }
 
             singleItem.detail = detail
-            singleItem.volunters_required = 0
-            singleItem.volunters_detail = activityDetail.volunters_detail
-            singleItem.volunters_quantity = activityDetail.volunters_quantity
-            singleItem.technical_personal_required = activityDetail.technical_personal_required
-            singleItem.technical_personal_detail = activityDetail.technical_personal_detail
-            singleItem.technical_personal_quantity = activityDetail.technical_personal_quantity
             singleItem.status = 1
 
             addItemList.add(singleItem)

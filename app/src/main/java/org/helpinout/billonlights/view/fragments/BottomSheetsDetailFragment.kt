@@ -33,14 +33,13 @@ class BottomSheetsDetailFragment(private val type: Int, private val offerType: I
             tv_help_for.visibleIf(self_else == 2)
         }
 
-        if (type == CATEGORY_PEOPLE) {
-            note.hide()
-            divider1.hide()
+        when (type) {
+            CATEGORY_AMBULANCE, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_PAID_WORK -> {
+                note.show()
+                divider1.show()
+            }
         }
-        if (type == CATEGORY_AMBULANCE) {
-            note.show()
-            divider1.show()
-        }
+
         tv_name.text = name
 
         tv_condition.text = detail

@@ -89,32 +89,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun onItemClick(item: OfferHelpItem, selfElse: Int) {
         when (item.type) {
-            CATEGORY_FOOD -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_FOOD, SELF_ELSE to selfElse)
+            CATEGORY_FOOD, CATEGORY_SHELTER, CATEGORY_MED_PPE, CATEGORY_MEDICAL_EQUIPMENT, CATEGORY_MEDICINES, CATEGORY_TESTING, CATEGORY_OTHERS -> {
+                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to item.type, SELF_ELSE to selfElse)
             }
-            CATEGORY_PEOPLE -> {
-                startActivityForResult<PeopleHelpActivity>(noClickResultCode, HELP_TYPE to helpType, SELF_ELSE to selfElse)
-            }
-            CATEGORY_SHELTER -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_SHELTER, SELF_ELSE to selfElse)
-            }
-            CATEGORY_MED_PPE -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MED_PPE, SELF_ELSE to selfElse)
-            }
-            CATEGORY_TESTING -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_TESTING, SELF_ELSE to selfElse)
-            }
-            CATEGORY_MEDICINES -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICINES, SELF_ELSE to selfElse)
-            }
-            CATEGORY_AMBULANCE -> {
-                startActivityForResult<AmbulanceHelpActivity>(noClickResultCode, HELP_TYPE to helpType, SELF_ELSE to selfElse)
-            }
-            CATEGORY_MEDICAL_EQUIPMENT -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_MEDICAL_EQUIPMENT, SELF_ELSE to selfElse)
-            }
-            CATEGORY_OTHERS -> {
-                startActivityForResult<FoodHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to CATEGORY_OTHERS, SELF_ELSE to selfElse)
+            CATEGORY_MEDICAL_TRANSPORT, CATEGORY_MEDICAL_PAID_WORK, CATEGORY_MEDICAL_GIVEAWAYS, CATEGORY_MEDICAL_ANIMAL_SUPPORT, CATEGORY_MEDICAL_FRUITS_VEGETABLES, CATEGORY_MEDICAL_VOLUNTEERS, CATEGORY_AMBULANCE -> {
+                startActivityForResult<AmbulanceHelpActivity>(noClickResultCode, HELP_TYPE to helpType, CATEGORY_TYPE to item.type, SELF_ELSE to selfElse)
             }
         }
         overridePendingTransition(R.anim.enter, R.anim.exit)

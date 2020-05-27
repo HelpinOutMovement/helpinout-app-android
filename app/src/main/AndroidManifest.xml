@@ -89,9 +89,6 @@
             android:name=".view.activity.FoodHelpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.PeopleHelpActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.activity.AmbulanceHelpActivity"
             android:screenOrientation="portrait" />
         <activity
