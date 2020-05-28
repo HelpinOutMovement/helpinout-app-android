@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg"
+    android:paddingBottom="@dimen/_20sdp">
+
+    <TextView
+        android:id="@+id/tvName"
+        style="@style/StyleTextView"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="V.Chikarmane" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        tools:text="Can supply once a day after 12 noon with a minimum 1 day notice. Food will need to be picked up, it cannot be delivered. " />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_message" />
+
+    <TextView
+        android:id="@+id/tv_notes"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        tools:text="Note" />
+
+    <TextView
+        android:id="@+id/tv_free_paid"
+        style="@style/StyleTextViewNormal"
+        android:layout_width="0dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/free_or_paid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_notes"
+        tools:text="Free" />
+</androidx.constraintlayout.widget.ConstraintLayout>

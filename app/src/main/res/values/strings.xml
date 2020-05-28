@@ -291,7 +291,7 @@
     <string name="hint_animal_support_request">Details of support needed, what kind of animals, problem being faced, location/date/time, etc.</string>
     <string name="hint_animal_support_offer">Details of the animals you can help with; whether feeding, birth control, adoption, distress rescue etc.</string>
     <string name="hint_giveaways_request">Details of articles NEEDED – e.g. clothes (gender / size), toys, kitchenware, whether pickup possible, etc.</string>
-    <string name="hint_giveaways_offer">Details of articles you can GIVE AWAY – clothes (sigender / ze), toys, kitchenware, whether pickup needed, etc.</string>
+    <string name="hint_giveaways_offer">Details of articles you can GIVE AWAY – clothes (size/gender), toys, kitchenware, whether pickup needed, etc.</string>
     <string name="hint_paid_work_request">Details of the job you want  – type of work, position, full/part time; type; salary; days/time; etc.</string>
     <string name="hint_paid_work_offer">Details of the job you are offering  – type of work, position, full/part time; type; salary; days/time; etc.</string>
     <string name="must_get_paid">Must Get Paid</string>

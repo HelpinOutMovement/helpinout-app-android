@@ -34,8 +34,16 @@ class BottomSheetsRequestOfferDetailFragment(private val offerType: Int, private
 
         if (offerType == HELP_TYPE_REQUEST) {
             tv_time.show()
-            free_or_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
+
+
+            if (item.activity_category== CATEGORY_MEDICAL_PAID_WORK){
+                free_or_paid.text = getString(R.string.must_get_paid)
+            }else free_or_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
+
         } else {
+            if (item.activity_category== CATEGORY_MEDICAL_PAID_WORK){
+                free_or_paid.text = getString(R.string.we_will_pay)
+            }else
             free_or_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)
             btn_cancel_this_request.text = getString(R.string.cancel_this_offer)
         }

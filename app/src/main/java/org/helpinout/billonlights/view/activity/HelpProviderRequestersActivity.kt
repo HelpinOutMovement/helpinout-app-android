@@ -3,10 +3,13 @@ package org.helpinout.billonlights.view.activity
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +28,7 @@ import com.google.gson.Gson
 import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.activity_help_map.*
 import kotlinx.android.synthetic.main.bottom_sheet_help_provider_requester.*
+import kotlinx.android.synthetic.main.layout_detail.view.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
 import kotlinx.android.synthetic.main.layout_map_toolbar.*
 import kotlinx.android.synthetic.main.layout_permission.*
@@ -158,11 +162,36 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
         recycler_view.setHasFixedSize(true)
         val divider = ContextCompat.getDrawable(this, R.drawable.line_divider)
         recycler_view.addItemDecoration(DividerItemDecoration(divider!!, 10, -10))
-        bottomAdapter = BottomSheetHelpAdapter(bottomItemList)
+        bottomAdapter = BottomSheetHelpAdapter(bottomItemList) { item -> onViewDetailClick(item) }
         val itemDecorator = ItemOffsetDecoration(this, R.dimen.item_offset)
         recycler_view.addItemDecoration(itemDecorator)
         recycler_view.adapter = bottomAdapter
     }
+
+    private fun onViewDetailClick(item: ActivityAddDetail) {
+        val view: View = layoutInflater.inflate(R.layout.layout_detail, null)
+
+        view.tvName.text = item.user_detail?.profile_name
+        view.tv_notes.text = ("<b>" + getString(R.string.note) + "</b> " + item.offer_note).fromHtml()
+        if (item.activity_type == HELP_TYPE_REQUEST) {
+            if (item.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
+                view.tv_free_paid.text = getString(R.string.must_get_paid)
+            } else view.tv_free_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
+            view.tv_message.text = (getString(R.string.need_help_with) + "<br/>" + item.user_detail?.detail).fromHtml()
+        } else {
+            view.tv_message.text = (getString(R.string.can_help_with) + "<br/>" + item.user_detail?.detail).fromHtml()
+            if (item.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
+                view.tv_free_paid.text = getString(R.string.we_will_pay)
+            } else view.tv_free_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)
+        }
+        val alert: AlertDialog.Builder = AlertDialog.Builder(this)
+        alert.setView(view)
+        val dialog: AlertDialog = alert.create()
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
 
     override fun onPermissionAllow() {
         buildGoogleApiClient()
