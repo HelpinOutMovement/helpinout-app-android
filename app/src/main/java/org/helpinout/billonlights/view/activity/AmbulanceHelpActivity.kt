@@ -96,7 +96,9 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
             }
             we_can_not_pay -> {
                 hideKeyboard()
-                ambulanceHelp.pay = 0
+                if (ambulanceHelp.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
+                    ambulanceHelp.pay = 11
+                } else ambulanceHelp.pay = 0
                 sendDataToServer()
             }
         }
