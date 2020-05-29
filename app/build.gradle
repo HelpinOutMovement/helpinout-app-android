@@ -12,8 +12,8 @@ android {
         applicationId "org.helpinout.billonlights"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 18
-        versionName "2.7"
+        versionCode 19
+        versionName "2.8"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -53,7 +53,7 @@ android {
             initWith debug
             resValue "bool", "Crash_Enable", "true"
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
-            buildConfigField "String", "BASE_URL", "\"http://3.7.52.176:8080/api/v1/\""
+            buildConfigField "String", "BASE_URL", "\"http://test.helpinout.org/api/v1/\""
         }
         beta_release {
             initWith release
@@ -64,7 +64,7 @@ android {
             resValue "bool", "Crash_Enable", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
-            buildConfigField "String", "BASE_URL", "\"http://3.7.52.176:8080/api/v1/\""
+            buildConfigField "String", "BASE_URL", "\"http://test.helpinout.org/api/v1/\""
         }
     }
     compileOptions {
