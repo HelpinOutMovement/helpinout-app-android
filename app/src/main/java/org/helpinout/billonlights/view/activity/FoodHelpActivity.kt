@@ -110,7 +110,9 @@ class FoodHelpActivity : BaseActivity(), View.OnClickListener {
         dialog?.show()
         val viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.addActivity(addData, address).observe(this, Observer {
-            dialog?.dismiss()
+            dialog?.let {pb->
+                if (pb.isShowing) pb.dismiss()
+            }
             if (it.first != null) {
                 askForConfirmation(addData.activity_uuid, suggestionData)
             } else {

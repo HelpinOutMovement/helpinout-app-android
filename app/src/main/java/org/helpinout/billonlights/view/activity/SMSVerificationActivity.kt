@@ -117,8 +117,10 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
 
     private fun verifyCode(code: String?) {
         if (resendToken != null) {
-            dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
-            dialog?.show()
+            if (isFinishing) {
+                dialog = indeterminateProgressDialog(R.string.alert_msg_please_wait)
+                dialog?.show()
+            }
             val credential = PhoneAuthProvider.getCredential(resendToken!!, code!!)
             signInWithCredential(credential)
         }
@@ -127,7 +129,9 @@ class SMSVerificationActivity : BaseActivity(), View.OnClickListener {
     private fun signInWithCredential(credential: PhoneAuthCredential) {
         mAuth!!.signInWithCredential(credential).addOnCompleteListener { task ->
             btn_verify.isEnabled = true
-            dialog?.dismiss()
+            dialog?.let {
+                if (it.isShowing) it.dismiss()
+            }
             if (task.isSuccessful) {
                 checkIfNotRegistered()
             }

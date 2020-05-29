@@ -175,7 +175,9 @@ class FragmentMyRequests : BaseFragment() {
         dialog?.show()
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.deleteActivity(activity_uuid, activity_type).observe(this, Observer {
-            dialog?.dismiss()
+            dialog?.let {pb->
+                if (pb.isShowing) pb.dismiss()
+            }
             it.first?.let {
                 toastSuccess(R.string.toast_delete_success)
                 (activity as HomeActivity).refreshBedge()

@@ -112,7 +112,10 @@ class AmbulanceHelpActivity : BaseActivity(), View.OnClickListener {
         ambulanceHelp.address = getAddress(preferencesService.latitude, preferencesService.longitude)
         val viewModel = ViewModelProvider(this).get(OfferViewModel::class.java)
         viewModel.sendAmbulanceHelp(ambulanceHelp, suggestionData).observe(this, Observer {
-            dialog?.dismiss()
+
+            dialog?.let {pb->
+                if (pb.isShowing) pb.dismiss()
+            }
             if (it.first != null && it.first?.status == 1) {
                 askForConfirmation(ambulanceHelp.activity_uuid, suggestionData)
             } else {

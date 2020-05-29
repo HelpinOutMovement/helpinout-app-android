@@ -53,7 +53,7 @@ android {
             initWith debug
             resValue "bool", "Crash_Enable", "true"
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
-            buildConfigField "String", "BASE_URL", "\"http://test.helpinout.org/api/v1/\""
+            buildConfigField "String", "BASE_URL", "\"https://test.helpinout.org/api/v1/\""
         }
         beta_release {
             initWith release
@@ -64,7 +64,7 @@ android {
             resValue "bool", "Crash_Enable", "true"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "RELEASE_DATE", "\"$BUILD_DATE\""
-            buildConfigField "String", "BASE_URL", "\"http://test.helpinout.org/api/v1/\""
+            buildConfigField "String", "BASE_URL", "\"https://test.helpinout.org/api/v1/\""
         }
     }
     compileOptions {
