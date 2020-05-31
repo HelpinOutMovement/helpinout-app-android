@@ -27,16 +27,17 @@ class BottomSheetHelpAdapter(private var appDetailItems: ArrayList<ActivityAddDe
         holder.itemView.tv_name.isEnabled = homeItem.isEnable
         if (homeItem.user_detail?.rating_count != 0) {
             holder.itemView.rating_bar.rating = homeItem.user_detail?.rating_avg ?: 0F
+            holder.itemView.rating_bar.jumpDrawablesToCurrentState()
         }
 
         if (homeItem.activity_type == HELP_TYPE_REQUEST) {
-            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.need_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
+            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.need_help_with) + "<br/>(" + context.getString(homeItem.activity_category.getName())+")" + "<br/>" + homeItem.user_detail?.detail).fromHtml()
             if (homeItem.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
                 holder.itemView.free_or_paid.text = context.getString(R.string.must_get_paid)
             } else holder.itemView.free_or_paid.text = context.getString(if (homeItem.pay == 1) R.string.can_pay else R.string.can_not_pay)
             holder.itemView.tv_self_help.visibleIf(homeItem.self_else == 2)
         } else {
-            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.can_help_with) + "<br/>" + homeItem.user_detail?.detail).fromHtml()
+            if (!homeItem.user_detail?.detail.isNullOrEmpty()) holder.itemView.tv_message.text = (context.getString(R.string.can_help_with) + "<br/>(" + context.getString(homeItem.activity_category.getName())+")" + "<br/>" + homeItem.user_detail?.detail).fromHtml()
             if (homeItem.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
                 holder.itemView.free_or_paid.text = context.getString(R.string.we_will_pay)
             } else

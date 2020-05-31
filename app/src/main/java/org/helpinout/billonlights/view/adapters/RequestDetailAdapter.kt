@@ -26,6 +26,7 @@ class RequestDetailAdapter(private var offerList: ArrayList<MappingDetail>, priv
         holder.itemView.rating_bar.inVisibleIf(item.rating_count == 0)
         holder.itemView.tv_rate.visibleIf(item.rating_count == 0)
         holder.itemView.rating_bar.rating = item.rating_avg ?: 0.0F
+        holder.itemView.rating_bar.jumpDrawablesToCurrentState()
         holder.itemView.tv_view_detail.setOnClickListener {
             onDetailClick(item.activity_category ?: 0, item.profile_name ?: "", item.offer_note ?: "", item.detail ?: "", item.pay, item.self_else)
         }

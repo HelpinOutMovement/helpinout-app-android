@@ -38,7 +38,6 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
                 til_org_name.hide()
                 spinner_org_type.hide()
                 til_unit_division.hide()
-
                 tv_help_in_profile_name.text = getProfileName()
             }
         }
@@ -176,6 +175,7 @@ class RegistrationActivity : BaseActivity(), View.OnClickListener {
 
         val viewModel = ViewModelProvider(this).get(LoginRegistrationViewModel::class.java)
         preferencesService.orgName = registration.org_name ?: ""
+
         viewModel.getUpdateProfileResult(registration).observe(this, Observer {
             dialog.dismiss()
             if (it.first != null) {

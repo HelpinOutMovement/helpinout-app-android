@@ -58,13 +58,7 @@
     <string name="org_type5">Non-profit Organization</string>
     <string name="org_type6">Other</string>
 
-    <string name="org_types_index0">-1</string>
-    <string name="org_types_index1">1</string>
-    <string name="org_types_index2">2</string>
-    <string name="org_types_index3">3</string>
-    <string name="org_types_index4">4</string>
-    <string name="org_types_index5">5</string>
-    <string name="org_types_index6">0</string>
+
 
 
     <!-- End Registration screen -->
@@ -296,5 +290,7 @@
     <string name="hint_paid_work_offer">Details of the job you are offering  – type of work, position, full/part time; type; salary; days/time; etc.</string>
     <string name="must_get_paid">Must Get Paid</string>
     <string name="we_will_pay">We will Pay</string>
+    <string name="restart">START</string>
+    <string name="update_downloaded">An update has just been downloaded.An update has just been downloaded.</string>
 
 </resources>

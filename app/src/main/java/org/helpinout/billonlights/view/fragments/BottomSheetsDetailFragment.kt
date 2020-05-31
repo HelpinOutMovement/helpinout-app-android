@@ -25,14 +25,14 @@ class BottomSheetsDetailFragment(private val type: Int, private val offerType: I
         if (offerType == HELP_TYPE_REQUEST) {
             note.show()
             divider1.show()
-            tv_items.text = (getString(R.string.can_help_with) + "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
+            tv_items.text = (getString(R.string.can_help_with) + "<br/>(" + getString(type.getName())+ ")" + "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
 
             if (type == CATEGORY_MEDICAL_PAID_WORK) {
                 free_or_paid.text = getString(R.string.must_get_paid)
             } else free_or_paid.text = getString(if (pay == 1) R.string.not_free else R.string.free)
 
         } else {
-            tv_items.text = (getString(R.string.need_help_with) + "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
+            tv_items.text = (getString(R.string.need_help_with) + "<br/>(" + getString(type.getName()) + ")"+ "<br/>" + description.replace("%1s", getString(R.string.volunteers)).replace("%2s", getString(R.string.technical_personnel))).fromHtml()
             if (type == CATEGORY_MEDICAL_PAID_WORK) {
                 free_or_paid.text = getString(R.string.we_will_pay)
             } else free_or_paid.text = getString(if (pay == 1) R.string.can_pay else R.string.can_not_pay)

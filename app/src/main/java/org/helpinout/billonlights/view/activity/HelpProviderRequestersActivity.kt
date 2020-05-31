@@ -171,15 +171,18 @@ class HelpProviderRequestersActivity : LocationActivity(), OnMapReadyCallback, V
     private fun onViewDetailClick(item: ActivityAddDetail) {
         val view: View = layoutInflater.inflate(R.layout.layout_detail, null)
 
+        if (item.user_detail?.detail.isNullOrEmpty()){
+            item.user_detail?.detail= item.request_note
+        }
         view.tvName.text = item.user_detail?.profile_name
         view.tv_notes.text = ("<b>" + getString(R.string.note) + "</b> " + item.offer_note).fromHtml()
         if (item.activity_type == HELP_TYPE_REQUEST) {
             if (item.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
                 view.tv_free_paid.text = getString(R.string.must_get_paid)
             } else view.tv_free_paid.text = getString(if (item.pay == 1) R.string.can_pay else R.string.can_not_pay)
-            view.tv_message.text = (getString(R.string.need_help_with) + "<br/>" + item.user_detail?.detail).fromHtml()
+            view.tv_message.text = (getString(R.string.need_help_with)+ "<br/>(" + getString(item.activity_category.getName())+ ")" + "<br/>" + item.user_detail?.detail ).fromHtml()
         } else {
-            view.tv_message.text = (getString(R.string.can_help_with) + "<br/>" + item.user_detail?.detail).fromHtml()
+            view.tv_message.text = (getString(R.string.can_help_with) + "<br/>(" + getString(item.activity_category.getName())+ ")"  +"<br/>" + item.user_detail?.detail).fromHtml()
             if (item.activity_category == CATEGORY_MEDICAL_PAID_WORK) {
                 view.tv_free_paid.text = getString(R.string.we_will_pay)
             } else view.tv_free_paid.text = getString(if (item.pay == 1) R.string.not_free else R.string.free)

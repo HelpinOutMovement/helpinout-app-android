@@ -2,15 +2,15 @@
   <string name="app_name">HelpinOut</string>
   <string name="label_app_name"><![CDATA[<font color=#EE6B6B>Helpin</font><font color=#4F5065>Out</font>]]></string>
   <string name="all_right_reserved">© Helpinout. All rights reserved</string>
-  <string name="instruction_text"><![CDATA[<font color=#EE6B6B>मदत मांगा </font> <br/> मदत करा <br/><br/>आपल्या सभोवतालच्या मदत-प्रदात्यांसाठी आणि मदत-शोधकांचा शोध घ्या]]></string>
-  <string name="btn_continue">सुरू</string>
-  <string name="label_enter_your_mobile_no">तुमचा भ्रमणध्वनी क्रमांक टाका</string>
+  <string name="instruction_text"><![CDATA[<font color=#EE6B6B>मदत मागा </font> <br/> मदत करा <br/><br/>आपल्या सभोवतालच्या मदत-प्रदात्यांचा आणि मदत-हवी असणाऱ्यांचा शोध घ्या]]></string>
+  <string name="btn_continue">पुढे चला </string>
+  <string name="label_enter_your_mobile_no">तुमचा मोबाईल क्रमांक लिहा </string>
   <string name="label_login">लॉगिन / साइन अप</string>
   <string name="by_signing_you_are_agree">साइन अप करून आपण सहमती देता</string>
   <string name="terms_Of_service"><![CDATA[Terms of Service]]></string>
   <string name="privacy_policy"><![CDATA[Privacy Policy]]></string>
-  <string name="toast_error_phone_number">तुमचा भ्रमणध्वनी क्रमांक टाका</string>
-  <string name="toast_error_invalid_phone_number">योग्य क्रमांक टाका</string>
+  <string name="toast_error_phone_number">तुमचा मोबाईल क्रमांक लिहा </string>
+  <string name="toast_error_invalid_phone_number">योग्य  क्रमांक लिहा</string>
   <string name="label_enter_otp">OTP प्रविष्ट करा</string>
   <string name="button_verify">सत्यापित करा</string>
   <string name="retry_msg">OTP पुन्हा पाठवा</string>
@@ -18,7 +18,7 @@
   <string name="you_can_try_max_try">अधिकतम %1$s OTP</string>
   <string name="otp_send_success">OTP यशस्वीरीत्या पाठविण्यात आला आहे</string>
   <string name="otp_send_to">OTP ला %1$s वर पाठविला आहे</string>
-  <string name="change_phone_number">भ्रमणध्वनी क्रमांक बदली करा.</string>
+  <string name="change_phone_number">मोबाईल क्रमांक बदली करा</string>
   <string name="label_register">नोंदणी करा</string>
   <string name="label_first_name">पहिले नाव</string>
   <string name="label_last_name">आडनाव</string>
@@ -42,15 +42,15 @@
   <string name="org_type6">इतर</string>
   <string name="update_profile">प्रोफ़ाइल अद्यावत करा</string>
   <string name="toast_success_update_success">तुमचा प्रोफ़ाइल यशस्वीरीत्या अद्यावत झाला आहे</string>
-  <string name="identify_location">वर उल्लेखित आपले स्थानाची खात्री करा, नंतर खालील पर्याय निवडा</string>
+  <string name="identify_location">वर उल्लेखित आपल्या स्थानाची खात्री करा,  नंतर खालील पर्याय  निवडा</string>
   <string name="title_home">मुख्यपृष्ठ</string>
   <string name="ask_for_help">मदतीसाठी विचारा</string>
   <string name="offer_help">मदतीसाठी तयारी</string>
   <string name="title_my_request">माझ्या विनंत्या</string>
-  <string name="title_my_offers">माझे प्रस्ताव</string>
+  <string name="title_my_offers">माझ्या ऑफर</string>
   <string name="title_profiles">प्रोफाइल</string>
   <string name="language">भाषा</string>
-  <string name="title_about">याबद्दल</string>
+  <string name="title_about">आमच्याबद्दल </string>
   <string name="title_feedback">फेसबुक</string>
   <string name="title_form">अर्ज</string>
   <string name="toast_press_again_to_exit">बाहेर पडण्यासाठी पुन्हा `मागे`वर क्लिक करा</string>
@@ -85,7 +85,7 @@
   <string name="other_things">इतर</string>
   <string name="toolbar_need_help_with">या मदतीची आवश्यकता आहे</string>
   <string name="email_title">सर्व विनंतीपत्रांची तपशीलवार माहिती येथे प्राप्त करा:</string>
-  <string name="toolbar_offer_help_with">यासह मदतीची तयारी...</string>
+  <string name="toolbar_offer_help_with">यासाठी मदतीची तयारी...</string>
   <string name="request_near_me">%1$s माझ्या परीसरातील विनंत्या</string>
   <string name="request_total">%1$s एकूण</string>
   <string name="hint_enter_item">वस्तूंची नोंद करा</string>
@@ -97,13 +97,13 @@
   <string name="technical_personnel">तंत्रज्ञ</string>
   <string name="we_charge">आम्ही शुल्क आकारतो</string>
   <string name="for_free">विनामूल्य</string>
-  <string name="hint_conditions"><![CDATA[अवधी,वितरण,निवड याबाबतच्या अडचणींची नोंद करा. मदत स्वीकारनाऱ्यासाठी उपयोगी ठरू शकेल अशी कोणतीही माहिती]]></string>
+  <string name="hint_conditions"><![CDATA[अवधी,वितरण,निवड याबाबतच्या अडचणींची नोंद करा. मदत स्वीकारणाऱ्यांसाठी  उपयोगी ठरू शकेल अशी कोणतीही माहिती]]></string>
   <string name="alert_msg_please_wait">कृपया प्रतिक्षा करा</string>
   <string name="rate">रेट करा</string>
   <string name="report_block">रिपोर्ट / ब्लॉक</string>
   <string name="canceled">रद्द करा</string>
   <string name="request_confirmation"><![CDATA[तुमची विनंती नोंदविण्यात आली आहे <br/>तुम्ही तुमच्या परिसरातील मदतकर्त्यांना शोधू इच्छिता का?]]></string>
-  <string name="offer_confirmation"><![CDATA[तुमचा प्रस्ताव नोंदविण्यात आला आहे.<br/><br/>तुम्ही तुमच्या परिसरातील गरजूंना शोधू इच्छिता का??]]></string>
+  <string name="offer_confirmation"><![CDATA[तुमची ऑफर नोंदविण्यात आली आहे<br/><br/>तुम्ही तुमच्या परिसरातील गरजूंना शोधू इच्छिता का?]]></string>
   <string name="note_to_requester">मदतीची गरज असलेल्यांसाठी लक्षात असू दे.</string>
   <string name="note_to_provider">मदत प्रदात्यांसाठी लक्षात असू दे.</string>
   <string name="toast_delete_success">यशस्वीरीत्या रद्द करण्यात आले आहे</string>
@@ -159,7 +159,7 @@
   <string name="need_help_with">आपली अशी मदत होऊ शकेल</string>
   <string name="today">आज</string>
   <string name="yesterday">काल</string>
-  <string name="days_ago">%1$s दिवसापूर्वी</string>
+  <string name="days_ago">%1$s दिवसांपूर्वी </string>
   <string name="request_call_him">आपला नंबर त्यांना दिला आहे, ते तुम्हाला कॉल करतील किंवा तुम्ही त्यांना कॉल करु शकता.</string>
   <string name="toast_error_some_error">An error occurred</string>
   <string name="loading">Loading...</string>

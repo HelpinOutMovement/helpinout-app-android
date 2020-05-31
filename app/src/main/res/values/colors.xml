@@ -39,13 +39,14 @@
     </string-array>
 
     <integer-array name="org_types_index">
-        <item>@string/org_types_index0</item>
-        <item>@string/org_types_index1</item>
-        <item>@string/org_types_index2</item>
-        <item>@string/org_types_index3</item>
-        <item>@string/org_types_index4</item>
-        <item>@string/org_types_index5</item>
-        <item>@string/org_types_index6</item>
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>0</item>
     </integer-array>
+
 
 </resources>

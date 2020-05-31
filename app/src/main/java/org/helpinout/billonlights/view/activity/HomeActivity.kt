@@ -1,5 +1,6 @@
 package org.helpinout.billonlights.view.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -25,6 +26,15 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.avneesh.crashreporter.ui.CrashReporterActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.tasks.OnSuccessListener
+import com.google.android.play.core.tasks.TaskExecutors
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.layout_ask_for_email.view.*
 import kotlinx.android.synthetic.main.layout_enable_location.*
@@ -40,6 +50,7 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import timber.log.Timber
+import java.util.concurrent.Executor
 
 
 class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -51,10 +62,18 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
     private var selectedPosition = -1
     private var updateLanguage = 349
     var radius: Float = 0.0F
+    val REQUEST_UPDATE_CODE = 1
+    lateinit var installStateUpdatedListener: InstallStateUpdatedListener
+
+    lateinit var appUpdateManager: AppUpdateManager
+
+    lateinit var playServiceExecutor: Executor
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appUpdateManager = AppUpdateManagerFactory.create(this)
+        playServiceExecutor = TaskExecutors.MAIN_THREAD
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.app_name, R.string.app_name) {
             override fun onDrawerClosed(view: View) {
                 invalidateOptionsMenu()
@@ -112,6 +131,47 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
         val filter = IntentFilter()
         filter.addAction(BEDGE_REFRESH)
         LocalBroadcastManager.getInstance(this).registerReceiver(bedgeRefreshReceiver, filter)
+        updateChecker()
+    }
+
+
+    @SuppressLint("SwitchIntDef")
+    private fun updateChecker() {
+        installStateUpdatedListener = InstallStateUpdatedListener { installState ->
+            when (installState.installStatus()) {
+                InstallStatus.DOWNLOADED -> {
+                    updaterDownloadCompleted()
+                }
+                InstallStatus.INSTALLED -> {
+                    appUpdateManager.unregisterListener(installStateUpdatedListener)
+                }
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
+
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener(playServiceExecutor, OnSuccessListener { appUpdateInfo ->
+            when (appUpdateInfo.updateAvailability()) {
+                UpdateAvailability.UPDATE_AVAILABLE -> {
+                    val updateTypes = arrayOf(AppUpdateType.FLEXIBLE, AppUpdateType.IMMEDIATE)
+                    run loop@{
+                        updateTypes.forEach { type ->
+                            if (appUpdateInfo.isUpdateTypeAllowed(type)) {
+                                appUpdateManager.startUpdateFlowForResult(appUpdateInfo, type, this, REQUEST_UPDATE_CODE)
+                                return@loop
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun updaterDownloadCompleted() {
+        Snackbar.make(activity_main_layout, R.string.update_downloaded, Snackbar.LENGTH_INDEFINITE).apply {
+            setAction(R.string.restart) { appUpdateManager.completeUpdate() }
+            show()
+        }
     }
 
     override fun onDestroy() {
@@ -134,6 +194,15 @@ class HomeActivity : LocationActivity(), BottomNavigationView.OnNavigationItemSe
 
     override fun onResume() {
         super.onResume()
+        appUpdateManager.appUpdateInfo.addOnSuccessListener(playServiceExecutor, OnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) updaterDownloadCompleted()
+            } else {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE, this, REQUEST_UPDATE_CODE)
+                }
+            }
+        })
         refreshBedge()
     }
 
