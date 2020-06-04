@@ -48,6 +48,7 @@ const val TELUGU = 5
 const val MARATHI = 4
 const val GUJRATI = 5
 const val RUSSIAN = 6
+const val ORIYA = 7
 const val ALLOW_NUMBER1 = "+917303767448" //
 const val ALLOW_NUMBER2 = "+918800579215"
 
@@ -58,11 +59,12 @@ const val KANNAD_CODE = "kn"
 const val MARATHI_CODE = "mr"
 const val GUJRATI_CODE = "gu"
 const val TAMIL_CODE = "ta"
+const val ORIYA_CODE = "or"
 const val TELUGU_CODE = "te"
 const val RUSSIAN_CODE = "ru"
 
-val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati, R.id.nav_tamil, R.id.nav_telugu, R.id.nav_russian)
-val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE, TAMIL_CODE, TELUGU_CODE, RUSSIAN_CODE)
+val languageList = listOf(R.id.nav_english, R.id.nav_hindi, R.id.nav_kannad, R.id.nav_marathi, R.id.nav_gujrati, R.id.nav_tamil, R.id.nav_oriya, R.id.nav_telugu, R.id.nav_russian)
+val languageCode = listOf(ENGLISH_CODE, HINDI_CODE, KANNAD_CODE, MARATHI_CODE, GUJRATI_CODE, TAMIL_CODE, ORIYA_CODE, TELUGU_CODE, RUSSIAN_CODE)
 
 
 const val CATEGORY_TYPE = "Item_Type"

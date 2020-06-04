@@ -76,6 +76,11 @@
             android:title="@string/tamil" />
 
         <item
+            android:id="@+id/nav_oriya"
+            android:checkable="false"
+            android:title="@string/oriya" />
+
+        <item
             android:id="@+id/nav_telugu"
             android:checkable="false"
             android:title="@string/telugu" />
